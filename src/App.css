@@ -1,84 +1,47 @@
-body {
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+:root {
+  --color-bg: #e8e8e4;
+  --color-bg-section: #deded9;
+  --color-surface: #f2f2ef;
+  --color-surface-dark: #1a1a1a;
+  --color-primary: #4a5c3a;
+  --color-primary-dark: #3a4a2d;
+  --color-primary-light: #6b8050;
+  --color-accent: #7a9460;
+  --color-text: #1c1c1c;
+  --color-text-muted: #6b6b65;
+  --color-text-light: #9b9b93;
+  --color-code-dim: rgba(74, 92, 58, 0.18);
+  --color-border: rgba(0,0,0,0.08);
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-body: 'DM Sans', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --shadow-card: 0 2px 24px rgba(0,0,0,0.07), 0 1px 4px rgba(0,0,0,0.04);
+  --shadow-btn: 0 4px 16px rgba(74,92,58,0.25);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
   margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #EEEEEE;
-  color: #333;
+  padding: 0;
 }
 
-.home-page {
-  min-height: 100vh;
-  padding: 32px;
+html {
+  scroll-behavior: smooth;
 }
 
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.navbar h1 {
-  color: #627254;
-}
-
-button {
-  background-color: #627254;
-  color: white;
-  border: none;
-  padding: 12px 20px;
-  border-radius: 12px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-button.secondary {
-  background-color: #DDDDDD;
-  color: #627254;
-}
-
-.hero {
-  margin-top: 80px;
-  display: flex;
-  justify-content: space-between;
-  gap: 40px;
-  align-items: center;
-}
-
-.hero-text {
-  max-width: 560px;
-}
-
-.hero-text h2 {
-  font-size: 48px;
-  line-height: 1.1;
-  margin-bottom: 20px;
-  color: #282828;
-}
-
-.hero-text p {
-  font-size: 18px;
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-bg);
+  color: var(--color-text);
   line-height: 1.6;
-  color: #555;
+  -webkit-font-smoothing: antialiased;
 }
 
-.buttons {
-  display: flex;
-  gap: 16px;
-  margin-top: 28px;
-}
-
-.preview-card {
-  background: white;
-  padding: 28px;
-  border-radius: 24px;
-  width: 320px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-}
-
-.preview-card span {
-  color: #76885B;
-  font-weight: bold;
-}
-
-.altColor span {
-  color: #76885B;
+.app {
+  min-height: 100vh;
 }
