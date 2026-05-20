@@ -1,12 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,400;0,700;0,900;1,400&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500&display=swap');
 
 :root {
   --color-bg: #e8e8e4;
   --color-bg-section: #deded9;
   --color-surface: #f2f2ef;
   --color-surface-dark: #1a1a1a;
-  --color-primary: #4a5c3a;
-  --color-primary-dark: #3a4a2d;
+  --color-primary: #627254;
+  --color-primary-dark: #627254;
   --color-primary-light: #6b8050;
   --color-accent: #7a9460;
   --color-text: #1c1c1c;
@@ -14,8 +14,8 @@
   --color-text-light: #9b9b93;
   --color-code-dim: rgba(74, 92, 58, 0.18);
   --color-border: rgba(0,0,0,0.08);
-  --font-display: 'Fraunces', Georgia, serif;
-  --font-body: 'DM Sans', sans-serif;
+  --font-display: 'Inter', sans-serif;
+  --font-body: 'Inter', sans-serif;
   --font-mono: 'JetBrains Mono', monospace;
   --radius-sm: 8px;
   --radius-md: 16px;

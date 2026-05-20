@@ -1,5 +1,5 @@
 .demo {
-  background-color: var(--color-bg);
+  background-color: #EEEEEE;
   padding: 0 48px 80px;
 }
 
@@ -101,7 +101,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 16px;
+  gap: 4px;
   flex-shrink: 0;
   width: 220px;
 }
@@ -191,4 +191,10 @@
   .demo__bubble::after {
     display: none;
   }
+}
+
+.demo__robot-img {
+    width: 140px;
+    height: 140px;
+    object-fit: contain;
 }

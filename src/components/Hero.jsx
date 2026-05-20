@@ -22,28 +22,34 @@ const codeSnippetsRight = [
   'while command ≠ "q"',
 ]
 
+const randomBetween = (min, max) => Math.random() * (max - min) + min
+
 export default function Hero() {
   return (
     <section className="hero">
-      {/* Decorative code — left */}
+      {/* Decorativo izquierda */}
       <div className="hero__code hero__code--left" aria-hidden="true">
         {codeSnippetsLeft.map((line, i) => (
-          <span
-            key={i}
-            className="hero__code-line"
-            style={{ '--delay': `${i * 0.08}s`, '--indent': `${Math.random() > 0.5 ? 1.5 : 0}rem` }}
-          >
-            {line}
-          </span>
-        ))}
+            <span
+                key={i}
+                className="hero__code-line"
+                style={{
+                  '--delay': `${i * 0.08}s`,
+                  paddingLeft: `${randomBetween(0, 60)}px`,
+                  fontSize: `${randomBetween(0.72, 1.0)}rem`,
+                }}
+            >
+              {line}
+            </span>
+          ))}
       </div>
 
       {/* Main content */}
       <div className="hero__content">
         <h1 className="hero__title">
-          Aprende a programar{' '}
-          <span className="hero__title--accent">junto a un tutor</span>{' '}
-          que se adapta a ti
+          Aprende a programar
+          <span className="hero__title--accent"> junto a un tutor</span>
+          <br />que se adapta a ti
         </h1>
         <p className="hero__subtitle">
           Resuelve ejercicios, recibe retroalimentación automática y<br />
@@ -58,13 +64,17 @@ export default function Hero() {
       {/* Decorative code — right */}
       <div className="hero__code hero__code--right" aria-hidden="true">
         {codeSnippetsRight.map((line, i) => (
-          <span
-            key={i}
-            className="hero__code-line"
-            style={{ '--delay': `${i * 0.08 + 0.04}s` }}
-          >
-            {line}
-          </span>
+            <span
+                key={i}
+                className="hero__code-line"
+                style={{
+                  '--delay': `${i * 0.08 + 0.04}s`,
+                  paddingRight: `${randomBetween(0, 60)}px`,
+                  fontSize: `${randomBetween(0.72, 1.0)}rem`,
+                }}
+            >
+              {line}
+            </span>
         ))}
       </div>
     </section>

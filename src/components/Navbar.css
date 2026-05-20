@@ -20,7 +20,7 @@
 
 .navbar__logo-tutor {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 600;
   font-size: 1.35rem;
   color: var(--color-text);
   letter-spacing: -0.02em;
@@ -28,7 +28,7 @@
 
 .navbar__logo-ia {
   font-family: var(--font-display);
-  font-weight: 900;
+  font-weight: 600;
   font-size: 1.35rem;
   color: var(--color-primary);
   letter-spacing: -0.02em;
