@@ -56,8 +56,8 @@ export default function Hero() {
           avanza según tu nivel
         </p>
         <div className="hero__actions">
-          <button className="btn btn--primary">Comenzar sin cuenta</button>
-          <button className="btn btn--outline">Iniciar sesión</button>
+          <button className="btn btn--primary">Ingresar desde Moodle</button>
+          <button className="btn btn--outline">Conocer TutorIA</button>
         </div>
       </div>
 

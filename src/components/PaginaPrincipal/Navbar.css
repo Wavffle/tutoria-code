@@ -76,3 +76,34 @@
     padding: 0 20px;
   }
 }
+
+.navbar__moodle {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background-color: rgb(238 238 238 / 0.93);
+  border: 2px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  padding: 4px 20px;
+}
+
+.navbar__moodle-icon {
+  font-size: 1.7rem;
+}
+
+.navbar__moodle-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar__moodle-title {
+  font-weight: 700;
+  font-size: 0.70rem;
+  color: var(--color-text);
+}
+
+.navbar__moodle-sub {
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+}

@@ -1,18 +1,8 @@
-import Navbar from './components/Navbar'
-import Hero from './components/Hero'
-import Features from './components/Features'
-import Demo from './components/Demo'
+import Home from './pages/Home'
 import './App.css'
 
 function App() {
-  return (
-    <div className="app">
-      <Navbar />
-      <Hero />
-      <Features />
-      <Demo />
-    </div>
-  )
+    return <Home />
 }
 
 export default App
