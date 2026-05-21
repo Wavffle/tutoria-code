@@ -1,0 +1,160 @@
+.modulo-card {
+  background-color: #6b7f55;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-width: 280px;
+  flex: 1;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modulo-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+
+.modulo-card--locked {
+  background-color: #8a9478;
+  opacity: 0.85;
+}
+
+/* ── Header ── */
+.modulo-card__header {
+  padding: 26px 22px 20px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.modulo-card__titulo {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1.3;
+}
+
+.modulo-card__nivel {
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.75);
+  margin-top: 2px;
+}
+
+.modulo-card__progreso {
+  font-size: 0.72rem;
+  color: rgba(255,255,255,0.8);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── Lista ── */
+.modulo-card__lista {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f0;
+  flex: 1;
+}
+
+.modulo-card__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  cursor: pointer;
+  transition: background 0.15s;
+  font-size: 0.92rem;
+  font-family: 'Inter', sans-serif;
+}
+
+.modulo-card__item:last-child {
+  border-bottom: none;
+}
+
+.modulo-card__item:hover {
+  background-color: rgba(90,110,69,0.08);
+}
+
+/* Estados */
+.modulo-card__item--ia {
+  color: #6b4fa0;
+  font-weight: 600;
+  background-color: rgba(107, 79, 160, 0.08);
+}
+
+.modulo-card__item--completado {
+  color: #3a5a2a;
+  font-weight: 500;
+}
+
+.modulo-card__item--disponible {
+  color: #2a4a7a;
+  font-weight: 500;
+}
+
+.modulo-card__item--bloqueado {
+  color: #c8883a;
+  font-weight: 500;
+  cursor: not-allowed;
+}
+
+.modulo-card__item--bloqueado:hover {
+  background: none;
+}
+
+/* Iconos */
+.modulo-card__item-icon {
+  flex-shrink: 0;
+  width: 18px;
+  text-align: center;
+  font-size: 0.8rem;
+}
+
+.modulo-card__ia-icon {
+  color: #5a6e45;
+  font-size: 0.9rem;
+}
+
+.modulo-card__item-texto {
+  flex: 1;
+  line-height: 1.35;
+}
+
+.modulo-card__info-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #6b4fa0;
+  font-size: 1rem;
+  padding: 2px 4px;
+  border-radius: 4px;
+  flex-shrink: 0;
+  opacity: 1;
+  transition: opacity 0.15s;
+}
+
+.modulo-card__info-btn:hover {
+  opacity: 1;
+}
+
+.modulo-card__play-btn {
+  font-size: 0.65rem;
+  color: #aaa;
+  flex-shrink: 0;
+}
+
+.modulo-card__ia-img {
+  width: 16px;
+  height: 16px;
+  object-fit: contain;
+}
+
+.modulo-card__info-img {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+}

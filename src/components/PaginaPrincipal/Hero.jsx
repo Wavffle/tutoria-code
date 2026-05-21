@@ -1,4 +1,5 @@
 import './Hero.css'
+import { useNavigate } from 'react-router-dom'
 
 const codeSnippetsLeft = [
   '#include <cmath>',
@@ -25,58 +26,71 @@ const codeSnippetsRight = [
 const randomBetween = (min, max) => Math.random() * (max - min) + min
 
 export default function Hero() {
+  const navigate = useNavigate()
+
   return (
-    <section className="hero">
-      {/* Decorativo izquierda */}
-      <div className="hero__code hero__code--left" aria-hidden="true">
-        {codeSnippetsLeft.map((line, i) => (
-            <span
-                key={i}
-                className="hero__code-line"
-                style={{
-                  '--delay': `${i * 0.08}s`,
-                  paddingLeft: `${randomBetween(0, 60)}px`,
-                  fontSize: `${randomBetween(0.72, 1.0)}rem`,
-                }}
-            >
-              {line}
-            </span>
+      <section className="hero">
+
+        {/* Decorativo izquierda */}
+        <div className="hero__code hero__code--left" aria-hidden="true">
+          {codeSnippetsLeft.map((line, i) => (
+              <span
+                  key={i}
+                  className="hero__code-line"
+                  style={{
+                    '--delay': `${i * 0.08}s`,
+                    paddingLeft: `${randomBetween(0, 60)}px`,
+                    fontSize: `${randomBetween(0.72, 1.0)}rem`,
+                  }}
+              >
+            {line}
+          </span>
           ))}
-      </div>
-
-      {/* Main content */}
-      <div className="hero__content">
-        <h1 className="hero__title">
-          Aprende a programar
-          <span className="hero__title--accent"> junto a un tutor</span>
-          <br />que se adapta a ti
-        </h1>
-        <p className="hero__subtitle">
-          Resuelve ejercicios, recibe retroalimentación automática y<br />
-          avanza según tu nivel
-        </p>
-        <div className="hero__actions">
-          <button className="btn btn--primary">Ingresar desde Moodle</button>
-          <button className="btn btn--outline">Conocer TutorIA</button>
         </div>
-      </div>
 
-      {/* Decorative code — right */}
-      <div className="hero__code hero__code--right" aria-hidden="true">
-        {codeSnippetsRight.map((line, i) => (
-            <span
-                key={i}
-                className="hero__code-line"
-                style={{
-                  '--delay': `${i * 0.08 + 0.04}s`,
-                  paddingRight: `${randomBetween(0, 60)}px`,
-                  fontSize: `${randomBetween(0.72, 1.0)}rem`,
-                }}
+        {/* Main content */}
+        <div className="hero__content">
+          <h1 className="hero__title">
+            Aprende a programar
+            <span className="hero__title--accent"> junto a un tutor</span>
+            <br />que se adapta a ti
+          </h1>
+          <p className="hero__subtitle">
+            Resuelve ejercicios, recibe retroalimentación automática y<br />
+            avanza según tu nivel
+          </p>
+          <div className="hero__actions">
+            <button
+                className="btn btn--primary"
+                onClick={() => window.location.href = 'https://moodle.tuuniversidad.cl'}
             >
-              {line}
-            </span>
-        ))}
-      </div>
-    </section>
+              Ingresar desde Moodle
+            </button>
+            <button
+                className="btn btn--outline"
+                onClick={() => navigate('/dashboard')}
+            >
+              Conocer TutorIA
+            </button>
+          </div>
+        </div>
+
+        {/* Decorativo derecha */}
+        <div className="hero__code hero__code--right" aria-hidden="true">
+          {codeSnippetsRight.map((line, i) => (
+              <span
+                  key={i}
+                  className="hero__code-line"
+                  style={{
+                    '--delay': `${i * 0.08 + 0.04}s`,
+                    paddingRight: `${randomBetween(0, 60)}px`,
+                    fontSize: `${randomBetween(0.72, 1.0)}rem`,
+                  }}
+              >
+            {line}
+          </span>
+          ))}
+        </div>
+      </section>
   )
 }
