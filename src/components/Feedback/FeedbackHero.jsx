@@ -5,7 +5,7 @@ export default function FeedbackHero() {
   return (
     <div className="fb-hero">
       <div className="fb-hero__left">
-        <img src="/robot%20TutorIA/robotFeedback.png" alt="Robot" className="fb-hero__robot" />
+        <img src="/robotTutorIA/robotFeedback.png" alt="Robot" className="fb-hero__robot" />
         <div className="fb-hero__texto">
           <h1 className="fb-hero__titulo">¡Excelente trabajo!</h1>
           <p className="fb-hero__desc">

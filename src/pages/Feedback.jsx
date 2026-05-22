@@ -1,4 +1,4 @@
-import PerfilNavbar from '../components/shared/PerfilNavbar'
+import TutorIANavbar from '../components/shared/TutorIANavbar.jsx'
 import FeedbackHero from '../components/Feedback/FeedbackHero'
 import FeedbackResumen from '../components/Feedback/FeedbackResumen'
 import FeedbackExplicacion from '../components/Feedback/FeedbackExplicacion'
@@ -10,7 +10,7 @@ import './Feedback.css'
 export default function Feedback() {
   return (
     <div className="feedback-page">
-      <PerfilNavbar breadcrumb={[
+      <TutorIANavbar breadcrumb={[
         { label: 'Dashboard', path: '/dashboard' },
         { label: feedbackData.modulo, path: '/dashboard' },
         { label: feedbackData.ejercicio, path: '/ejercicio' },

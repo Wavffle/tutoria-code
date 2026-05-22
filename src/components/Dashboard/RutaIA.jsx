@@ -3,7 +3,7 @@ import './RutaIA.css'
 export default function RutaIA() {
     return (
         <div className="ruta-ia">
-            <img src="/robot%20TutorIA/robotSaludando.png" alt="Robot TutorIA" className="ruta-ia__robot" />
+            <img src="/robotTutorIA/robotSaludando.png" alt="Robot TutorIA" className="ruta-ia__robot" />
 
             <div className="ruta-ia__left">
                 <div className="ruta-ia__text">

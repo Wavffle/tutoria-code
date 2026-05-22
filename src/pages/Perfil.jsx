@@ -1,4 +1,4 @@
-import PerfilNavbar from '../components/shared/PerfilNavbar'
+import TutorIANavbar from '../components/shared/TutorIANavbar.jsx'
 import MoodleBanner from '../components/Perfil/MoodleBanner'
 import PerfilInfo from '../components/Perfil/PerfilInfo'
 import PerfilHistorial from '../components/Perfil/PerfilHistorial'
@@ -9,7 +9,7 @@ import './Perfil.css'
 export default function Perfil() {
     return (
         <div className="perfil-page">
-            <PerfilNavbar breadcrumb={[
+            <TutorIANavbar breadcrumb={[
                 { label: 'Dashboard', path: '/dashboard' },
                 { label: 'Perfil' }
             ]} />

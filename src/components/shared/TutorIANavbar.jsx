@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom'
 import { perfilData } from '../Perfil/perfilData'
-import './PerfilNavbar.css'
+import './TutorIANavbar.css'
 
-export default function PerfilNavbar({ breadcrumb }) {
+export default function TutorIANavbar({ breadcrumb }) {
     const navigate = useNavigate()
 
     return (

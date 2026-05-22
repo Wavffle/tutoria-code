@@ -25,7 +25,6 @@ export default function PerfilInfo() {
           {perfilData.ejerciciosParaSiguienteNivel} Ejercicios más para el siguiente nivel
         </p>
 
-        {/* TutorIA te acompaña */}
         <div className="perfil-info__tutor-box">
           <img src="/logos/logoAvatar.png" alt="TutorIA" className="perfil-info__tutor-img" />
           <div>

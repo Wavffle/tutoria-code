@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import PerfilNavbar from '../components/shared/PerfilNavbar'
+import TutorIANavbar from '../components/shared/TutorIANavbar.jsx'
 import EjercicioInfo from '../components/Ejercicio/EjercicioInfo'
 import EjercicioEditor from '../components/Ejercicio/EjercicioEditor'
 import EjercicioFooter from '../components/Ejercicio/EjercicioFooter'
@@ -79,7 +79,7 @@ sys.stdout = StringIO()
 
   return (
       <div className="ejercicio-page">
-        <PerfilNavbar breadcrumb={[
+        <TutorIANavbar breadcrumb={[
           { label: 'Dashboard', path: '/dashboard' },
           { label: ejercicioData.modulo, path: '/dashboard' },
           { label: ejercicioData.practica }
