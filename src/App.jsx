@@ -3,6 +3,8 @@ import Home from './pages/Home'
 import Dashboard from './pages/Dashboard'
 import Perfil from './pages/Perfil'
 import Ejercicio from './pages/Ejercicio'
+import Feedback from './pages/Feedback'
+
 
 function App() {
     return (
@@ -12,6 +14,7 @@ function App() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/perfil" element={<Perfil />} />
                 <Route path="/ejercicio" element={<Ejercicio />} />
+                <Route path="/feedback" element={<Feedback />} />
             </Routes>
         </BrowserRouter>
     )

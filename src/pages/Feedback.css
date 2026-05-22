@@ -1,0 +1,28 @@
+.feedback-page {
+  min-height: 100vh;
+  background-color: #eeeee9;
+  font-family: 'Inter', sans-serif;
+}
+
+.feedback-page__body {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 28px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 36px 40px 60px;
+}
+
+.feedback-page__main {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  min-width: 0;
+}
+
+@media (max-width: 960px) {
+  .feedback-page__body {
+    grid-template-columns: 1fr;
+    padding: 24px 20px 40px;
+  }
+}

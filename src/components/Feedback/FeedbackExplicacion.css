@@ -1,0 +1,66 @@
+.fb-explicacion {
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 16px;
+  padding: 28px 28px;
+  margin-bottom: 20px;
+}
+
+.fb-explicacion__header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.fb-explicacion__code-icon {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #4a5c3a;
+}
+
+.fb-explicacion__title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #1c1c1c;
+}
+
+.fb-explicacion__intro {
+  font-size: 0.9rem;
+  color: #444;
+  margin-bottom: 14px;
+  line-height: 1.6;
+}
+
+.fb-explicacion__lista {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.fb-explicacion__lista li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.88rem;
+  color: #333;
+  line-height: 1.5;
+}
+
+.fb-explicacion__check {
+  color: #4a5c3a;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.fb-explicacion__recuerda {
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.6;
+  font-style: italic;
+}

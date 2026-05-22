@@ -86,6 +86,7 @@ sys.stdout = StringIO()
       <div className="ejercicio-page">
         <PerfilNavbar breadcrumb={[
           { label: 'Dashboard', path: '/dashboard' },
+          { label: ejercicioData.modulo, path: '/dashboard' },
           { label: ejercicioData.practica }
         ]} />
 
