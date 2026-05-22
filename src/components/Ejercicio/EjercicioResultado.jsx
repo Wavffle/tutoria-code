@@ -79,6 +79,9 @@ export default function EjercicioResultado({ estado, salida, onReintentar, onRef
                         {fb.conceptosLogrados.map((c, i) => (
                             <span key={i} className="ej-resultado__tag ej-resultado__tag--verde">✓ {c}</span>
                         ))}
+                        {fb.conceptosError.map((c, i) => (
+                            <span key={i} className="ej-resultado__tag ej-resultado__tag--rojo">✗ {c}</span>
+                        ))}
                     </div>
                 </div>
                 <div className="ej-resultado__incorrecto-right">

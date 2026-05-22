@@ -1,10 +1,10 @@
-import {useEffect, useRef, useState} from 'react'
+import { useEffect, useRef, useState } from 'react'
 import PerfilNavbar from '../components/shared/PerfilNavbar'
 import EjercicioInfo from '../components/Ejercicio/EjercicioInfo'
 import EjercicioEditor from '../components/Ejercicio/EjercicioEditor'
 import EjercicioFooter from '../components/Ejercicio/EjercicioFooter'
 import EjercicioResultado from '../components/Ejercicio/EjercicioResultado'
-import {ejercicioData} from '../components/Ejercicio/ejercicioData'
+import { ejercicioData } from '../components/Ejercicio/ejercicioData'
 import './Ejercicio.css'
 
 export default function Ejercicio() {
@@ -14,7 +14,6 @@ export default function Ejercicio() {
   const [cargandoPython, setCargandoPython] = useState(true)
   const pyodideRef = useRef(null)
 
-  // Carga Pyodide al montar el componente
   useEffect(() => {
     async function cargarPyodide() {
       pyodideRef.current = await window.loadPyodide({
@@ -30,7 +29,6 @@ export default function Ejercicio() {
     if (!pyodideRef.current) return
 
     try {
-      // Captura el print() del código del estudiante
       pyodideRef.current.runPython(`
 import sys
 from io import StringIO
@@ -42,7 +40,6 @@ sys.stdout = StringIO()
       const output = pyodideRef.current.runPython('sys.stdout.getvalue()').trim()
       setSalida(output || '(Sin salida)')
 
-      // Compara la salida real con la esperada
       const salidaLimpia = output.trim().toLowerCase()
       const esperadaLimpia = ejercicioData.salidaEsperada.trim().toLowerCase()
       const esCorrecto = salidaLimpia === esperadaLimpia
@@ -55,12 +52,10 @@ sys.stdout = StringIO()
       }
 
     } catch (error) {
-      // Error de sintaxis o ejecución
       setSalida(`Error: ${error.message}`)
       setEstado('incorrecto')
       setErrores(prev => prev + 1)
     } finally {
-      // Restaura stdout
       pyodideRef.current.runPython('sys.stdout = sys.__stdout__')
     }
   }
@@ -112,10 +107,6 @@ sys.stdout = StringIO()
         <div className="ejercicio-page__bottom">
           <div className="ejercicio-page__salida">
             <div className="ejercicio-page__salida-body">
-              <div className="ejercicio-page__salida-lines">
-                <span>1</span>
-                <span>2</span>
-              </div>
               <div className="ejercicio-page__salida-content">
                 <p className="ejercicio-page__salida-label">Salida:</p>
                 <p className={`ejercicio-page__salida-valor ${estado === 'incorrecto' ? 'ejercicio-page__salida-valor--error' : ''}`}>

@@ -44,7 +44,6 @@
 }
 .ejercicio-page__salida-body {
   display: flex;
-  gap: 16px;
   padding: 20px 16px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.85rem;

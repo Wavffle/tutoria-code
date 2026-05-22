@@ -16,15 +16,35 @@
   gap: 10px;
   padding-left: 90px;
 }
+
+/* Base robot — compartido */
 .ej-footer__robot {
-  width: 130px;
-  height: 130px;
   object-fit: contain;
   position: absolute;
-  top: -55px;
-  left: 0;
   z-index: 10;
 }
+
+.ej-footer__robot--pendiente {
+  width: 130px;
+  height: 130px;
+  top: -55px;
+  left: 0;
+}
+
+.ej-footer__robot--correcto {
+  width: 110px;
+  height: 110px;
+  top: -55px;
+  left: 10px;
+}
+
+.ej-footer__robot--incorrecto {
+  width: 110px;
+  height: 110px;
+  top: -55px;
+  left: 10px;
+}
+
 .ej-footer__label {
   font-family: 'Inter', sans-serif;
   font-size: 0.88rem;
@@ -85,11 +105,9 @@
   filter: brightness(0) invert(1);
 }
 .ej-footer__btn--pista .ej-footer__btn-icon {
-  width: 16px;
-  height: 16px;
-  object-fit: contain;
   filter: none;
 }
+
 /* Right */
 .ej-footer__right {
   display: flex;
