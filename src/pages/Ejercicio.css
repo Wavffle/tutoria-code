@@ -1,0 +1,88 @@
+.ejercicio-page {
+  min-height: 100vh;
+  background-color: #eeeee9;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', sans-serif;
+}
+
+/* ── Main: info + editor ── */
+.ejercicio-page__main {
+  display: grid;
+  grid-template-columns: 700px 1fr;
+  flex: 1;
+  min-height: 500px;
+  padding-right: 32px;
+}
+
+.ejercicio-page__left {
+  background-color: #eeeee9;
+  border-right: 1px solid rgba(0,0,0,0.08);
+  overflow-y: auto;
+  max-height: 75vh;
+}
+
+.ejercicio-page__right {
+  background-color: #1a1e16;
+}
+
+/* ── Footer ── */
+/* (en EjercicioFooter.css) */
+
+/* ── Bottom: salida + feedback ── */
+.ejercicio-page__bottom {
+  display: grid;
+  grid-template-columns: 500px 1fr;
+  min-height: 180px;
+  border-top: 1px solid rgba(0,0,0,0.1);
+}
+
+.ejercicio-page__salida {
+  background-color: #1a1e16;
+  display: flex;
+  flex-direction: column;
+}
+.ejercicio-page__salida-body {
+  display: flex;
+  gap: 16px;
+  padding: 20px 16px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85rem;
+  flex: 1;
+}
+.ejercicio-page__salida-lines {
+  display: flex;
+  flex-direction: column;
+  color: #4a5c3a;
+  opacity: 0.5;
+  font-size: 0.82rem;
+  gap: 0;
+  user-select: none;
+}
+.ejercicio-page__salida-lines span { line-height: 1.75; }
+.ejercicio-page__salida-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.ejercicio-page__salida-label {
+  color: #a8c488;
+  line-height: 1.75;
+}
+.ejercicio-page__salida-valor {
+  color: #a8c488;
+  line-height: 1.75;
+}
+.ejercicio-page__salida-valor--error {
+  color: #e74c3c;
+}
+
+.ejercicio-page__feedback {
+  background-color: #eeeee9;
+  padding: 20px 24px;
+  display: flex;
+  align-items: stretch;
+}
+.ejercicio-page__feedback > * {
+  width: 100%;
+}
