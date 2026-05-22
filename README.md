@@ -6,19 +6,32 @@ Proyecto desarrollado con React + Vite.
 
 Antes de ejecutar el proyecto, instalar:
 
-- Node.js
+- Node.js (versión 18 o superior)
 - Git
 - Un editor o IDE como IntelliJ, VS Code o WebStorm
+- Google Chrome o Firefox (recomendado para compatibilidad con Pyodide)
 
-## Para ejecutar el proyecto:
+## Dependencias principales
 
-- Clonar el repositorio en tu IDE
-- Adentro del proyecto clonado abrir la terminal del IDE y ejecutar en orden:
+El proyecto usa las siguientes librerías (se instalan automáticamente con `npm install`):
+
+- **React 18** — biblioteca de interfaces
+- **React Router DOM** — navegación entre pantallas
+- **@uiw/react-codemirror** — editor de código con syntax highlighting
+- **@codemirror/lang-python** — soporte de Python en el editor
+- **@codemirror/theme-one-dark** — tema oscuro del editor
+- **Pyodide** — ejecuta Python real en el navegador (se carga desde CDN, requiere internet)
+
+## Para ejecutar el proyecto
+
+1. Clonar el repositorio
+2. Abrir la terminal dentro de la carpeta del proyecto y ejecutar en orden:
 
 ```bash
 npm install
 npm run dev
 ```
-- Abrir en el navegador la url que te aparecerá.
 
-Ejemplo: (http://localhost:xxxx/)
+3. Abrir en el navegador la URL que aparecerá.
+
+Ejemplo: `http://localhost:5173/`
