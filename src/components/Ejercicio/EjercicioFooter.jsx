@@ -4,9 +4,9 @@ import AyudaPopup from './AyudaPopup'
 import './EjercicioFooter.css'
 
 const robotImg = {
-  pendiente:  '/robotSentado.png',
-  correcto:   '/robotCorrecto.png',
-  incorrecto: '/robotIncorrecto.png',
+  pendiente:  '/robotTutorIA/robotSentado.png',
+  correcto:   '/robotTutorIA/robotCorrecto.png',
+  incorrecto: '/robotTutorIA/robotIncorrecto.png',
 }
 
 export default function EjercicioFooter({ estado, onPedirPista, onNuevoEjercicio }) {
