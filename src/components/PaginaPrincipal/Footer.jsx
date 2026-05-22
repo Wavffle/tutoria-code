@@ -6,12 +6,12 @@ export default function Footer() {
             <div className="footer__inner">
 
                 <div className="footer__item">
-                    <img src="/LogoMoodle.png" alt="Moodle" className="footer__icon-img" />
+                    <img src="/logos/LogoMoodle.png" alt="Moodle" className="footer__icon-img" />
                     <p className="footer__text">TutorIA Code está integrado con Moodle</p>
                 </div>
 
                 <div className="footer__item">
-                    <img src="/SincronizacionIcono.png" alt="Sincronización" className="footer__icon-img" />
+                    <img src="/iconos/SincronizacionIcono.png" alt="Sincronización" className="footer__icon-img" />
                     <div>
                         <p className="footer__label">Sincronización</p>
                         <p className="footer__sub">Tu progreso se guarda y es sincronizado con tu curso</p>
@@ -19,7 +19,7 @@ export default function Footer() {
                 </div>
 
                 <div className="footer__item">
-                    <img src="/PrivacidadIcono.png" alt="Privacidad" className="footer__icon-img" />
+                    <img src="/iconos/PrivacidadIcono.png" alt="Privacidad" className="footer__icon-img" />
                     <div>
                         <p className="footer__label">Privacidad</p>
                         <p className="footer__sub">Tus datos están protegidos y son utilizados con fines educativos</p>

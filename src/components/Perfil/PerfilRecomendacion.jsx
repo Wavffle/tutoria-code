@@ -10,7 +10,7 @@ export default function PerfilRecomendacion() {
             <h2 className="recomendacion__title">Recomendación TutorIA</h2>
 
             <div className="recomendacion__body">
-                <img src="/robotLampara.png" alt="TutorIA recomienda" className="recomendacion__robot" />
+                <img src="/robot%20TutorIA/robotLampara.png" alt="TutorIA recomienda" className="recomendacion__robot" />
                 <div className="recomendacion__texto-wrap">
                     <p className="recomendacion__texto">
                         {perfilData.recomendacion.texto}{' '}

@@ -58,7 +58,7 @@ export default function Demo() {
           </div>
 
           {/* Robot image placeholder */}
-          <img src="/robot1.png" alt="Robot tutor" className="demo__robot-img" />
+          <img src="/robot%20TutorIA/robotInicio.png" alt="Robot tutor" className="demo__robot-img" />
         </div>
 
       </div>

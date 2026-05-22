@@ -19,12 +19,12 @@ export default function EjercicioInfo({ estado, errores }) {
         <div className="ej-info__ia-header">
           {esIncorrecto ? (
             <>
-              <img src="/xIcono.png" alt="Error" className="ej-info__ia-icon" />
+              <img src="/iconos/xIcono.png" alt="Error" className="ej-info__ia-icon" />
               <span className="ej-info__ia-title ej-info__ia-title--error">Se han detectado errores</span>
             </>
           ) : (
             <>
-              <img src="/iAIcono.png" alt="IA" className="ej-info__ia-icon" />
+              <img src="/iconos/iAIcono.png" alt="IA" className="ej-info__ia-icon" />
               <span className="ej-info__ia-title">Ejercicio generado por IA</span>
             </>
           )}
@@ -59,7 +59,7 @@ export default function EjercicioInfo({ estado, errores }) {
 
       {/* Pista del tutor */}
       <div className="ej-info__pista-box">
-          <img src="/ampolletaIcono.png" alt="Tip" className="ej-info__pista-robot" />
+          <img src="/iconos/ampolletaIcono.png" alt="Tip" className="ej-info__pista-robot" />
           <p className="ej-info__pista-texto">
               {ejercicioData.pista}
           </p>

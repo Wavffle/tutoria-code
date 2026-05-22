@@ -35,11 +35,11 @@ export default function EjercicioFooter({ estado, onPedirPista, onNuevoEjercicio
 
         <div className="ej-footer__center">
           <button className="ej-footer__btn ej-footer__btn--pista" onClick={onPedirPista}>
-            <img src="/ampolletaIcono2.png" alt="Pista" className="ej-footer__btn-icon" />
+            <img src="/iconos/ampolletaIcono2.png" alt="Pista" className="ej-footer__btn-icon" />
             Pedir pista
           </button>
           <button className="ej-footer__btn ej-footer__btn--nuevo" onClick={onNuevoEjercicio}>
-            <img src="/repetirIcono.png" alt="Nuevo" className="ej-footer__btn-icon" />
+            <img src="/iconos/repetirIcono.png" alt="Nuevo" className="ej-footer__btn-icon" />
             Nuevo ejercicio del mismo nivel
           </button>
         </div>
@@ -49,7 +49,7 @@ export default function EjercicioFooter({ estado, onPedirPista, onNuevoEjercicio
             ← Ir al dashboard
           </button>
           <button className="ej-footer__ayuda" onClick={() => setMostrarAyuda(true)}>
-            <img src="/interrogacionIcono.png" alt="Ayuda" className="ej-footer__ayuda-icon" />
+            <img src="/iconos/interrogacionIcono.png" alt="Ayuda" className="ej-footer__ayuda-icon" />
             ¿Necesitas ayuda?
           </button>
         </div>

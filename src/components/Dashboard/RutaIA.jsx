@@ -3,7 +3,7 @@ import './RutaIA.css'
 export default function RutaIA() {
     return (
         <div className="ruta-ia">
-            <img src="/robotSaludando.png" alt="Robot TutorIA" className="ruta-ia__robot" />
+            <img src="/robot%20TutorIA/robotSaludando.png" alt="Robot TutorIA" className="ruta-ia__robot" />
 
             <div className="ruta-ia__left">
                 <div className="ruta-ia__text">
@@ -20,7 +20,7 @@ export default function RutaIA() {
             <div className="ruta-ia__divider" />
 
             <div className="ruta-ia__right">
-                <img src="/targetIcon.png" alt="Objetivo" className="ruta-ia__target" />
+                <img src="/iconos/targetIcon.png" alt="Objetivo" className="ruta-ia__target" />
                 <p className="ruta-ia__right-text">
                     El contenido se genera en cada practica para que siempre sea diferente y desafiante
                 </p>

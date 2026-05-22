@@ -51,7 +51,7 @@ export default function FeedbackSidebar() {
           <p><strong>Decisión:</strong> {feedbackData.decision.accion}</p>
         </div>
         <div className="fb-sidebar__decision-box">
-          <img src="/iAIcono.png" alt="IA" className="fb-sidebar__ia-icon" />
+          <img src="/iconos/iAIcono.png" alt="IA" className="fb-sidebar__ia-icon" />
           <p>{feedbackData.decision.mensaje}</p>
         </div>
       </div>

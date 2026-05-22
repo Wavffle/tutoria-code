@@ -27,7 +27,7 @@ export default function PerfilInfo() {
 
         {/* TutorIA te acompaña */}
         <div className="perfil-info__tutor-box">
-          <img src="/Icono2.png" alt="TutorIA" className="perfil-info__tutor-img" />
+          <img src="/logos/logoAvatar.png" alt="TutorIA" className="perfil-info__tutor-img" />
           <div>
             <p className="perfil-info__tutor-title">TutorIA te acompaña</p>
             <p className="perfil-info__tutor-desc">

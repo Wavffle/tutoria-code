@@ -6,7 +6,7 @@ export default function AyudaPopup({ onClose }) {
       <div className="ayuda-modal" onClick={e => e.stopPropagation()}>
 
         <div className="ayuda-modal__header">
-          <img src="/interrogacionIcono.png" alt="Ayuda" className="ayuda-modal__header-icon" />
+          <img src="/iconos/interrogacionIcono.png" alt="Ayuda" className="ayuda-modal__header-icon" />
           <div>
             <h2 className="ayuda-modal__titulo">¿Necesitas ayuda?</h2>
             <p className="ayuda-modal__subtitulo">La IA puede acompañarte en tu aprendizaje.</p>
@@ -20,21 +20,21 @@ export default function AyudaPopup({ onClose }) {
 
         <div className="ayuda-modal__cards">
           <div className="ayuda-modal__card">
-            <img src="/ampolletaIcono2.png" alt="Pistas" className="ayuda-modal__card-icon ayuda-modal__card-icon--blue" />
+            <img src="/iconos/ampolletaIcono2.png" alt="Pistas" className="ayuda-modal__card-icon ayuda-modal__card-icon--blue" />
             <div>
               <p className="ayuda-modal__card-titulo">Pistas guiadas</p>
               <p className="ayuda-modal__card-desc">Recibe pistas paso a paso para orientarte sin darte la solución directa.</p>
             </div>
           </div>
           <div className="ayuda-modal__card">
-            <img src="/lupaIcono.png" alt="Revisión" className="ayuda-modal__card-icon" />
+            <img src="/iconos/lupaIcono.png" alt="Revisión" className="ayuda-modal__card-icon" />
             <div>
               <p className="ayuda-modal__card-titulo">Revisión de errores</p>
               <p className="ayuda-modal__card-desc">Si tu código no funciona, la IA te ayudará a entender qué salió mal.</p>
             </div>
           </div>
           <div className="ayuda-modal__card">
-            <img src="/puzzleIcono.png" alt="Refuerzo" className="ayuda-modal__card-icon" />
+            <img src="/iconos/puzzleIcono.png" alt="Refuerzo" className="ayuda-modal__card-icon" />
             <div>
               <p className="ayuda-modal__card-titulo">Ejercicios de refuerzo</p>
               <p className="ayuda-modal__card-desc">Si lo necesitas, te puede generar ejercicios para que practiques.</p>

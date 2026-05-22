@@ -42,7 +42,7 @@ export default function DashboardNavbar() {
       <div className="db-navbar__sugerencia">
         <p className="db-navbar__sugerencia-title">Sugerencia del tutor</p>
         <div className="db-navbar__sugerencia-body">
-          <img src="/programacionIcono.png" alt="Código" className="db-navbar__sugerencia-icon" />
+          <img src="/iconos/programacionIcono.png" alt="Código" className="db-navbar__sugerencia-icon" />
           <p className="db-navbar__sugerencia-text">"{userData.sugerencia}"</p>
         </div>
       </div>

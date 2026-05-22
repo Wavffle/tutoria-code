@@ -36,12 +36,12 @@ export default function ModuloCard({ modulo, onIAClick }) {
               >
             <span className="modulo-card__item-icon">
               {ej.tipo === 'ia' && (
-                  <img src="/iAIcono.png" alt="IA" className="modulo-card__ia-img" />
+                  <img src="/iconos/iAIcono.png" alt="IA" className="modulo-card__ia-img" />
               )}
               {ej.tipo === 'ejercicio' && ej.estado === 'completado' && '✓'}
               {ej.tipo === 'ejercicio' && ej.estado === 'disponible' && '▶'}
                 {ej.tipo === 'ejercicio' && ej.estado === 'bloqueado' && (
-                    <img src="/candadoIcono.png" alt="Bloqueado" className="modulo-card__candado" />
+                    <img src="/iconos/candadoIcono.png" alt="Bloqueado" className="modulo-card__candado" />
                 )}
             </span>
                 <span className="modulo-card__item-texto">{ej.texto}</span>
@@ -50,7 +50,7 @@ export default function ModuloCard({ modulo, onIAClick }) {
                         className="modulo-card__info-btn"
                         onClick={(e) => { e.stopPropagation(); onIAClick(modulo) }}
                     >
-                      <img src="/infoIcono.png" alt="Info" className="modulo-card__info-img" />
+                      <img src="/iconos/infoIcono.png" alt="Info" className="modulo-card__info-img" />
                     </button>
                 )}
                 {ej.tipo === 'ejercicio' && ej.estado !== 'bloqueado' && (
