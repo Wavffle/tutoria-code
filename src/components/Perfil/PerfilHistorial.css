@@ -1,0 +1,81 @@
+.historial {
+  background: #eeeeee;
+  border: 1px solid rgba(0,0,0,0.1);
+  border-radius: 16px;
+  padding: 28px 28px;
+  flex: 1;
+}
+.historial__title {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1c1c1c;
+  margin-bottom: 20px;
+}
+.historial__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.historial__table thead tr th {
+  text-align: left;
+  font-size: 0.83rem;
+  font-weight: 500;
+  color: #999;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+.historial__table thead tr th:nth-child(2),
+.historial__table thead tr th:nth-child(3) {
+  text-align: center;
+}
+.historial__table tbody tr {
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  transition: background 0.15s;
+}
+.historial__table tbody tr:last-child {
+  border-bottom: none;
+}
+.historial__table tbody tr:hover {
+  background-color: #f8f8f5;
+}
+.historial__table tbody tr td {
+  padding: 14px 0;
+  vertical-align: middle;
+}
+.historial__ejercicio {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #1c1c1c;
+  margin-bottom: 2px;
+}
+.historial__modulo {
+  font-size: 0.78rem;
+  color: #999;
+}
+.historial__resultado {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #444;
+  text-align: center;
+}
+.historial__estado {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  color: #4a5c3a;
+  font-weight: 500;
+}
+.historial__check {
+  font-weight: 700;
+  color: #4a5c3a;
+}
+
+.historial__vacio {
+  text-align: center;
+  color: #bbb;
+  font-size: 0.88rem;
+  padding: 40px 0;
+  font-style: italic;
+}
