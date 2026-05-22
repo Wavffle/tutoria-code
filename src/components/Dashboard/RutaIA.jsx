@@ -3,8 +3,9 @@ import './RutaIA.css'
 export default function RutaIA() {
     return (
         <div className="ruta-ia">
+            <img src="/robotSaludando.png" alt="Robot TutorIA" className="ruta-ia__robot" />
+
             <div className="ruta-ia__left">
-                <img src="/robotSaludando.png" alt="Robot TutorIA" className="ruta-ia__robot" />
                 <div className="ruta-ia__text">
                     <h2 className="ruta-ia__titulo">
                         Ruta adaptativa basada en IA

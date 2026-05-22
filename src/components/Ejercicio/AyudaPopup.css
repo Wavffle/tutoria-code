@@ -1,0 +1,159 @@
+.ayuda-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.ayuda-modal {
+  background: #f0f2f4;
+  border-radius: 20px;
+  padding: 36px;
+  max-width: 500px;
+  width: 90%;
+  position: relative;
+  animation: slideUp 0.25s cubic-bezier(0.22,1,0.36,1);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Header */
+.ayuda-modal__header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.ayuda-modal__header-icon {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.ayuda-modal__titulo {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #0c6277;
+  margin-bottom: 4px;
+}
+
+.ayuda-modal__subtitulo {
+  font-size: 0.9rem;
+  color: #888;
+}
+
+/* Intro */
+.ayuda-modal__intro {
+  font-size: 0.9rem;
+  color: #444;
+  line-height: 1.6;
+}
+
+/* Cards */
+.ayuda-modal__cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.ayuda-modal__card {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background-color: #dde3e8;
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+
+.ayuda-modal__card-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.ayuda-modal__card-icon--blue {
+  filter: invert(1) sepia(1) saturate(3) hue-rotate(155deg) brightness(0.5);
+}
+
+.ayuda-modal__card-titulo {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1a6070;
+  margin-bottom: 4px;
+}
+
+.ayuda-modal__card-desc {
+  font-size: 0.83rem;
+  color: #444;
+  line-height: 1.5;
+}
+
+/* Consejos */
+.ayuda-modal__consejos {
+  border: 1.5px solid #a0c4cc;
+  border-radius: 12px;
+  padding: 16px 20px;
+  background-color: transparent;
+}
+
+.ayuda-modal__consejos-titulo {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #1a6070;
+  margin-bottom: 10px;
+}
+
+.ayuda-modal__consejos-lista {
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ayuda-modal__consejos-lista li {
+  font-size: 0.83rem;
+  color: #444;
+  line-height: 1.5;
+}
+
+/* Botón */
+.ayuda-modal__btn {
+  background-color: #1a6070;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  padding: 15px;
+  font-family: 'Inter', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.15s;
+  width: 60%;
+  align-self: center;
+}
+
+.ayuda-modal__btn:hover {
+  background-color: #134d5a;
+  transform: translateY(-1px);
+}

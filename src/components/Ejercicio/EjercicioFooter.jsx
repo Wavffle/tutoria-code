@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import AyudaPopup from './AyudaPopup'
 import './EjercicioFooter.css'
 
 const robotImg = {
@@ -9,6 +11,7 @@ const robotImg = {
 
 export default function EjercicioFooter({ estado, onPedirPista, onNuevoEjercicio }) {
   const navigate = useNavigate()
+  const [mostrarAyuda, setMostrarAyuda] = useState(false)
 
   const estadoConfig = {
     pendiente:  { color: '#f0ad4e', texto: 'Ejercicio sin completar' },
@@ -45,11 +48,15 @@ export default function EjercicioFooter({ estado, onPedirPista, onNuevoEjercicio
           <button className="ej-footer__link" onClick={() => navigate('/dashboard')}>
             ← Ir al dashboard
           </button>
-          <button className="ej-footer__ayuda">
+          <button className="ej-footer__ayuda" onClick={() => setMostrarAyuda(true)}>
             <img src="/interrogacionIcono.png" alt="Ayuda" className="ej-footer__ayuda-icon" />
             ¿Necesitas ayuda?
           </button>
         </div>
+
+        {mostrarAyuda && (
+            <AyudaPopup onClose={() => setMostrarAyuda(false)} />
+        )}
       </div>
   )
 }

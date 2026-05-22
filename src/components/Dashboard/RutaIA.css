@@ -1,4 +1,5 @@
 .ruta-ia {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -6,6 +7,7 @@
   background-color: rgb(118 136 91 / 0.02);
   padding: 24px 80px;
   border-bottom: 1px solid rgba(0,0,0,0.07);
+  overflow: visible;
 }
 
 .ruta-ia__left {
@@ -75,10 +77,13 @@
 }
 
 .ruta-ia__robot {
-  width: 80px;
-  height: 80px;
+  width: 110px;
+  height: 110px;
   object-fit: contain;
   flex-shrink: 0;
+  position: absolute;
+  bottom: 0;        /* cuánto sobresale hacia abajo */
+  left: 380px;           /* alineado con el padding */
 }
 
 .ruta-ia__target {

@@ -40,7 +40,9 @@ export default function ModuloCard({ modulo, onIAClick }) {
               )}
               {ej.tipo === 'ejercicio' && ej.estado === 'completado' && '✓'}
               {ej.tipo === 'ejercicio' && ej.estado === 'disponible' && '▶'}
-              {ej.tipo === 'ejercicio' && ej.estado === 'bloqueado' && '🔒'}
+                {ej.tipo === 'ejercicio' && ej.estado === 'bloqueado' && (
+                    <img src="/candadoIcono.png" alt="Bloqueado" className="modulo-card__candado" />
+                )}
             </span>
                 <span className="modulo-card__item-texto">{ej.texto}</span>
                 {ej.tipo === 'ia' && (

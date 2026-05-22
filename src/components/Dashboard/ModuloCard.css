@@ -158,3 +158,10 @@
   height: 18px;
   object-fit: contain;
 }
+
+.modulo-card__candado {
+  width: 14px;
+  height: 14px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
