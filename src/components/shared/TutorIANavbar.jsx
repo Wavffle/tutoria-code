@@ -39,7 +39,10 @@ export default function TutorIANavbar({ breadcrumb }) {
                 <div className="perfil-navbar__nivel">
                     Nivel: <strong>{perfilData.nivelActual}</strong>
                 </div>
-                <div className="perfil-navbar__avatar">
+                <div
+                    className="perfil-navbar__avatar"
+                    onClick={() => navigate('/perfil')}
+                >
                     {perfilData.iniciales}
                 </div>
             </div>

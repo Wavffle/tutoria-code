@@ -106,3 +106,12 @@
   font-weight: 700;
   font-size: 0.9rem;
 }
+
+.perfil-navbar__avatar {
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.perfil-navbar__avatar:hover {
+  opacity: 0.85;
+}
