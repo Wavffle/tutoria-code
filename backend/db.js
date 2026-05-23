@@ -12,46 +12,59 @@ db.exec(`
         moodle_id TEXT UNIQUE NOT NULL,
         nombre TEXT NOT NULL,
         apellido TEXT NOT NULL,
-        correo TEXT NOT NULL,
-        nivel TEXT DEFAULT 'basico',
-        lenguaje TEXT DEFAULT 'python',
-        progreso_nivel INTEGER DEFAULT 0,
-        ejercicios_completados INTEGER DEFAULT 0,
-        ejercicios_correctos INTEGER DEFAULT 0,
-        tiempo_total_segundos INTEGER DEFAULT 0,
-        created_at TEXT DEFAULT (datetime('now')),
-        updated_at TEXT DEFAULT (datetime('now'))
+        correo TEXT UNIQUE NOT NULL,
+        nivel_actual INTEGER NOT NULL DEFAULT 1,
+        progreso_nivel INTEGER NOT NULL DEFAULT 0,
+        ejercicios_completados INTEGER NOT NULL DEFAULT 0,
+        ejercicios_correctos INTEGER NOT NULL DEFAULT 0,
+        tiempo_total_segundos INTEGER NOT NULL DEFAULT 0,
+        ed_at TEXT NOT NULL DEFAULT (datetime('now')),
+        updated_at TEXT NOT NULL DEFAULT (datetime('now'))
+        );
+
+    CREATE TABLE IF NOT EXISTS sesiones (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        estudiante_id INTEGER NOT NULL,
+        fecha_inicio TEXT NOT NULL DEFAULT (datetime('now')),
+        fecha_cierre TEXT,
+        activa INTEGER NOT NULL DEFAULT 1,
+        FOREIGN KEY (estudiante_id) REFERENCES estudiantes(id)
         );
 
     CREATE TABLE IF NOT EXISTS ejercicios (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        titulo TEXT NOT NULL,
         modulo TEXT NOT NULL,
         titulo_modulo TEXT NOT NULL,
-        total_ejercicios_modulo INTEGER DEFAULT 0,
-        nivel TEXT NOT NULL,
-        lenguaje TEXT DEFAULT 'python',
+        total_ejercicios_modulo INTEGER NOT NULL DEFAULT 0,
+        nivel INTEGER NOT NULL,
+        lenguaje TEXT NOT NULL DEFAULT 'python',
+        titulo TEXT NOT NULL,
         descripcion TEXT NOT NULL,
-        salida_esperada TEXT NOT NULL,
+        salida_esperada TEXT,
         conceptos TEXT,
-        created_at TEXT DEFAULT (datetime('now'))
+        es_refuerzo INTEGER NOT NULL DEFAULT 0,
+        ejercicio_origen_id INTEGER,
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
+        FOREIGN KEY (ejercicio_origen_id) REFERENCES ejercicios(id)
         );
 
     CREATE TABLE IF NOT EXISTS intentos (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         estudiante_id INTEGER NOT NULL,
         ejercicio_id INTEGER NOT NULL,
-        codigo_enviado TEXT,
-        es_correcto INTEGER DEFAULT 0,
-        puntaje INTEGER DEFAULT 0,
-        numero_intento INTEGER DEFAULT 1,
-        errores_acumulados INTEGER DEFAULT 0,
-        tiempo_segundos INTEGER DEFAULT 0,
+        sesion_id INTEGER NOT NULL,
+        codigo_enviado TEXT NOT NULL,
+        es_correcto INTEGER NOT NULL DEFAULT 0,
+        puntaje REAL,
+        numero_intento INTEGER NOT NULL DEFAULT 1,
+        errores_acumulados INTEGER NOT NULL DEFAULT 0,
+        tiempo_segundos INTEGER,
         feedback TEXT,
         decision_tutor TEXT,
-        created_at TEXT DEFAULT (datetime('now')),
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
         FOREIGN KEY (estudiante_id) REFERENCES estudiantes(id),
-        FOREIGN KEY (ejercicio_id) REFERENCES ejercicios(id)
+        FOREIGN KEY (ejercicio_id) REFERENCES ejercicios(id),
+        FOREIGN KEY (sesion_id) REFERENCES sesiones(id)
         );
 
     CREATE TABLE IF NOT EXISTS progreso_modulo (
@@ -59,12 +72,26 @@ db.exec(`
         estudiante_id INTEGER NOT NULL,
         modulo TEXT NOT NULL,
         titulo_modulo TEXT NOT NULL,
-        total_ejercicios INTEGER DEFAULT 0,
-        ejercicios_completados INTEGER DEFAULT 0,
-        ejercicios_correctos INTEGER DEFAULT 0,
-        errores_acumulados INTEGER DEFAULT 0,
-        updated_at TEXT DEFAULT (datetime('now')),
-        FOREIGN KEY (estudiante_id) REFERENCES estudiantes(id)
+        total_ejercicios INTEGER NOT NULL DEFAULT 0,
+        ejercicios_completados INTEGER NOT NULL DEFAULT 0,
+        ejercicios_correctos INTEGER NOT NULL DEFAULT 0,
+        errores_acumulados INTEGER NOT NULL DEFAULT 0,
+        updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+        FOREIGN KEY (estudiante_id) REFERENCES estudiantes(id),
+        UNIQUE (estudiante_id, modulo)
+        );
+
+    CREATE TABLE IF NOT EXISTS contexto_cognitivo (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        estudiante_id INTEGER UNIQUE NOT NULL,
+        modulo_activo TEXT,
+        ejercicios_correctos_consecutivos INTEGER NOT NULL DEFAULT 0,
+        ejercicios_incorrectos_consecutivos INTEGER NOT NULL DEFAULT 0,
+        ultima_decision TEXT,
+        ultimo_ejercicio_id INTEGER,
+        updated_at TEXT NOT NULL DEFAULT (datetime('now')),
+        FOREIGN KEY (estudiante_id) REFERENCES estudiantes(id),
+        FOREIGN KEY (ultimo_ejercicio_id) REFERENCES ejercicios(id)
         );
 `);
 
