@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useLocation } from 'react-router-dom'
 import TutorIANavbar from '../components/shared/TutorIANavbar.jsx'
 import EjercicioInfo from '../components/Ejercicio/EjercicioInfo'
 import EjercicioEditor from '../components/Ejercicio/EjercicioEditor'
@@ -8,6 +9,12 @@ import { ejercicioData } from '../components/Ejercicio/ejercicioData'
 import './Ejercicio.css'
 
 export default function Ejercicio() {
+  const location = useLocation()
+  const ejercicioSeleccionado = location.state?.ejercicio
+  const moduloSeleccionado = location.state?.modulo
+  const numeroEjercicio = location.state?.numeroEjercicio || ejercicioData.ejercicioNum
+  const totalEjercicios = location.state?.totalEjercicios || ejercicioData.ejercicioTotal
+
   const [estado, setEstado] = useState('pendiente')
   const [salida, setSalida] = useState('')
   const [errores, setErrores] = useState(ejercicioData.errores)
@@ -34,23 +41,18 @@ import sys
 from io import StringIO
 sys.stdout = StringIO()
       `)
-
       pyodideRef.current.runPython(code)
-
       const output = pyodideRef.current.runPython('sys.stdout.getvalue()').trim()
       setSalida(output || '(Sin salida)')
-
       const salidaLimpia = output.trim().toLowerCase()
       const esperadaLimpia = ejercicioData.salidaEsperada.trim().toLowerCase()
       const esCorrecto = salidaLimpia === esperadaLimpia
-
       if (esCorrecto) {
         setEstado('correcto')
       } else {
         setEstado('incorrecto')
         setErrores(prev => prev + 1)
       }
-
     } catch (error) {
       setSalida(`Error: ${error.message}`)
       setEstado('incorrecto')
@@ -60,34 +62,31 @@ sys.stdout = StringIO()
     }
   }
 
-  function handleReintentar() {
-    setEstado('pendiente')
-    setSalida('')
-  }
+  function handleReintentar() { setEstado('pendiente'); setSalida('') }
+  function handleRefuerzo()   { setEstado('pendiente'); setSalida(''); setErrores(0) }
+  function handleNuevoEjercicio() { setEstado('pendiente'); setSalida(''); setErrores(0) }
 
-  function handleRefuerzo() {
-    setEstado('pendiente')
-    setSalida('')
-    setErrores(0)
-  }
-
-  function handleNuevoEjercicio() {
-    setEstado('pendiente')
-    setSalida('')
-    setErrores(0)
-  }
+  const tituloModulo   = moduloSeleccionado?.titulo || ejercicioData.modulo
+  const tituloEjercicio = ejercicioSeleccionado?.texto || ejercicioData.practica
 
   return (
       <div className="ejercicio-page">
         <TutorIANavbar breadcrumb={[
           { label: 'Dashboard', path: '/dashboard' },
-          { label: ejercicioData.modulo, path: '/dashboard' },
-          { label: ejercicioData.practica }
+          { label: tituloModulo, path: '/dashboard' },
+          { label: tituloEjercicio }
         ]} />
 
         <div className="ejercicio-page__main">
           <div className="ejercicio-page__left">
-            <EjercicioInfo estado={estado} errores={errores} />
+            <EjercicioInfo
+                estado={estado}
+                errores={errores}
+                ejercicioSeleccionado={ejercicioSeleccionado}
+                moduloSeleccionado={moduloSeleccionado}
+                numeroEjercicio={numeroEjercicio}
+                totalEjercicios={totalEjercicios}
+            />
           </div>
           <div className="ejercicio-page__right">
             <EjercicioEditor
@@ -115,7 +114,6 @@ sys.stdout = StringIO()
               </div>
             </div>
           </div>
-
           <div className="ejercicio-page__feedback">
             <EjercicioResultado
                 estado={estado}

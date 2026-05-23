@@ -29,7 +29,7 @@
   margin-bottom: 10px;
 }
 .perfil-info__barra {
-  height: 10px;
+  height: 16px;
   background-color: #ddd;
   border-radius: 999px;
   overflow: hidden;
@@ -51,15 +51,15 @@
 .perfil-info__tutor-box {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 5px;
   background-color: rgb(232 233 225);
   border-radius: 16px;
-  padding: 18px 20px;
+  padding: 24px 20px;
   max-width: 420px;
 }
 .perfil-info__tutor-img {
-  width: 60px;
-  height: 60px;
+  width: 90px;
+  height: 90px;
   object-fit: contain;
   flex-shrink: 0;
 }
