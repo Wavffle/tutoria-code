@@ -18,7 +18,7 @@ db.exec(`
         ejercicios_completados INTEGER NOT NULL DEFAULT 0,
         ejercicios_correctos INTEGER NOT NULL DEFAULT 0,
         tiempo_total_segundos INTEGER NOT NULL DEFAULT 0,
-        ed_at TEXT NOT NULL DEFAULT (datetime('now')),
+        created_at TEXT NOT NULL DEFAULT (datetime('now')),
         updated_at TEXT NOT NULL DEFAULT (datetime('now'))
         );
 
@@ -44,6 +44,8 @@ db.exec(`
         conceptos TEXT,
         es_refuerzo INTEGER NOT NULL DEFAULT 0,
         ejercicio_origen_id INTEGER,
+        prompt_enviado TEXT,
+        modelo_usado TEXT,
         created_at TEXT NOT NULL DEFAULT (datetime('now')),
         FOREIGN KEY (ejercicio_origen_id) REFERENCES ejercicios(id)
         );
