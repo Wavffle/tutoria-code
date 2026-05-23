@@ -82,8 +82,8 @@
   object-fit: contain;
   flex-shrink: 0;
   position: absolute;
-  bottom: 0;        /* cuánto sobresale hacia abajo */
-  left: 380px;           /* alineado con el padding */
+  bottom: 0;
+  left: 380px;
 }
 
 .ruta-ia__target {

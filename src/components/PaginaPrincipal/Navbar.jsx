@@ -12,7 +12,11 @@ export default function Navbar() {
             </div>
 
             <div className="navbar__moodle">
-                <div className="navbar__moodle-icon">🎓</div>
+                <img
+                    src="/iconos/gorroIcono.png"
+                    alt="Moodle"
+                    className="navbar__moodle-icon"
+                />
                 <div className="navbar__moodle-text">
                     <span className="navbar__moodle-title">Integrado con Moodle</span>
                     <span className="navbar__moodle-sub">Accede desde tu curso</span>

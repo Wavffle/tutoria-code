@@ -17,7 +17,6 @@
   padding-left: 90px;
 }
 
-/* Base robot — compartido */
 .ej-footer__robot {
   object-fit: contain;
   position: absolute;

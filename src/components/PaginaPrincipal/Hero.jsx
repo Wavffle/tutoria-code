@@ -62,7 +62,7 @@ export default function Hero() {
           <div className="hero__actions">
             <button
                 className="btn btn--primary"
-                onClick={() => window.location.href = 'https://moodle.tuuniversidad.cl'}
+                onClick={() => navigate('/error')}
             >
               Ingresar desde Moodle
             </button>

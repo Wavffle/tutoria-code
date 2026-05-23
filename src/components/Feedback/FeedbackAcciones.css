@@ -9,9 +9,9 @@
 .fb-acciones__title {
   font-family: 'Inter', sans-serif;
   font-size: 1.15rem;
-  font-weight: 700;
+  font-weight: 600;
   color: #1c1c1c;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
 }
 
 .fb-acciones__grid {
@@ -63,7 +63,7 @@
   font-family: 'Inter', sans-serif;
   font-size: 0.9rem;
   font-weight: 700;
-  color: #1c1c1c;
+  color: #627254;
   margin-bottom: 4px;
 }
 

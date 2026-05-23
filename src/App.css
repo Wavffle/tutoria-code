@@ -3,7 +3,7 @@
 :root {
   --color-bg: #e8e8e4;
   --color-bg-section: #deded9;
-  --color-surface: #f2f2ef;
+  --color-surface: rgb(238 238 238 / 0.93);
   --color-surface-dark: #1a1a1a;
   --color-primary: #627254;
   --color-primary-dark: #627254;

@@ -4,7 +4,7 @@ import Dashboard from './pages/Dashboard'
 import Perfil from './pages/Perfil'
 import Ejercicio from './pages/Ejercicio'
 import Feedback from './pages/Feedback'
-
+import Error from './pages/Error'
 
 function App() {
     return (
@@ -15,6 +15,7 @@ function App() {
                 <Route path="/perfil" element={<Perfil />} />
                 <Route path="/ejercicio" element={<Ejercicio />} />
                 <Route path="/feedback" element={<Feedback />} />
+                <Route path="/error" element={<Error />} />
             </Routes>
         </BrowserRouter>
     )

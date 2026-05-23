@@ -51,7 +51,7 @@ export default function Demo() {
         {/* Tutor feedback panel */}
         <div className="demo__tutor">
           <div className={`demo__bubble ${submitted ? 'demo__bubble--visible' : ''}`}>
-            <p className="demo__bubble-good">¡Buena trabajo!</p>
+            <p className="demo__bubble-good">¡Buen trabajo!</p>
             <p className="demo__bubble-suggestion">
               <strong>Sugerencia:</strong> prueba a validar tipos de entrada
             </p>
