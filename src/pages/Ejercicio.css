@@ -6,7 +6,6 @@
   font-family: 'Inter', sans-serif;
 }
 
-/* ── Main: info + editor ── */
 .ejercicio-page__main {
   display: grid;
   grid-template-columns: 700px 1fr;
@@ -26,10 +25,6 @@
   background-color: #1a1e16;
 }
 
-/* ── Footer ── */
-/* (en EjercicioFooter.css) */
-
-/* ── Bottom: salida + feedback ── */
 .ejercicio-page__bottom {
   display: grid;
   grid-template-columns: 500px 1fr;
@@ -49,16 +44,6 @@
   font-size: 0.85rem;
   flex: 1;
 }
-.ejercicio-page__salida-lines {
-  display: flex;
-  flex-direction: column;
-  color: #4a5c3a;
-  opacity: 0.5;
-  font-size: 0.82rem;
-  gap: 0;
-  user-select: none;
-}
-.ejercicio-page__salida-lines span { line-height: 1.75; }
 .ejercicio-page__salida-content {
   display: flex;
   flex-direction: column;
@@ -84,4 +69,74 @@
 }
 .ejercicio-page__feedback > * {
   width: 100%;
+}
+
+/* Modal confirmación salida */
+.ejercicio-confirm__overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0,0,0,0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+.ejercicio-confirm__modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 380px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  animation: slideUp 0.25s cubic-bezier(0.22,1,0.36,1);
+}
+
+.ejercicio-confirm__titulo {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1c1c1c;
+  margin-bottom: 10px;
+}
+
+.ejercicio-confirm__desc {
+  font-size: 0.88rem;
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.ejercicio-confirm__btns {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+.ejercicio-confirm__btn {
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background 0.15s;
+}
+
+.ejercicio-confirm__btn--cancel {
+  background-color: #f0f0f0;
+  color: #444;
+}
+.ejercicio-confirm__btn--cancel:hover {
+  background-color: #e5e5e5;
+}
+
+.ejercicio-confirm__btn--confirm {
+  background-color: #c0392b;
+  color: #fff;
+}
+.ejercicio-confirm__btn--confirm:hover {
+  background-color: #a93226;
 }

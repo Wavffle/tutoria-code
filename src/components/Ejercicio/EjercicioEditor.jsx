@@ -5,10 +5,15 @@ import { useState } from 'react'
 import { ejercicioData } from './ejercicioData'
 import './EjercicioEditor.css'
 
-export default function EjercicioEditor({ onEjecutar, estado, cargando }) {
+export default function EjercicioEditor({ onEjecutar, estado, cargando, onCodigoChange }) {
     const [code, setCode] = useState('')
 
     const enviado = estado === 'correcto' || estado === 'incorrecto'
+
+    function handleChange(val) {
+        setCode(val)
+        if (onCodigoChange) onCodigoChange(val.trim().length > 0)
+    }
 
     return (
         <div className="ej-editor">
@@ -28,7 +33,7 @@ export default function EjercicioEditor({ onEjecutar, estado, cargando }) {
 
             <CodeMirror
                 value={code}
-                onChange={(val) => setCode(val)}
+                onChange={handleChange}
                 extensions={[python()]}
                 theme={oneDark}
                 editable={!enviado}

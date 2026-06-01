@@ -2,12 +2,27 @@ import { useNavigate } from 'react-router-dom'
 import { perfilData } from '../Perfil/perfilData'
 import './TutorIANavbar.css'
 
-export default function TutorIANavbar({ breadcrumb }) {
+export default function TutorIANavbar({ breadcrumb, onLogoClick, onAvatarClick, onBreadcrumbClick }) {
     const navigate = useNavigate()
+
+    function handleLogo() {
+        if (onLogoClick) onLogoClick()
+        else navigate('/dashboard')
+    }
+
+    function handleAvatar() {
+        if (onAvatarClick) onAvatarClick()
+        else navigate('/perfil')
+    }
+
+    function handleBreadcrumb(path) {
+        if (onBreadcrumbClick) onBreadcrumbClick(path)
+        else navigate(path)
+    }
 
     return (
         <header className="perfil-navbar">
-            <div className="perfil-navbar__logo" onClick={() => navigate('/dashboard')} style={{ cursor: 'pointer' }}>
+            <div className="perfil-navbar__logo" onClick={handleLogo} style={{ cursor: 'pointer' }}>
                 <div className="perfil-navbar__logo-line">
                     <span className="perfil-navbar__logo-tutor">Tutor</span>
                     <span className="perfil-navbar__logo-ia">IA</span>
@@ -21,7 +36,7 @@ export default function TutorIANavbar({ breadcrumb }) {
             {item.path ? (
                 <button
                     className="perfil-navbar__breadcrumb-link"
-                    onClick={() => navigate(item.path)}
+                    onClick={() => handleBreadcrumb(item.path)}
                 >
                     {item.label}
                 </button>
@@ -39,10 +54,7 @@ export default function TutorIANavbar({ breadcrumb }) {
                 <div className="perfil-navbar__nivel">
                     Nivel: <strong>{perfilData.nivelActual}</strong>
                 </div>
-                <div
-                    className="perfil-navbar__avatar"
-                    onClick={() => navigate('/perfil')}
-                >
+                <div className="perfil-navbar__avatar" onClick={handleAvatar} style={{ cursor: 'pointer' }}>
                     {perfilData.iniciales}
                 </div>
             </div>

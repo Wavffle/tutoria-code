@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import TutorIANavbar from '../components/shared/TutorIANavbar.jsx'
 import EjercicioInfo from '../components/Ejercicio/EjercicioInfo'
 import EjercicioEditor from '../components/Ejercicio/EjercicioEditor'
@@ -10,6 +10,7 @@ import './Ejercicio.css'
 
 export default function Ejercicio() {
   const location = useLocation()
+  const navigate = useNavigate()
   const ejercicioSeleccionado = location.state?.ejercicio
   const moduloSeleccionado = location.state?.modulo
   const numeroEjercicio = location.state?.numeroEjercicio || ejercicioData.ejercicioNum
@@ -19,6 +20,9 @@ export default function Ejercicio() {
   const [salida, setSalida] = useState('')
   const [errores, setErrores] = useState(ejercicioData.errores)
   const [cargandoPython, setCargandoPython] = useState(true)
+  const [codigoEscrito, setCodigoEscrito] = useState(false)
+  const [mostrarConfirm, setMostrarConfirm] = useState(false)
+  const [destino, setDestino] = useState(null)
   const pyodideRef = useRef(null)
 
   useEffect(() => {
@@ -31,10 +35,34 @@ export default function Ejercicio() {
     cargarPyodide()
   }, [])
 
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (codigoEscrito && estado === 'pendiente') {
+        e.preventDefault()
+        e.returnValue = ''
+      }
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [codigoEscrito, estado])
+
+  function handleNavegar(ruta) {
+    if (codigoEscrito && estado === 'pendiente') {
+      setDestino(ruta)
+      setMostrarConfirm(true)
+    } else {
+      navigate(ruta)
+    }
+  }
+
+  function confirmarSalida() {
+    setMostrarConfirm(false)
+    navigate(destino)
+  }
+
   async function handleEjecutar(code) {
     if (!code.trim()) return
     if (!pyodideRef.current) return
-
     try {
       pyodideRef.current.runPython(`
 import sys
@@ -66,16 +94,21 @@ sys.stdout = StringIO()
   function handleRefuerzo()   { setEstado('pendiente'); setSalida(''); setErrores(0) }
   function handleNuevoEjercicio() { setEstado('pendiente'); setSalida(''); setErrores(0) }
 
-  const tituloModulo   = moduloSeleccionado?.titulo || ejercicioData.modulo
+  const tituloModulo    = moduloSeleccionado?.titulo || ejercicioData.modulo
   const tituloEjercicio = ejercicioSeleccionado?.texto || ejercicioData.practica
 
   return (
       <div className="ejercicio-page">
-        <TutorIANavbar breadcrumb={[
-          { label: 'Dashboard', path: '/dashboard' },
-          { label: tituloModulo, path: '/dashboard' },
-          { label: tituloEjercicio }
-        ]} />
+        <TutorIANavbar
+            breadcrumb={[
+              { label: 'Dashboard', path: '/dashboard' },
+              { label: tituloModulo, path: '/dashboard' },
+              { label: tituloEjercicio }
+            ]}
+            onLogoClick={() => handleNavegar('/dashboard')}
+            onAvatarClick={() => handleNavegar('/perfil')}
+            onBreadcrumbClick={(path) => handleNavegar(path)}
+        />
 
         <div className="ejercicio-page__main">
           <div className="ejercicio-page__left">
@@ -93,6 +126,7 @@ sys.stdout = StringIO()
                 onEjecutar={handleEjecutar}
                 estado={estado}
                 cargando={cargandoPython}
+                onCodigoChange={(tieneContenido) => setCodigoEscrito(tieneContenido)}
             />
           </div>
         </div>
@@ -101,6 +135,7 @@ sys.stdout = StringIO()
             estado={estado}
             onPedirPista={() => alert(ejercicioData.pistaBton)}
             onNuevoEjercicio={handleNuevoEjercicio}
+            onIrDashboard={() => handleNavegar('/dashboard')}
         />
 
         <div className="ejercicio-page__bottom">
@@ -123,6 +158,31 @@ sys.stdout = StringIO()
             />
           </div>
         </div>
+
+        {mostrarConfirm && (
+            <div className="ejercicio-confirm__overlay" onClick={() => setMostrarConfirm(false)}>
+              <div className="ejercicio-confirm__modal" onClick={e => e.stopPropagation()}>
+                <p className="ejercicio-confirm__titulo">¿Seguro que quieres salir?</p>
+                <p className="ejercicio-confirm__desc">
+                  Perderás el código que escribiste. Esta acción no se puede deshacer.
+                </p>
+                <div className="ejercicio-confirm__btns">
+                  <button
+                      className="ejercicio-confirm__btn ejercicio-confirm__btn--cancel"
+                      onClick={() => setMostrarConfirm(false)}
+                  >
+                    Seguir practicando
+                  </button>
+                  <button
+                      className="ejercicio-confirm__btn ejercicio-confirm__btn--confirm"
+                      onClick={confirmarSalida}
+                  >
+                    Sí, salir
+                  </button>
+                </div>
+              </div>
+            </div>
+        )}
       </div>
   )
 }

@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import AyudaPopup from './AyudaPopup'
 import './EjercicioFooter.css'
 
@@ -9,8 +8,7 @@ const robotImg = {
   incorrecto: '/robotTutorIA/robotIncorrecto.png',
 }
 
-export default function EjercicioFooter({ estado, onPedirPista, onNuevoEjercicio }) {
-  const navigate = useNavigate()
+export default function EjercicioFooter({ estado, onPedirPista, onNuevoEjercicio, onIrDashboard }) {
   const [mostrarAyuda, setMostrarAyuda] = useState(false)
 
   const estadoConfig = {
@@ -45,7 +43,7 @@ export default function EjercicioFooter({ estado, onPedirPista, onNuevoEjercicio
         </div>
 
         <div className="ej-footer__right">
-          <button className="ej-footer__link" onClick={() => navigate('/dashboard')}>
+          <button className="ej-footer__link" onClick={onIrDashboard}>
             ← Ir al dashboard
           </button>
           <button className="ej-footer__ayuda" onClick={() => setMostrarAyuda(true)}>
