@@ -7,7 +7,7 @@ export default function TutorIANavbar({ breadcrumb }) {
 
     return (
         <header className="perfil-navbar">
-            <div className="perfil-navbar__logo">
+            <div className="perfil-navbar__logo" onClick={() => navigate('/dashboard')} style={{ cursor: 'pointer' }}>
                 <div className="perfil-navbar__logo-line">
                     <span className="perfil-navbar__logo-tutor">Tutor</span>
                     <span className="perfil-navbar__logo-ia">IA</span>

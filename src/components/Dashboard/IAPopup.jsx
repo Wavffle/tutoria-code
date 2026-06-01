@@ -6,16 +6,12 @@ export default function IAPopup({ modulo, onClose }) {
   return (
       <div className="ia-popup__overlay" onClick={onClose}>
         <div className="ia-popup__modal" onClick={e => e.stopPropagation()}>
-          <button className="ia-popup__close" onClick={onClose}>✕</button>
 
           {/* Header */}
           <div className="ia-popup__header">
             <img src="/iconos/cerebroIcon.png" alt="IA" className="ia-popup__cerebro" />
             <h2 className="ia-popup__title">Practicas generadas por IA</h2>
           </div>
-
-          {/* Módulo */}
-          <p className="ia-popup__modulo">Módulo: <strong>{modulo.titulo}</strong></p>
 
           {/* Descripción */}
           <p className="ia-popup__desc">
@@ -26,10 +22,9 @@ export default function IAPopup({ modulo, onClose }) {
           {/* Lista con checks */}
           <ul className="ia-popup__lista">
             <li><span className="ia-popup__check">✓</span> El modulo que estás estudiando.</li>
+            <li><span className="ia-popup__check">✓</span> El titulo del ejercicio.</li>
             <li><span className="ia-popup__check">✓</span> Tu nivel actual.</li>
             <li><span className="ia-popup__check">✓</span> Tus intentos anteriores y errores detectados.</li>
-            <li><span className="ia-popup__check">✓</span> Tu desempeño reciente.</li>
-            <li><span className="ia-popup__check">✓</span> El lenguaje de programación escogido.</li>
           </ul>
 
           {/* Box roles */}
@@ -48,9 +43,9 @@ export default function IAPopup({ modulo, onClose }) {
           <div className="ia-popup__infobox">
             <img src="/iconos/infoIcono.png" alt="Info" className="ia-popup__infobox-icon" />
             <p>
-            <span className="ia-popup__infobox-highlight">
-              Cada vez que realizas una práctica, TutorIA puede generar una versión diferente
-            </span>
+              <span className="ia-popup__infobox-highlight">
+                Cada vez que realizas una práctica, TutorIA puede generar una versión diferente
+              </span>
               {' '}del ejercicio para ayudarte a seguir aprendiendo.
             </p>
           </div>
