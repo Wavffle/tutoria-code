@@ -1,5 +1,7 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import AyudaPopup from './AyudaPopup'
+import { ejercicioData } from './ejercicioData'
 import './EjercicioFooter.css'
 
 const robotImg = {
@@ -8,8 +10,11 @@ const robotImg = {
   incorrecto: '/robotTutorIA/robotIncorrecto.png',
 }
 
-export default function EjercicioFooter({ estado, onPedirPista, onNuevoEjercicio, onIrDashboard }) {
+export default function EjercicioFooter({ estado, onNuevoEjercicio }) {
+  const navigate = useNavigate()
   const [mostrarAyuda, setMostrarAyuda] = useState(false)
+  const [mostrarPista, setMostrarPista] = useState(false)
+  const [cerrando, setCerrando] = useState(false)
 
   const estadoConfig = {
     pendiente:  { color: '#f0ad4e', texto: 'Ejercicio sin completar' },
@@ -18,8 +23,38 @@ export default function EjercicioFooter({ estado, onPedirPista, onNuevoEjercicio
   }
   const { color, texto } = estadoConfig[estado] || estadoConfig.pendiente
 
+  function cerrarPista() {
+    setCerrando(true)
+    setTimeout(() => {
+      setMostrarPista(false)
+      setCerrando(false)
+    }, 200)
+  }
+
+  function togglePista() {
+    if (mostrarPista) {
+      cerrarPista()
+    } else {
+      setMostrarPista(true)
+    }
+  }
+
   return (
       <div className="ej-footer">
+
+        {mostrarPista && (
+            <div className={`ej-footer__pista-panel ${cerrando ? 'ej-footer__pista-panel--saliendo' : ''}`}>
+              <div className="ej-footer__pista-header">
+                <div className="ej-footer__pista-label">
+                  <img src="/iconos/ampolletaIcono2.png" alt="Pista" className="ej-footer__pista-label-icon" />
+                  <span>Pista</span>
+                </div>
+              </div>
+              <p className="ej-footer__pista-texto">{ejercicioData.pistaBton}</p>
+            </div>
+        )}
+
+        {/* Left */}
         <div className="ej-footer__left">
           <img
               src={robotImg[estado] || robotImg.pendiente}
@@ -31,10 +66,14 @@ export default function EjercicioFooter({ estado, onPedirPista, onNuevoEjercicio
           <span className="ej-footer__estado" style={{ color }}>{texto}</span>
         </div>
 
+        {/* Center */}
         <div className="ej-footer__center">
-          <button className="ej-footer__btn ej-footer__btn--pista" onClick={onPedirPista}>
-            <img src="/iconos/ampolletaIcono2.png" alt="Pista" className="ej-footer__btn-icon" />
+          <button
+              className={`ej-footer__btn ej-footer__btn--pista ${mostrarPista ? 'ej-footer__btn--pista-activo' : ''}`}
+              onClick={togglePista}
+          >
             Pedir pista
+            <span className="ej-footer__pista-arrow">{mostrarPista ? '∧' : '∨'}</span>
           </button>
           <button className="ej-footer__btn ej-footer__btn--nuevo" onClick={onNuevoEjercicio}>
             <img src="/iconos/repetirIcono.png" alt="Nuevo" className="ej-footer__btn-icon" />
@@ -42,8 +81,9 @@ export default function EjercicioFooter({ estado, onPedirPista, onNuevoEjercicio
           </button>
         </div>
 
+        {/* Right */}
         <div className="ej-footer__right">
-          <button className="ej-footer__link" onClick={onIrDashboard}>
+          <button className="ej-footer__link" onClick={() => navigate('/dashboard')}>
             ← Ir al dashboard
           </button>
           <button className="ej-footer__ayuda" onClick={() => setMostrarAyuda(true)}>
