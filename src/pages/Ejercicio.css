@@ -19,6 +19,8 @@
   border-right: 1px solid rgba(0,0,0,0.08);
   overflow-y: auto;
   max-height: 75vh;
+  display: flex;
+  flex-direction: column;
 }
 
 .ejercicio-page__right {
@@ -28,21 +30,24 @@
 .ejercicio-page__bottom {
   display: grid;
   grid-template-columns: 500px 1fr;
-  min-height: 180px;
+  height: 195px;
   border-top: 1px solid rgba(0,0,0,0.1);
+  overflow: hidden;
 }
 
 .ejercicio-page__salida {
   background-color: #1a1e16;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 .ejercicio-page__salida-body {
   display: flex;
-  padding: 20px 16px;
+  padding: 12px 16px;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.85rem;
   flex: 1;
+  overflow-y: auto;
 }
 .ejercicio-page__salida-content {
   display: flex;
@@ -63,12 +68,14 @@
 
 .ejercicio-page__feedback {
   background-color: #eeeee9;
-  padding: 20px 24px;
+  padding: 8px 16px;
   display: flex;
   align-items: stretch;
+  overflow: hidden;
 }
 .ejercicio-page__feedback > * {
   width: 100%;
+  height: 100%;
 }
 
 /* Modal confirmación salida */

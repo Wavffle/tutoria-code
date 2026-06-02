@@ -4,7 +4,7 @@ import './EjercicioInfo.css'
 export default function EjercicioInfo({ estado, errores, ejercicioSeleccionado, moduloSeleccionado, numeroEjercicio, totalEjercicios }) {
     const esIncorrecto = estado === 'incorrecto'
 
-    const tituloModulo   = moduloSeleccionado?.titulo?.toUpperCase() || ejercicioData.moduloSlug
+    const tituloModulo    = moduloSeleccionado?.titulo?.toUpperCase() || ejercicioData.moduloSlug
     const tituloEjercicio = ejercicioSeleccionado?.texto || ejercicioData.titulo
 
     return (
@@ -12,9 +12,9 @@ export default function EjercicioInfo({ estado, errores, ejercicioSeleccionado, 
             <p className="ej-info__modulo">MODULO - {tituloModulo}</p>
             <h1 className="ej-info__titulo">{tituloEjercicio}</h1>
             <div className="ej-info__meta">
-        <span className="ej-info__num">
-          Ejercicio {numeroEjercicio}/{totalEjercicios}
-        </span>
+                <span className="ej-info__num">
+                    Ejercicio {numeroEjercicio}/{totalEjercicios}
+                </span>
                 <span className="ej-info__nivel">Nivel: {ejercicioData.nivel}</span>
             </div>
 
@@ -41,9 +41,9 @@ export default function EjercicioInfo({ estado, errores, ejercicioSeleccionado, 
                     <li><span className="ej-info__check">✓</span> <strong>Práctica:</strong> {ejercicioSeleccionado?.texto || ejercicioData.practica}</li>
                     <li><span className="ej-info__check">✓</span> <strong>Nivel:</strong> {ejercicioData.nivel}</li>
                     <li>
-            <span className={esIncorrecto ? 'ej-info__x' : 'ej-info__check'}>
-              {esIncorrecto ? '✗' : '✓'}
-            </span>
+                        <span className={esIncorrecto ? 'ej-info__x' : 'ej-info__check'}>
+                            {esIncorrecto ? '✗' : '✓'}
+                        </span>
                         {' '}<strong>Errores:</strong> {errores}
                     </li>
                 </ul>
@@ -58,9 +58,9 @@ export default function EjercicioInfo({ estado, errores, ejercicioSeleccionado, 
                 <span className="ej-info__salida-texto">{ejercicioData.salidaEsperada}</span>
             </div>
 
-            <div className="ej-info__pista-box">
-                <img src="/iconos/ampolletaIcono.png" alt="Tip" className="ej-info__pista-robot" />
-                <p className="ej-info__pista-texto">{ejercicioData.pista}</p>
+            <div className="ej-info__consejo-box">
+                <img src="/iconos/cerebroIcon.png" alt="Consejo" className="ej-info__consejo-icon" />
+                <p className="ej-info__consejo-texto"><strong>Recuerda:</strong> {ejercicioData.consejo}</p>
             </div>
         </div>
     )

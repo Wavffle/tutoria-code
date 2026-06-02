@@ -64,41 +64,43 @@ export default function EjercicioResultado({ estado, salida, onReintentar, onRef
         const fb = ejercicioData.feedbackIncorrecto
         return (
             <div className="ej-resultado ej-resultado--incorrecto">
-                <div className="ej-resultado__incorrecto-left">
-                    <p className="ej-resultado__incorrecto-texto">
-                        <strong>Incorrecto.</strong> {fb.texto.replace('Incorrecto. ', '')}
-                    </p>
-                    <div className="ej-resultado__error-box">
-                        <div className="ej-resultado__error-header">
-                            <img src="/iconos/xIcono.png" alt="Error" className="ej-resultado__x-icon" />
-                            <strong>{fb.errorTitulo}</strong>
+                <div className="ej-resultado__incorrecto-top">
+                    <div className="ej-resultado__incorrecto-left">
+                        <p className="ej-resultado__incorrecto-texto">
+                            <strong>Incorrecto.</strong> {fb.texto.replace('Incorrecto. ', '')}
+                        </p>
+                        <div className="ej-resultado__error-box">
+                            <div className="ej-resultado__error-header">
+                                <img src="/iconos/xIcono.png" alt="Error" className="ej-resultado__x-icon" />
+                                <strong>{fb.errorTitulo}</strong>
+                            </div>
+                            <p className="ej-resultado__error-desc">{fb.errorDesc}</p>
                         </div>
-                        <p className="ej-resultado__error-desc">{fb.errorDesc}</p>
+                        <div className="ej-resultado__tags">
+                            {fb.conceptosLogrados.map((c, i) => (
+                                <span key={i} className="ej-resultado__tag ej-resultado__tag--verde">✓ {c}</span>
+                            ))}
+                            {fb.conceptosError.map((c, i) => (
+                                <span key={i} className="ej-resultado__tag ej-resultado__tag--rojo">✗ {c}</span>
+                            ))}
+                        </div>
                     </div>
-                    <div className="ej-resultado__tags">
-                        {fb.conceptosLogrados.map((c, i) => (
-                            <span key={i} className="ej-resultado__tag ej-resultado__tag--verde">✓ {c}</span>
-                        ))}
-                        {fb.conceptosError.map((c, i) => (
-                            <span key={i} className="ej-resultado__tag ej-resultado__tag--rojo">✗ {c}</span>
-                        ))}
+                    <div className="ej-resultado__incorrecto-right">
+                        <div className="ej-resultado__decision-box">
+                            <p className="ej-resultado__decision-title">Decisión de TutorIA</p>
+                            <p className="ej-resultado__decision-desc">{fb.decisionTutor}</p>
+                        </div>
                     </div>
                 </div>
-                <div className="ej-resultado__incorrecto-right">
-                    <div className="ej-resultado__decision-box">
-                        <p className="ej-resultado__decision-title">Decisión de TutorIA</p>
-                        <p className="ej-resultado__decision-desc">{fb.decisionTutor}</p>
-                    </div>
-                    <div className="ej-resultado__incorrecto-btns">
-                        <button className="ej-resultado__btn ej-resultado__btn--reintentar" onClick={onReintentar}>
-                            <img src="/iconos/repetirIcono.png" alt="Reintentar" className="ej-resultado__btn-icon" />
-                            Reintentar el mismo ejercicio
-                        </button>
-                        <button className="ej-resultado__btn ej-resultado__btn--refuerzo" onClick={onRefuerzo}>
-                            <img src="/iconos/iAIcono.png" alt="IA" className="ej-resultado__btn-icon" />
-                            Generar ejercicio de refuerzo
-                        </button>
-                    </div>
+                <div className="ej-resultado__incorrecto-btns">
+                    <button className="ej-resultado__btn ej-resultado__btn--reintentar" onClick={onReintentar}>
+                        <img src="/iconos/repetirIcono.png" alt="Reintentar" className="ej-resultado__btn-icon" />
+                        Reintentar el mismo ejercicio
+                    </button>
+                    <button className="ej-resultado__btn ej-resultado__btn--refuerzo" onClick={onRefuerzo}>
+                        <img src="/iconos/iAIcono.png" alt="IA" className="ej-resultado__btn-icon" />
+                        Generar ejercicio de refuerzo
+                    </button>
                 </div>
             </div>
         )

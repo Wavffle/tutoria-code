@@ -42,18 +42,6 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio }) {
   return (
       <div className="ej-footer">
 
-        {mostrarPista && (
-            <div className={`ej-footer__pista-panel ${cerrando ? 'ej-footer__pista-panel--saliendo' : ''}`}>
-              <div className="ej-footer__pista-header">
-                <div className="ej-footer__pista-label">
-                  <img src="/iconos/ampolletaIcono2.png" alt="Pista" className="ej-footer__pista-label-icon" />
-                  <span>Pista</span>
-                </div>
-              </div>
-              <p className="ej-footer__pista-texto">{ejercicioData.pistaBton}</p>
-            </div>
-        )}
-
         {/* Left */}
         <div className="ej-footer__left">
           <img
@@ -68,13 +56,26 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio }) {
 
         {/* Center */}
         <div className="ej-footer__center">
-          <button
-              className={`ej-footer__btn ej-footer__btn--pista ${mostrarPista ? 'ej-footer__btn--pista-activo' : ''}`}
-              onClick={togglePista}
-          >
-            Pedir pista
-            <span className="ej-footer__pista-arrow">{mostrarPista ? '∧' : '∨'}</span>
-          </button>
+          <div className="ej-footer__pista-wrapper">
+            {mostrarPista && (
+                <div className={`ej-footer__pista-panel ${cerrando ? 'ej-footer__pista-panel--saliendo' : ''}`}>
+                  <div className="ej-footer__pista-header">
+                    <div className="ej-footer__pista-label">
+                      <img src="/iconos/ampolletaIcono2.png" alt="Pista" className="ej-footer__pista-label-icon" />
+                      <span>Pista</span>
+                    </div>
+                  </div>
+                  <p className="ej-footer__pista-texto">{ejercicioData.pistaBton}</p>
+                </div>
+            )}
+            <button
+                className={`ej-footer__btn ej-footer__btn--pista ${mostrarPista ? 'ej-footer__btn--pista-activo' : ''}`}
+                onClick={togglePista}
+            >
+              Pedir pista
+              <span className="ej-footer__pista-arrow">{mostrarPista ? '∨' : '∧'}</span>
+            </button>
+          </div>
           <button className="ej-footer__btn ej-footer__btn--nuevo" onClick={onNuevoEjercicio}>
             <img src="/iconos/repetirIcono.png" alt="Nuevo" className="ej-footer__btn-icon" />
             Nuevo ejercicio del mismo nivel

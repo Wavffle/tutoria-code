@@ -12,7 +12,7 @@ export const ejercicioData = {
   titulo: 'Uso de variables en cálculos',
   descripcion: 'Crea un programa que calcule el total de una compra. Para ello, debes crear dos variables: una para guardar el precio de un producto y otra para guardar la cantidad comprada. Luego, calcula el total multiplicando ambos valores y muestra el resultado en pantalla.',
   salidaEsperada: 'El total de la compra es: 15000',
-  pista: 'puedes usar variables para guardar valores y realizar operaciones entre ellos',
+  consejo: 'puedes usar variables para guardar valores y realizar operaciones entre ellos',
   pistaBton: 'Intenta multiplicar precio por cantidad usando el operador *',
 
   feedbackCorrecto: {
