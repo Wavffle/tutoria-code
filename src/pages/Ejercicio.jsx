@@ -133,7 +133,6 @@ sys.stdout = StringIO()
 
         <EjercicioFooter
             estado={estado}
-            onPedirPista={() => alert(ejercicioData.pistaBton)}
             onNuevoEjercicio={handleNuevoEjercicio}
             onIrDashboard={() => handleNavegar('/dashboard')}
         />

@@ -1,20 +1,19 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import AyudaPopup from './AyudaPopup'
 import { ejercicioData } from './ejercicioData'
 import './EjercicioFooter.css'
 
 const robotImg = {
-  pendiente:  '/robotTutorIA/robotSentado.png',
-  correcto:   '/robotTutorIA/robotCorrecto.png',
+  pendiente: '/robotTutorIA/robotSentado.png',
+  correcto: '/robotTutorIA/robotCorrecto.png',
   incorrecto: '/robotTutorIA/robotIncorrecto.png',
 }
 
-export default function EjercicioFooter({ estado, onNuevoEjercicio }) {
-  const navigate = useNavigate()
+export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboard }) {
   const [mostrarAyuda, setMostrarAyuda] = useState(false)
   const [mostrarPista, setMostrarPista] = useState(false)
   const [cerrando, setCerrando] = useState(false)
+  const [mostrarAviso, setMostrarAviso] = useState(false)
 
   const estadoConfig = {
     pendiente:  { color: '#f0ad4e', texto: 'Ejercicio sin completar' },
@@ -22,6 +21,8 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio }) {
     incorrecto: { color: '#c0392b', texto: 'Ejercicio incorrecto' },
   }
   const { color, texto } = estadoConfig[estado] || estadoConfig.pendiente
+
+  const nuevoDeshabilitado = estado === 'incorrecto'
 
   function cerrarPista() {
     setCerrando(true)
@@ -36,6 +37,15 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio }) {
       cerrarPista()
     } else {
       setMostrarPista(true)
+    }
+  }
+
+  function handleNuevoClick() {
+    if (nuevoDeshabilitado) {
+      setMostrarAviso(true)
+      setTimeout(() => setMostrarAviso(false), 2500)
+    } else {
+      onNuevoEjercicio()
     }
   }
 
@@ -76,15 +86,26 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio }) {
               <span className="ej-footer__pista-arrow">{mostrarPista ? '∨' : '∧'}</span>
             </button>
           </div>
-          <button className="ej-footer__btn ej-footer__btn--nuevo" onClick={onNuevoEjercicio}>
-            <img src="/iconos/repetirIcono.png" alt="Nuevo" className="ej-footer__btn-icon" />
-            Nuevo ejercicio del mismo nivel
-          </button>
+
+          <div className="ej-footer__nuevo-wrapper">
+            {mostrarAviso && (
+                <div className="ej-footer__nuevo-tooltip">
+                  Reintenta o genera un ejercicio de refuerzo primero
+                </div>
+            )}
+            <button
+                className={`ej-footer__btn ej-footer__btn--nuevo ${nuevoDeshabilitado ? 'ej-footer__btn--nuevo-disabled' : ''}`}
+                onClick={handleNuevoClick}
+            >
+              <img src="/iconos/repetirIcono.png" alt="Nuevo" className="ej-footer__btn-icon" />
+              Nuevo ejercicio del mismo nivel
+            </button>
+          </div>
         </div>
 
         {/* Right */}
         <div className="ej-footer__right">
-          <button className="ej-footer__link" onClick={() => navigate('/dashboard')}>
+          <button className="ej-footer__link" onClick={onIrDashboard}>
             ← Ir al dashboard
           </button>
           <button className="ej-footer__ayuda" onClick={() => setMostrarAyuda(true)}>

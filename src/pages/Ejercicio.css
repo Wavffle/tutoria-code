@@ -30,15 +30,16 @@
 .ejercicio-page__bottom {
   display: grid;
   grid-template-columns: 500px 1fr;
-  height: 195px;
+  min-height: 195px;
   border-top: 1px solid rgba(0,0,0,0.1);
-  overflow: hidden;
+  align-items: start;
 }
 
 .ejercicio-page__salida {
   background-color: #1a1e16;
   display: flex;
   flex-direction: column;
+  height: 195px;
   overflow: hidden;
 }
 .ejercicio-page__salida-body {
@@ -71,7 +72,7 @@
   padding: 8px 16px;
   display: flex;
   align-items: stretch;
-  overflow: hidden;
+  min-height: 195px;
 }
 .ejercicio-page__feedback > * {
   width: 100%;

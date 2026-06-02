@@ -28,6 +28,6 @@ export const ejercicioData = {
     errorDesc: 'El total es el resultado de multiplicar el precio y la cantidad. Reemplaza el operador "+".',
     conceptosLogrados: ['Variables asignadas', 'print()'],
     conceptosError: ['Operación incorrecta'],
-    decisionTutor: 'Se generará un ejercicio de refuerzo adecuado para que practiques el concepto.',
+    decisionTutor: 'Se generará un ejercicio de refuerzo adecuado para que practiques el concepto de operaciones aritméticas básicas en Python. El tutor ha detectado que necesitas reforzar el uso de operadores matemáticos.',
   },
 }
