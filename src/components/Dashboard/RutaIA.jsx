@@ -9,10 +9,10 @@ export default function RutaIA() {
                 <div className="ruta-ia__text">
                     <h2 className="ruta-ia__titulo">
                         Ruta adaptativa basada en IA
-                        <span className="ruta-ia__spark"> ✦</span>
+                        <img src="/iconos/iAIcono.png" alt="IA" className="ruta-ia__spark-icon" />
                     </h2>
                     <p className="ruta-ia__desc">
-                        TutorIA crea y ajusta ejercicios según tu nivel, errores e intentos
+                        TutorIA crea y ajusta ejercicios según tu nivel y desempeño
                     </p>
                 </div>
             </div>

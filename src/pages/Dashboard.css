@@ -6,5 +6,10 @@
 .modulos-grid {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 40px 80px;
+    padding: 50px 40px 40px;
+}
+
+.dashboard {
+    background-color: #eeeee9;
+    min-height: 100vh;
 }

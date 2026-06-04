@@ -4,9 +4,8 @@
   align-items: center;
   justify-content: center;
   gap: 50px;
-  background-color: rgb(118 136 91 / 0.02);
+  background-color: rgb(118 136 91 / 0.06);
   padding: 24px 80px;
-  border-bottom: 1px solid rgba(0,0,0,0.07);
   overflow: visible;
 }
 
@@ -91,4 +90,13 @@
   height: 56px;
   object-fit: contain;
   flex-shrink: 0;
+}
+
+.ruta-ia__spark-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  margin-left: 8px;
+  vertical-align: middle;
+  opacity: 0.8;
 }
