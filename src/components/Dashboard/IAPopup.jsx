@@ -39,7 +39,7 @@ export default function IAPopup({ modulo, onClose }) {
             </div>
             <div className="ia-popup__role">
               <img src="/logos/ollamaLogo.png" alt="LLM" className="ia-popup__role-icon" />
-              <p><strong>El LLM (IA)</strong> genera el ejercicio, analiza tu respuesta y redacta el feedback</p>
+              <p><strong>Llama2 (IA)</strong> genera el ejercicio, analiza tu respuesta y redacta el feedback</p>
             </div>
           </div>
 
