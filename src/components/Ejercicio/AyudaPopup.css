@@ -157,3 +157,18 @@
   background-color: #134d5a;
   transform: translateY(-1px);
 }
+
+.ayuda-overlay--saliendo {
+  animation: fadeOut 0.2s ease forwards;
+}
+.ayuda-modal--saliendo {
+  animation: slideDown 0.2s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+@keyframes slideDown {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(20px); }
+}

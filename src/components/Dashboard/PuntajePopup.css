@@ -18,7 +18,7 @@
     background: #f5f5f0;
     border-radius: 20px;
     padding: 36px;
-    max-width: 560px;
+    max-width: 620px;
     width: 90%;
     max-height: 90vh;
     overflow-y: auto;
@@ -181,30 +181,32 @@ tr:nth-child(even) .puntaje-popup__tabla-td:first-child {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 12px;
+    align-items: stretch;
 }
 .puntaje-popup__nivel {
     border-radius: 12px;
     padding: 16px;
     text-align: center;
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 44px auto 44px;
     gap: 6px;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 .puntaje-popup__nivel--basico {
     background-color: rgba(74, 92, 58, 0.06);
-    border: 1px solid rgba(74, 92, 58, 0.15);
 }
 .puntaje-popup__nivel--intermedio {
     background-color: rgba(107, 79, 160, 0.08);
-    border: 1px solid rgba(107, 79, 160, 0.2);
 }
 .puntaje-popup__nivel--avanzado {
     background-color: rgba(180, 140, 40, 0.08);
-    border: 1px solid rgba(180, 140, 40, 0.2);
 }
 .puntaje-popup__nivel-titulo {
     font-size: 0.88rem;
     font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .puntaje-popup__nivel--basico .puntaje-popup__nivel-titulo { color: #4a5c3a; }
 .puntaje-popup__nivel--intermedio .puntaje-popup__nivel-titulo { color: #6b4fa0; }
@@ -213,6 +215,9 @@ tr:nth-child(even) .puntaje-popup__tabla-td:first-child {
 .puntaje-popup__nivel-puntos {
     font-size: 0.92rem;
     font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .puntaje-popup__nivel--basico .puntaje-popup__nivel-puntos { color: #4a5c3a; }
 .puntaje-popup__nivel--intermedio .puntaje-popup__nivel-puntos { color: #6b4fa0; }
@@ -222,6 +227,8 @@ tr:nth-child(even) .puntaje-popup__tabla-td:first-child {
     font-size: 0.78rem;
     color: #555;
     line-height: 1.4;
+    display: block;
+    text-align: center;
 }
 
 /* Nota */
@@ -266,17 +273,22 @@ tr:nth-child(even) .puntaje-popup__tabla-td:first-child {
     box-shadow: 0 6px 16px rgba(74, 92, 58, 0.3);
 }
 
-.puntaje-popup__nivel {
-    border-radius: 12px;
-    padding: 16px;
-    text-align: center;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
-}
-
 .puntaje-popup__nivel:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+}
+
+.puntaje-popup__overlay--saliendo {
+    animation: fadeOut 0.2s ease forwards;
+}
+.puntaje-popup__modal--saliendo {
+    animation: slideDown 0.2s cubic-bezier(0.22,1,0.36,1) forwards;
+}
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+@keyframes slideDown {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(20px); }
 }

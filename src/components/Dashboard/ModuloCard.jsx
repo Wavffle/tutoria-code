@@ -33,6 +33,13 @@ export default function ModuloCard({ modulo, onIAClick }) {
         navigate('/ejercicio', { state: { ejercicio, modulo, numeroEjercicio, totalEjercicios } })
     }
 
+    function handleRepetirClick(e, ejercicio) {
+        e.stopPropagation()
+        const numeroEjercicio = ejerciciosSoloEjercicios.indexOf(ejercicio) + 1
+        const totalEjercicios = ejerciciosSoloEjercicios.length
+        navigate('/ejercicio', { state: { ejercicio, modulo, numeroEjercicio, totalEjercicios, esRepeticion: true } })
+    }
+
     return (
         <div className={`modulo-card ${!modulo.desbloqueado ? 'modulo-card--locked' : ''}`}>
 
@@ -70,7 +77,9 @@ export default function ModuloCard({ modulo, onIAClick }) {
                             {ej.tipo === 'ia' && (
                                 <img src="/iconos/iAIcono.png" alt="IA" className="modulo-card__ia-img" />
                             )}
-                            {ej.tipo === 'ejercicio' && ej.estado === 'completado' && '✓'}
+                            {ej.tipo === 'ejercicio' && ej.estado === 'completado' && (
+                                <img src="/iconos/checkmarkIcon.png" alt="Completado" className="modulo-card__check-img" />
+                            )}
                             {ej.tipo === 'ejercicio' && ej.estado === 'disponible' && '▶'}
                             {ej.tipo === 'ejercicio' && ej.estado === 'bloqueado' && (
                                 <img src="/iconos/candadoIcono.png" alt="Bloqueado" className="modulo-card__candado" />
@@ -85,8 +94,14 @@ export default function ModuloCard({ modulo, onIAClick }) {
                                 <img src="/iconos/infoIcono.png" alt="Info" className="modulo-card__info-img" />
                             </button>
                         )}
-                        {ej.tipo === 'ejercicio' && ej.estado !== 'bloqueado' && (
-                            <span className="modulo-card__play-btn">▶</span>
+                        {ej.tipo === 'ejercicio' && ej.estado === 'completado' && (
+                            <img
+                                src="/iconos/retryIcon.png"
+                                alt="Repetir con variación IA"
+                                className="modulo-card__retry-img"
+                                title="Repetir con variación IA"
+                                onClick={(e) => handleRepetirClick(e, ej)}
+                            />
                         )}
                     </li>
                 ))}

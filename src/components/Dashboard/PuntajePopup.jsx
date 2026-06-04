@@ -1,14 +1,20 @@
+import { useState } from 'react'
 import './PuntajePopup.css'
 import { useNavigate } from 'react-router-dom'
 
 export default function PuntajePopup({ onClose }) {
     const navigate = useNavigate()
+    const [cerrando, setCerrando] = useState(false)
+
+    function handleClose() {
+        setCerrando(true)
+        setTimeout(() => onClose(), 200)
+    }
 
     return (
-        <div className="puntaje-popup__overlay" onClick={onClose}>
-            <div className="puntaje-popup__modal" onClick={e => e.stopPropagation()}>
+        <div className={`puntaje-popup__overlay ${cerrando ? 'puntaje-popup__overlay--saliendo' : ''}`} onClick={handleClose}>
+            <div className={`puntaje-popup__modal ${cerrando ? 'puntaje-popup__modal--saliendo' : ''}`} onClick={e => e.stopPropagation()}>
 
-                {/* Header */}
                 <div className="puntaje-popup__header">
                     <img src="/iconos/iconoTrofeo.png" alt="Trofeo" className="puntaje-popup__header-icon" />
                     <div className="puntaje-popup__header-text">
@@ -17,12 +23,12 @@ export default function PuntajePopup({ onClose }) {
                     </div>
                 </div>
 
-                {/* Sección tabla */}
                 <div className="puntaje-popup__seccion-titulo">
                     <img src="/iconos/iconoEstrella.png" alt="Estrella" className="puntaje-popup__seccion-icon" />
                     <span>Puntos por ejercicio según nivel</span>
                 </div>
-                    <div className="puntaje-popup__tabla-wrapper">
+
+                <div className="puntaje-popup__tabla-wrapper">
                     <table className="puntaje-popup__tabla">
                         <thead>
                         <tr>
@@ -62,8 +68,8 @@ export default function PuntajePopup({ onClose }) {
                         </tr>
                         </tbody>
                     </table>
-                    </div>
-                {/* Sección metas */}
+                </div>
+
                 <div className="puntaje-popup__seccion-titulo">
                     <img src="/iconos/iconoMeta.png" alt="Meta" className="puntaje-popup__seccion-icon" />
                     <span>Metas para subir de nivel</span>
@@ -73,12 +79,12 @@ export default function PuntajePopup({ onClose }) {
                     <div className="puntaje-popup__nivel puntaje-popup__nivel--basico">
                         <p className="puntaje-popup__nivel-titulo">Nivel BASICO</p>
                         <p className="puntaje-popup__nivel-puntos">500 puntos</p>
-                        <p className="puntaje-popup__nivel-desc">Para subir a <strong>INTERMEDIO</strong></p>
+                        <p className="puntaje-popup__nivel-desc">Para subir a<br/><strong>INTERMEDIO</strong></p>
                     </div>
                     <div className="puntaje-popup__nivel puntaje-popup__nivel--intermedio">
                         <p className="puntaje-popup__nivel-titulo">Nivel INTERMEDIO</p>
                         <p className="puntaje-popup__nivel-puntos">750 puntos</p>
-                        <p className="puntaje-popup__nivel-desc">Para subir a <strong>AVANZADO</strong></p>
+                        <p className="puntaje-popup__nivel-desc">Para subir a<br/><strong>AVANZADO</strong></p>
                     </div>
                     <div className="puntaje-popup__nivel puntaje-popup__nivel--avanzado">
                         <p className="puntaje-popup__nivel-titulo">Nivel AVANZADO</p>
@@ -87,7 +93,6 @@ export default function PuntajePopup({ onClose }) {
                     </div>
                 </div>
 
-                {/* Nota robot */}
                 <div className="puntaje-popup__nota">
                     <img src="/robotTutorIA/codiChibi.png" alt="Robot" className="puntaje-popup__nota-robot" />
                     <p className="puntaje-popup__nota-texto">
@@ -96,8 +101,7 @@ export default function PuntajePopup({ onClose }) {
                     </p>
                 </div>
 
-                {/* Botón */}
-                <button className="puntaje-popup__btn" onClick={() => { onClose(); navigate('/dashboard') }}>
+                <button className="puntaje-popup__btn" onClick={() => { handleClose(); navigate('/dashboard') }}>
                     ¡A ejercitar!
                 </button>
 
