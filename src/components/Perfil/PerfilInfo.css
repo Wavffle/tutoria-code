@@ -19,7 +19,7 @@
 .perfil-info__nivel {
   font-size: 1.1rem;
   color: #444;
-  margin-bottom: 14px;
+  margin-bottom: 10px;
 }
 .perfil-info__nivel strong {
   color: #4a5c3a;
@@ -37,13 +37,13 @@
 }
 .perfil-info__barra-fill {
   height: 100%;
-  background-color: #4a5c3a;
+  background-color: #76885b;
   border-radius: 999px;
   transition: width 0.4s ease;
 }
 .perfil-info__siguiente {
   font-size: 0.85rem;
-  color: #888;
+  color: #627254;
   margin-bottom: 28px;
 }
 
@@ -54,26 +54,26 @@
   gap: 5px;
   background-color: rgb(232 233 225);
   border-radius: 16px;
-  padding: 24px 20px;
+  padding: 2px 18px;
   max-width: 420px;
 }
 .perfil-info__tutor-img {
-  width: 90px;
-  height: 90px;
+  width: 83px;
+  height: 83px;
   object-fit: contain;
   flex-shrink: 0;
 }
 .perfil-info__tutor-title {
   font-family: 'Inter', sans-serif;
-  font-size: 0.95rem;
-  font-weight: 700;
+  font-size: 0.90rem;
+  font-weight: 600;
   color: #4a5c3a;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 .perfil-info__tutor-desc {
-  font-size: 0.83rem;
-  color: #666;
-  line-height: 1.5;
+  font-size: 0.73rem;
+  color: #76885b;
+  line-height: 1.2;
 }
 
 /* ── Derecha — stats ── */
@@ -89,12 +89,11 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .perfil-info__stat {
-  padding: 28px 24px;
+  padding: 21px 24px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
 }
 .perfil-info__stat--border {
   border-right: 1px solid rgba(0,0,0,0.08);
@@ -108,7 +107,7 @@
   border-top: 1px solid rgba(0,0,0,0.08);
 }
 .perfil-info__stat-label {
-  font-size: 0.85rem;
+  font-size: 0.80rem;
   color: #666;
   font-weight: 500;
 }
@@ -119,6 +118,7 @@
   letter-spacing: -0.02em;
 }
 .perfil-info__stat-value--green  { color: #4a5c3a; }
+.perfil-info__stat-value--blue  { color: #0c6277; }
 .perfil-info__stat-value--orange { color: #c8883a; }
 .perfil-info__stat-sub {
   font-size: 0.82rem;

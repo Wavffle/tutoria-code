@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { userData } from './dashboardData'
 import './DashboardNavbar.css'
 
@@ -7,23 +7,47 @@ export default function DashboardNavbar() {
     const navigate = useNavigate()
     const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 })
     const [tooltipVisible, setTooltipVisible] = useState(false)
+    const [mostrarEaster, setMostrarEaster] = useState(false)
+    const cooldownRef = useRef(false)
 
     function handleMouseMove(e) {
         setTooltipPos({ x: e.clientX, y: e.clientY })
     }
 
+    function handleLogoClick() {
+        if (cooldownRef.current) return
+        cooldownRef.current = true
+
+        const audio = new Audio('/sounds/bading.mp3')
+        audio.play()
+        setMostrarEaster(true)
+
+        setTimeout(() => {
+            setMostrarEaster(false)
+            cooldownRef.current = false
+        }, 2500)
+    }
+
     return (
         <header className="db-navbar">
-            <div
-                className="db-navbar__logo"
-                onClick={() => navigate('/dashboard')}
-                style={{ cursor: 'pointer' }}
-            >
-                <div className="db-navbar__logo-line">
-                    <span className="db-navbar__logo-tutor">Tutor</span>
-                    <span className="db-navbar__logo-ia">IA</span>
+            <div className="db-navbar__logo-wrapper">
+                <div
+                    className="db-navbar__logo"
+                    onClick={handleLogoClick}
+                    style={{ cursor: 'pointer', width: 'fit-content' }}
+                >
+                    <div className="db-navbar__logo-line">
+                        <span className="db-navbar__logo-tutor">Tutor</span>
+                        <span className="db-navbar__logo-ia">IA</span>
+                    </div>
+                    <span className="db-navbar__logo-sub">Code</span>
                 </div>
-                <span className="db-navbar__logo-sub">Code</span>
+
+                {mostrarEaster && (
+                    <div className="db-navbar__easter-egg">
+                        ¡Bienvenido a TutorIA Code!
+                    </div>
+                )}
             </div>
 
             <div className="db-navbar__center">

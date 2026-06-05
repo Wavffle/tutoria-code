@@ -41,7 +41,7 @@ export default function PuntajePopup({ onClose }) {
                         <tbody>
                         <tr>
                             <td className="puntaje-popup__tabla-td">
-                                <p className="puntaje-popup__tabla-tipo">Primera vez</p>
+                                <p className="puntaje-popup__tabla-tipo puntaje-popup__tabla-tipo--primera">Primera vez</p>
                                 <p className="puntaje-popup__tabla-desc">(Ejercicio completado)</p>
                             </td>
                             <td className="puntaje-popup__tabla-td puntaje-popup__tabla-pts--basico">+80 pts</td>
@@ -50,7 +50,7 @@ export default function PuntajePopup({ onClose }) {
                         </tr>
                         <tr>
                             <td className="puntaje-popup__tabla-td">
-                                <p className="puntaje-popup__tabla-tipo">Ejercicio de refuerzo</p>
+                                <p className="puntaje-popup__tabla-tipo puntaje-popup__tabla-tipo--refuerzo">Ejercicio de refuerzo</p>
                                 <p className="puntaje-popup__tabla-desc">(Error al realizar el ejercicio)</p>
                             </td>
                             <td className="puntaje-popup__tabla-td puntaje-popup__tabla-pts--basico">+30 pts</td>
@@ -59,7 +59,7 @@ export default function PuntajePopup({ onClose }) {
                         </tr>
                         <tr>
                             <td className="puntaje-popup__tabla-td">
-                                <p className="puntaje-popup__tabla-tipo">Variación con IA</p>
+                                <p className="puntaje-popup__tabla-tipo puntaje-popup__tabla-tipo--variacion">Variación con IA</p>
                                 <p className="puntaje-popup__tabla-desc">(Repetir el ejercicio completado)</p>
                             </td>
                             <td className="puntaje-popup__tabla-td puntaje-popup__tabla-pts--basico">+40 pts</td>

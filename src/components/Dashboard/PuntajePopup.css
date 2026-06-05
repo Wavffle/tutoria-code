@@ -196,7 +196,7 @@ tr:nth-child(even) .puntaje-popup__tabla-td:first-child {
     background-color: rgba(74, 92, 58, 0.06);
 }
 .puntaje-popup__nivel--intermedio {
-    background-color: rgba(107, 79, 160, 0.08);
+    background-color: rgb(226 225 233);
 }
 .puntaje-popup__nivel--avanzado {
     background-color: rgba(180, 140, 40, 0.08);
@@ -209,7 +209,7 @@ tr:nth-child(even) .puntaje-popup__tabla-td:first-child {
     justify-content: center;
 }
 .puntaje-popup__nivel--basico .puntaje-popup__nivel-titulo { color: #4a5c3a; }
-.puntaje-popup__nivel--intermedio .puntaje-popup__nivel-titulo { color: #6b4fa0; }
+.puntaje-popup__nivel--intermedio .puntaje-popup__nivel-titulo { color: #0c6277; }
 .puntaje-popup__nivel--avanzado .puntaje-popup__nivel-titulo { color: #b08020; }
 
 .puntaje-popup__nivel-puntos {
@@ -220,7 +220,7 @@ tr:nth-child(even) .puntaje-popup__tabla-td:first-child {
     justify-content: center;
 }
 .puntaje-popup__nivel--basico .puntaje-popup__nivel-puntos { color: #4a5c3a; }
-.puntaje-popup__nivel--intermedio .puntaje-popup__nivel-puntos { color: #6b4fa0; }
+.puntaje-popup__nivel--intermedio .puntaje-popup__nivel-puntos { color: #0c6277; }
 .puntaje-popup__nivel--avanzado .puntaje-popup__nivel-puntos { color: #b08020; }
 
 .puntaje-popup__nivel-desc {
@@ -233,12 +233,15 @@ tr:nth-child(even) .puntaje-popup__tabla-td:first-child {
 
 /* Nota */
 .puntaje-popup__nota {
-    background-color: rgba(0,0,0,0.04);
+    background-color: #e8ede2;
     border-radius: 12px;
     padding: 14px 18px;
     display: flex;
     align-items: center;
     gap: 14px;
+}
+.puntaje-popup__nota-texto strong {
+    color: #627254;
 }
 .puntaje-popup__nota-robot {
     width: 48px;
@@ -291,4 +294,15 @@ tr:nth-child(even) .puntaje-popup__tabla-td:first-child {
 @keyframes slideDown {
     from { opacity: 1; transform: translateY(0); }
     to   { opacity: 0; transform: translateY(20px); }
+}
+.puntaje-popup__tabla-tipo--primera {
+    color: #76885B;
+}
+
+.puntaje-popup__tabla-tipo--refuerzo {
+    color: #6D46A2;
+}
+
+.puntaje-popup__tabla-tipo--variacion {
+    color: #6D46A2;
 }

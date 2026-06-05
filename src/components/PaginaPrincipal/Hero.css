@@ -87,10 +87,12 @@
 .hero__subtitle {
   font-family: var(--font-body);
   font-size: 1rem;
-  font-weight: 400;
+  font-weight: 500;
   color: var(--color-text-muted);
-  line-height: 1.65;
+  line-height: 1.4;
   margin-bottom: 36px;
+  margin-left: 125px;
+  max-width: 300px;
 }
 
 /* ── Buttons ── */
@@ -104,9 +106,9 @@
 .btn {
   font-family: var(--font-body);
   font-size: 0.95rem;
-  font-weight: 600;
+  font-weight: 500;
   padding: 14px 28px;
-  border-radius: var(--radius-sm);
+  border-radius: 14px;
   border: none;
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
@@ -127,12 +129,11 @@
 
 .btn--outline {
   background-color: transparent;
-  color: var(--color-text);
-  border: 1.5px solid rgba(0,0,0,0.25);
+  color: #627254;
+  border: 1px solid rgb(143 156 131);
 }
 
 .btn--outline:hover {
-  background-color: rgba(0,0,0,0.04);
   transform: translateY(-2px);
 }
 

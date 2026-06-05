@@ -16,13 +16,13 @@ export default function PerfilInfo() {
         <div className="perfil-info__barra-wrap">
           <div className="perfil-info__barra">
             <div
-              className="perfil-info__barra-fill"
-              style={{ width: `${perfilData.progresoNivel}%` }}
+                className="perfil-info__barra-fill"
+                style={{ width: `${(perfilData.puntos / perfilData.puntosParaSiguienteNivel) * 100}%` }}
             />
           </div>
         </div>
         <p className="perfil-info__siguiente">
-          {perfilData.ejerciciosParaSiguienteNivel} Ejercicios más para el siguiente nivel
+          {perfilData.puntos}/{perfilData.puntosParaSiguienteNivel} puntos para subir a {perfilData.siguienteNivel}
         </p>
 
         <div className="perfil-info__tutor-box">
@@ -55,7 +55,7 @@ export default function PerfilInfo() {
           </div>
           <div className="perfil-info__stat perfil-info__stat--full">
             <p className="perfil-info__stat-label">Tiempo de practica</p>
-            <p className="perfil-info__stat-value perfil-info__stat-value--green">
+            <p className="perfil-info__stat-value perfil-info__stat-value--blue">
               {perfilData.tiempoPractica} h.
             </p>
             <p className="perfil-info__stat-sub">En total</p>
