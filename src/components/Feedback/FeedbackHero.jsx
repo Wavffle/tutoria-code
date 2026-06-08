@@ -25,41 +25,38 @@ export default function FeedbackHero() {
                 </div>
             </div>
 
-            <div className="fb-hero__puntaje">
-                <svg className="fb-hero__puntaje-svg" viewBox="0 0 100 100">
-                    <circle
-                        cx="50" cy="50" r={radio}
-                        fill="#4F5C43"
-                    />
-                    <circle
-                        cx="50" cy="50" r={radio}
-                        fill="none"
-                        stroke={colorPorPuntaje(feedbackData.puntaje)}
-                        strokeWidth="5"
-                        strokeLinecap="round"
-                        strokeDasharray={`${progreso} ${circunferencia}`}
-                        transform="rotate(-90 50 50)"
-                    />
-                    <text
-                        x="50" y="47"
-                        textAnchor="middle"
-                        fill="white"
-                        fontSize="18"
-                        fontWeight="400"
-                        fontFamily="Inter"
-                    >
-                        {feedbackData.puntaje}%
-                    </text>
-                    <text
-                        x="50" y="62"
-                        textAnchor="middle"
-                        fill="rgba(255,255,255,0.75)"
-                        fontSize="10"
-                        fontFamily="Inter"
-                    >
-                        Puntaje
-                    </text>
-                </svg>
+            <div className="fb-hero__derecha">
+                {/* Círculo puntaje */}
+                <div className="fb-hero__puntaje">
+                    <svg className="fb-hero__puntaje-svg" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r={radio} fill="#4F5C43" />
+                        <circle
+                            cx="50" cy="50" r={radio}
+                            fill="none"
+                            stroke={colorPorPuntaje(feedbackData.puntaje)}
+                            strokeWidth="5"
+                            strokeLinecap="round"
+                            strokeDasharray={`${progreso} ${circunferencia}`}
+                            transform="rotate(-90 50 50)"
+                        />
+                        <text x="50" y="47" textAnchor="middle" fill="white" fontSize="18" fontWeight="400" fontFamily="Inter">
+                            {feedbackData.puntaje}%
+                        </text>
+                        <text x="50" y="62" textAnchor="middle" fill="rgba(255,255,255,0.75)" fontSize="10" fontFamily="Inter">
+                            Puntaje
+                        </text>
+                    </svg>
+                </div>
+
+                {/* Tarjeta puntos ganados */}
+                <div className="fb-hero__puntos-card">
+                    <img src="/iconos/tarjetaPuntos.png" alt="Puntos" className="fb-hero__puntos-bg" />
+                    <div className="fb-hero__puntos-content">
+                        <img src="/iconos/iconoEstrella.png" alt="Estrella" className="fb-hero__puntos-estrella" />
+                        <p className="fb-hero__puntos-valor">+{feedbackData.puntosGanados}</p>
+                        <p className="fb-hero__puntos-label">puntos</p>
+                    </div>
+                </div>
             </div>
         </div>
     )

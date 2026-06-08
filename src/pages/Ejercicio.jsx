@@ -97,6 +97,11 @@ sys.stdout = StringIO()
   const tituloModulo    = moduloSeleccionado?.titulo || ejercicioData.modulo
   const tituloEjercicio = ejercicioSeleccionado?.texto || ejercicioData.practica
 
+  const archivoEditor = moduloSeleccionado?.id === 1 ? 'variables_basicas.py'
+      : moduloSeleccionado?.id === 2 ? 'condicionales.py'
+          : moduloSeleccionado?.id === 3 ? 'bucles_repeticion.py'
+              : ejercicioData.archivo
+
   return (
       <div className="ejercicio-page">
         <TutorIANavbar
@@ -127,6 +132,7 @@ sys.stdout = StringIO()
                 estado={estado}
                 cargando={cargandoPython}
                 onCodigoChange={(tieneContenido) => setCodigoEscrito(tieneContenido)}
+                archivo={archivoEditor}
             />
           </div>
         </div>

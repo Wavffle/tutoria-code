@@ -10,7 +10,7 @@
   background: #fff;
   border: 1px solid rgba(0,0,0,0.08);
   border-radius: 14px;
-  padding: 20px 18px;
+  padding: 20px 18px 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
 
@@ -25,21 +25,21 @@
 /* Dots progreso */
 .fb-sidebar__dots {
   display: flex;
-  gap: 6px;
-  margin-bottom: 8px;
+  gap: 10px;
+  margin-bottom: 12px;
 }
 .fb-sidebar__dot {
-  width: 14px; height: 14px;
+  width: 18px; height: 18px;
   border-radius: 50%;
   background-color: #ddd;
 }
 .fb-sidebar__dot--done {
-  background-color: #4a5c3a;
+  background-color: #76885b;
 }
 
 /* Barra */
 .fb-sidebar__barra {
-  height: 8px;
+  height: 14px;
   background-color: #e0e0e0;
   border-radius: 999px;
   overflow: hidden;
@@ -47,7 +47,7 @@
 }
 .fb-sidebar__barra-fill {
   height: 100%;
-  background-color: #4a5c3a;
+  background-color: #76885b;
   border-radius: 999px;
   transition: width 0.4s ease;
 }
@@ -110,7 +110,7 @@
   gap: 8px;
 }
 .fb-sidebar__check {
-  color: #4a5c3a;
+  color: #627254;
   font-weight: 700;
   flex-shrink: 0;
 }

@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { ejercicioData } from './ejercicioData'
 import './EjercicioEditor.css'
 
-export default function EjercicioEditor({ onEjecutar, estado, cargando, onCodigoChange }) {
+export default function EjercicioEditor({ onEjecutar, estado, cargando, onCodigoChange, archivo }) {
     const [code, setCode] = useState('')
 
     const enviado = estado === 'correcto' || estado === 'incorrecto'
@@ -20,7 +20,7 @@ export default function EjercicioEditor({ onEjecutar, estado, cargando, onCodigo
             <div className="ej-editor__tabbar">
                 <div className="ej-editor__tab">
                     <span className="ej-editor__tab-dot" />
-                    {ejercicioData.archivo}
+                    {archivo || ejercicioData.archivo}
                 </div>
                 <button
                     className={`ej-editor__ejecutar-btn ${enviado ? 'ej-editor__ejecutar-btn--enviado' : ''}`}

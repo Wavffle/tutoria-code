@@ -25,21 +25,21 @@ export default function FeedbackSidebar() {
       </div>
 
       {/* Progreso nivel */}
-      <div className="fb-sidebar__card">
-        <h3 className="fb-sidebar__card-title">Progreso hasta el proximo nivel</h3>
-        <div className="fb-sidebar__barra">
-          <div className="fb-sidebar__barra-fill" style={{ width: `${progresoNivel}%` }} />
+        <div className="fb-sidebar__card">
+            <h3 className="fb-sidebar__card-title">Progreso hasta el proximo nivel</h3>
+            <div className="fb-sidebar__barra">
+                <div className="fb-sidebar__barra-fill" style={{ width: `${(feedbackData.puntosActuales / feedbackData.puntosParaSiguienteNivel) * 100}%` }} />
+            </div>
+            <p className="fb-sidebar__sub">
+                {feedbackData.puntosActuales}/{feedbackData.puntosParaSiguienteNivel} Puntos totales
+            </p>
+            <p className="fb-sidebar__nivel">
+                Nivel actual: <strong>{feedbackData.nivelActual}</strong>
+            </p>
+            <p className="fb-sidebar__nivel">
+                Siguiente nivel: <strong className="fb-sidebar__nivel--next">{feedbackData.siguienteNivel}</strong>
+            </p>
         </div>
-        <p className="fb-sidebar__sub">
-          {feedbackData.ejerciciosTotales}/{feedbackData.ejerciciosTotalesNivel} Ejercicios totales completados
-        </p>
-        <p className="fb-sidebar__nivel">
-          Nivel actual: <strong>{feedbackData.nivelActual}</strong>
-        </p>
-        <p className="fb-sidebar__nivel">
-          Siguiente nivel: <strong className="fb-sidebar__nivel--next">{feedbackData.siguienteNivel}</strong>
-        </p>
-      </div>
 
       {/* Decisión tutor */}
       <div className="fb-sidebar__card">

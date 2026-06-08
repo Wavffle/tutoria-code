@@ -1,51 +1,46 @@
-// Simula lo que devolvería POST /api/exercises/:id/evaluate
 export const feedbackData = {
-  ejercicio: 'Introducción a variables',
-  modulo: 'Variables básicas',
+  ejercicio: 'Estructura if/else',
+  modulo: 'Condicionales',
   puntaje: 100,
+  puntosGanados: 120,
   intentos: 1,
-  nivelActual: 'BÁSICO',
-  siguienteNivel: 'INTERMEDIO',
+  nivelActual: 'INTERMEDIO',
+  siguienteNivel: 'AVANZADO',
+  puntosActuales: 240,
+  puntosParaSiguienteNivel: 750,
 
-  // Resumen
-  codigoEstudiante: `precio = 3000\ncantidad = 5\n\ntotal = precio * cantidad\n\nprint("El total de la compra es:", total)`,
-  codigoSolucion: `precio = 3000\ncantidad = 5\n\ntotal = precio * cantidad\n\nprint("El total de la compra es:", total)`,
+  codigoEstudiante: `edadUsuario = 18\n\nif edadUsuario >= 18:\n    print("Acceso permitido")\nelse:\n    print("Acceso denegado")`,
+  codigoSolucion: `edad = 18\n\nif edad >= 18:\n    print("Acceso permitido")\nelse:\n    print("Acceso denegado")`,
   mensajeResumen: 'Tu solución es correcta. Has usado las variables y operaciones adecuadas.',
 
-  // Explicación IA
   explicacion: {
     intro: 'Tu código funciona correctamente porque:',
     puntos: [
-      { texto: 'Definiste las variables ', bold: 'precio', texto2: ' y ', bold2: 'cantidad', texto3: ' correctamente.' },
-      { texto: 'Mutiplicaste ambas variables para obtener el total.' },
-      { texto: 'Mostraste el resultado por pantalla usando ', bold: 'print().' },
+      { texto: 'Usaste una condición if para comprobar si edad >= 18.' },
+      { texto: 'Agregaste un bloque else para cubrir el caso contrario.' },
+      { texto: 'La lógica distingue correctamente entre acceso permitido y acceso denegado.' },
     ],
-    recuerda: 'Recuerda: el orden de las operaciones importa y siempre podemos reutilizar variables.',
+    recuerda: 'la estructura if/else permite que un programa tome decisiones entre dos caminos posibles según si una condición se cumple o no.',
   },
 
-  // Progreso
-  ejerciciosModulo: 1,
-  ejerciciosTotalModulo: 6,
-  ejerciciosTotales: 1,
-  ejerciciosTotalesNivel: 10,
+  ejerciciosModulo: 2,
+  ejerciciosTotalModulo: 5,
 
-  // Decisión tutor
   decision: {
     resultado: 'Correcto',
     intentos: 1,
-    nivelActual: 'BASICO',
+    nivelActual: 'INTERMEDIO',
     accion: 'Aumentar la dificultad',
     mensaje: 'Se creará un nuevo ejercicio en base a tu desempeño',
   },
 
-  // Conceptos reforzados
   conceptos: [
-    'Declaración de variables',
-    'Asignación de valores',
-    'Operaciones aritméticas',
-    'Salidas de datos con print()',
+    'Comparación con >=',
+    'Uso de estructura if/else',
+    'Mensaje para condición verdadera.',
+    'Mensaje para condición falsa.',
   ],
 
-  // Historial — vacío para usuario nuevo
-  historial: [],
+  historial: [
+  ],
 }

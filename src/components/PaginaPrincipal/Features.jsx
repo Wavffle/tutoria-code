@@ -23,7 +23,7 @@ export default function Features() {
                 Aprendizaje progresivo y guiado
               </li>
             </ul>
-            <img src="/elementosGraficos/tarjeta1.png" alt="Estación de trabajo" className="feature-card__img" />
+            <img src="/elementosGraficos/codiProgramando.png" alt="Estación de trabajo" className="feature-card__img" />
           </div>
 
           {/* Card 2 — Aprende */}
@@ -44,7 +44,7 @@ export default function Features() {
                 Avanza según tu desempeño
               </li>
             </ol>
-            <img src="/elementosGraficos/tarjeta2.png" alt="Tutor IA" className="feature-card__img" />
+            <img src="/elementosGraficos/codiALaMeta.png" alt="Tutor IA" className="feature-card__img" />
           </div>
 
         </div>
