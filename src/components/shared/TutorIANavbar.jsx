@@ -1,9 +1,10 @@
 import { useNavigate } from 'react-router-dom'
-import { perfilData } from '../Perfil/perfilData'
+import { useEstudiante } from '../../context/EstudianteContext'
 import './TutorIANavbar.css'
 
 export default function TutorIANavbar({ breadcrumb, onLogoClick, onAvatarClick, onBreadcrumbClick }) {
     const navigate = useNavigate()
+    const { estudiante } = useEstudiante()
 
     function handleLogo() {
         if (onLogoClick) onLogoClick()
@@ -20,6 +21,12 @@ export default function TutorIANavbar({ breadcrumb, onLogoClick, onAvatarClick, 
         else navigate(path)
     }
 
+    const iniciales = estudiante
+        ? `${estudiante.nombre[0]}${estudiante.apellido[0]}`
+        : '??'
+
+    const nivelTexto = estudiante ? estudiante.nivelTexto : '...'
+
     return (
         <header className="perfil-navbar">
             <div className="perfil-navbar__logo" onClick={handleLogo} style={{ cursor: 'pointer' }}>
@@ -33,29 +40,29 @@ export default function TutorIANavbar({ breadcrumb, onLogoClick, onAvatarClick, 
             <nav className="perfil-navbar__breadcrumb">
                 {breadcrumb.map((item, i) => (
                     <span key={i} className="perfil-navbar__breadcrumb-item">
-            {item.path ? (
-                <button
-                    className="perfil-navbar__breadcrumb-link"
-                    onClick={() => handleBreadcrumb(item.path)}
-                >
-                    {item.label}
-                </button>
-            ) : (
-                <span className="perfil-navbar__breadcrumb-current">{item.label}</span>
-            )}
+                        {item.path ? (
+                            <button
+                                className="perfil-navbar__breadcrumb-link"
+                                onClick={() => handleBreadcrumb(item.path)}
+                            >
+                                {item.label}
+                            </button>
+                        ) : (
+                            <span className="perfil-navbar__breadcrumb-current">{item.label}</span>
+                        )}
                         {i < breadcrumb.length - 1 && (
                             <span className="perfil-navbar__breadcrumb-sep">›</span>
                         )}
-          </span>
+                    </span>
                 ))}
             </nav>
 
             <div className="perfil-navbar__right">
                 <div className="perfil-navbar__nivel">
-                    Nivel: <strong>{perfilData.nivelActual}</strong>
+                    Nivel: <strong>{nivelTexto}</strong>
                 </div>
-                <div className="perfil-navbar__avatar" onClick={handleAvatar} style={{ cursor: 'pointer' }}>
-                    {perfilData.iniciales}
+                <div className="perfil-navbar__avatar" onClick={handleAvatar}>
+                    {iniciales}
                 </div>
             </div>
         </header>

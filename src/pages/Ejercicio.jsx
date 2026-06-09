@@ -6,13 +6,17 @@ import EjercicioEditor from '../components/Ejercicio/EjercicioEditor'
 import EjercicioFooter from '../components/Ejercicio/EjercicioFooter'
 import EjercicioResultado from '../components/Ejercicio/EjercicioResultado'
 import { ejercicioData } from '../components/Ejercicio/ejercicioData'
+import { useEstudiante } from '../context/EstudianteContext'
 import './Ejercicio.css'
 
 export default function Ejercicio() {
   const location = useLocation()
   const navigate = useNavigate()
+  const { estudiante, sesion_id, registrarIntento } = useEstudiante()
+
   const ejercicioSeleccionado = location.state?.ejercicio
   const moduloSeleccionado = location.state?.modulo
+  const esRepeticion = location.state?.esRepeticion || false
   const numeroEjercicio = location.state?.numeroEjercicio || ejercicioData.ejercicioNum
   const totalEjercicios = location.state?.totalEjercicios || ejercicioData.ejercicioTotal
 
@@ -23,6 +27,7 @@ export default function Ejercicio() {
   const [codigoEscrito, setCodigoEscrito] = useState(false)
   const [mostrarConfirm, setMostrarConfirm] = useState(false)
   const [destino, setDestino] = useState(null)
+  const [tiempoInicio] = useState(Date.now())
   const pyodideRef = useRef(null)
 
   useEffect(() => {
@@ -63,6 +68,7 @@ export default function Ejercicio() {
   async function handleEjecutar(code) {
     if (!code.trim()) return
     if (!pyodideRef.current) return
+
     try {
       pyodideRef.current.runPython(`
 import sys
@@ -72,15 +78,47 @@ sys.stdout = StringIO()
       pyodideRef.current.runPython(code)
       const output = pyodideRef.current.runPython('sys.stdout.getvalue()').trim()
       setSalida(output || '(Sin salida)')
+
       const salidaLimpia = output.trim().toLowerCase()
       const esperadaLimpia = ejercicioData.salidaEsperada.trim().toLowerCase()
       const esCorrecto = salidaLimpia === esperadaLimpia
+
       if (esCorrecto) {
         setEstado('correcto')
+
+        // Registrar intento en el backend
+        const tiempoSegundos = Math.floor((Date.now() - tiempoInicio) / 1000)
+        const nivelEjercicio = moduloSeleccionado?.id || 1
+        const tipoIntento = esRepeticion ? 'repeticion' : errores > 0 ? 'refuerzo' : 'primera_vez'
+
+        // Buscar el ejercicio_id correcto por título y módulo
+        let ejercicioId = 1
+        if (ejercicioSeleccionado && moduloSeleccionado) {
+          try {
+            const res = await fetch(
+                `http://localhost:3001/api/ejercicios/buscar?titulo=${encodeURIComponent(ejercicioSeleccionado.texto)}&modulo=${encodeURIComponent(moduloSeleccionado.id === 1 ? 'variables_basicas' : moduloSeleccionado.id === 2 ? 'condicionales' : 'bucles_repeticion')}`
+            )
+            const data = await res.json()
+            if (data.success) ejercicioId = data.ejercicio.id
+          } catch (e) {
+            console.error('Error buscando ejercicio:', e)
+          }
+        }
+
+        await registrarIntento({
+          ejercicio_id: ejercicioId,
+          codigo_enviado: code,
+          es_correcto: true,
+          tipo_intento: tipoIntento,
+          nivel_ejercicio: nivelEjercicio,
+          tiempo_segundos: tiempoSegundos
+        })
+
       } else {
         setEstado('incorrecto')
         setErrores(prev => prev + 1)
       }
+
     } catch (error) {
       setSalida(`Error: ${error.message}`)
       setEstado('incorrecto')
@@ -91,10 +129,10 @@ sys.stdout = StringIO()
   }
 
   function handleReintentar() { setEstado('pendiente'); setSalida('') }
-  function handleRefuerzo()   { setEstado('pendiente'); setSalida(''); setErrores(0) }
+  function handleRefuerzo() { setEstado('pendiente'); setSalida(''); setErrores(0) }
   function handleNuevoEjercicio() { setEstado('pendiente'); setSalida(''); setErrores(0) }
 
-  const tituloModulo    = moduloSeleccionado?.titulo || ejercicioData.modulo
+  const tituloModulo = moduloSeleccionado?.titulo || ejercicioData.modulo
   const tituloEjercicio = ejercicioSeleccionado?.texto || ejercicioData.practica
 
   const archivoEditor = moduloSeleccionado?.id === 1 ? 'variables_basicas.py'

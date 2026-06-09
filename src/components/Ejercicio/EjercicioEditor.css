@@ -13,7 +13,7 @@
   justify-content: space-between;
   padding: 0 16px;
   height: 44px;
-  background-color: #141710;
+  background-color: #27282b;
   border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 .ej-editor__tab {
@@ -32,13 +32,13 @@
   background-color: #a8c488;
 }
 .ej-editor__ejecutar-btn {
-  background-color: #4a5c3a;
+  background-color: #76885b;
   color: #fff;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   padding: 8px 20px;
   font-family: 'Inter', sans-serif;
-  font-size: 0.85rem;
+  font-size: 0.78rem;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.15s;
@@ -47,7 +47,7 @@
   background-color: #3a4a2d;
 }
 .ej-editor__ejecutar-btn--enviado {
-  background-color: #2e4a2e;
+  background-color: #627254;
   cursor: default;
   opacity: 0.8;
 }

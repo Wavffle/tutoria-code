@@ -46,7 +46,7 @@
 .fb-mini-editor__lines {
   display: flex;
   flex-direction: column;
-  color: #4a5c3a;
+  color: #eeeeee;
   opacity: 0.5;
   user-select: none;
   text-align: right;
@@ -54,7 +54,7 @@
 }
 .fb-mini-editor__lines span { line-height: 1.75; }
 .fb-mini-editor__code {
-  color: #a8c488;
+  color: #eeeeee;
   margin: 0;
   white-space: pre;
   font-family: 'JetBrains Mono', monospace;

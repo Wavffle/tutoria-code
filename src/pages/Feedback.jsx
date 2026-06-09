@@ -8,24 +8,34 @@ import { feedbackData } from '../components/Feedback/feedbackData'
 import './Feedback.css'
 
 export default function Feedback() {
-  return (
-    <div className="feedback-page">
-      <TutorIANavbar breadcrumb={[
-        { label: 'Dashboard', path: '/dashboard' },
-        { label: feedbackData.modulo, path: '/dashboard' },
-        { label: feedbackData.ejercicio, path: '/ejercicio' },
-        { label: 'Retroalimentación' }
-      ]} />
+    return (
+        <div className="feedback-page">
+            <TutorIANavbar breadcrumb={[
+                { label: 'Dashboard', path: '/dashboard' },
+                { label: feedbackData.modulo, path: '/dashboard' },
+                { label: feedbackData.ejercicio, path: '/ejercicio' },
+                { label: 'Retroalimentación' }
+            ]} />
 
-      <div className="feedback-page__body">
-        <div className="feedback-page__main">
-          <FeedbackHero />
-          <FeedbackResumen />
-          <FeedbackExplicacion />
-          <FeedbackAcciones />
+            <div className="feedback-page__body">
+                <div className="feedback-page__main">
+                    <div className="feedback-animar" style={{ animationDelay: '0ms' }}>
+                        <FeedbackHero />
+                    </div>
+                    <div className="feedback-animar" style={{ animationDelay: '80ms' }}>
+                        <FeedbackResumen />
+                    </div>
+                    <div className="feedback-animar" style={{ animationDelay: '160ms' }}>
+                        <FeedbackExplicacion />
+                    </div>
+                    <div className="feedback-animar" style={{ animationDelay: '240ms' }}>
+                        <FeedbackAcciones />
+                    </div>
+                </div>
+                <div className="feedback-animar" style={{ animationDelay: '120ms' }}>
+                    <FeedbackSidebar />
+                </div>
+            </div>
         </div>
-        <FeedbackSidebar />
-      </div>
-    </div>
-  )
+    )
 }

@@ -31,7 +31,7 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
   }, [estado])
 
   const estadoConfig = {
-    pendiente:  { color: '#f0ad4e', texto: 'Ejercicio sin completar' },
+    pendiente:  { color: '#b07801', texto: 'Ejercicio sin completar' },
     correcto:   { color: '#4a5c3a', texto: 'Ejercicio correcto' },
     incorrecto: { color: '#c0392b', texto: 'Ejercicio incorrecto' },
   }

@@ -9,7 +9,7 @@
 .fb-sidebar__card {
   background: #fff;
   border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 14px;
+  border-radius: 10px;
   padding: 20px 18px 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.05);
 }
@@ -81,11 +81,11 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  background-color: rgba(107,79,160,0.07);
+  background-color: rgb(234 226 242);
   border-radius: 10px;
-  padding: 10px 12px;
-  font-size: 0.8rem;
-  color: #6b4fa0;
+  padding: 12px 20px;
+  font-size: 0.7rem;
+  color: #6d46a2;
   font-weight: 500;
   line-height: 1.4;
 }
@@ -100,10 +100,10 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 .fb-sidebar__conceptos li {
-  font-size: 0.82rem;
+  font-size: 0.74rem;
   color: #444;
   display: flex;
   align-items: center;

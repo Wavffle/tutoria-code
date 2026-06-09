@@ -194,6 +194,96 @@ app.post('/api/intentos', (req, res) => {
     }
 })
 
+// ── Obtener historial de intentos del estudiante ──
+app.get('/api/estudiantes/:estudiante_id/historial', (req, res) => {
+    const { estudiante_id } = req.params
+
+    try {
+        const intentos = db.prepare(`
+            SELECT 
+                i.id,
+                i.es_correcto,
+                i.puntaje,
+                i.created_at,
+                e.titulo,
+                e.modulo,
+                e.titulo_modulo,
+                e.nivel
+            FROM intentos i
+            JOIN ejercicios e ON i.ejercicio_id = e.id
+            WHERE i.estudiante_id = ?
+            ORDER BY i.created_at DESC
+        `).all(estudiante_id)
+
+        const progreso = db.prepare(`
+            SELECT * FROM progreso_modulo
+            WHERE estudiante_id = ?
+        `).all(estudiante_id)
+
+        res.json({ success: true, intentos, progreso })
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: { code: 'SERVER_ERROR', message: error.message }
+        })
+    }
+})
+
+// ── Módulos completados del estudiante ──
+app.get('/api/estudiantes/:estudiante_id/modulos', (req, res) => {
+    const { estudiante_id } = req.params
+
+    try {
+        const modulos = db.prepare(`
+            SELECT 
+                e.modulo,
+                e.titulo_modulo,
+                COUNT(DISTINCT e.id) as ejercicios_completados
+            FROM intentos i
+            JOIN ejercicios e ON i.ejercicio_id = e.id
+            WHERE i.estudiante_id = ? AND i.es_correcto = 1
+            GROUP BY e.modulo, e.titulo_modulo
+        `).all(estudiante_id)
+
+        res.json({ success: true, modulos })
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: { code: 'SERVER_ERROR', message: error.message }
+        })
+    }
+})
+
+// ── Buscar ejercicio por título y módulo ──
+app.get('/api/ejercicios/buscar', (req, res) => {
+    const { titulo, modulo } = req.query
+
+    try {
+        const ejercicio = db.prepare(`
+            SELECT * FROM ejercicios
+            WHERE titulo = ? AND modulo = ?
+            LIMIT 1
+        `).get(titulo, modulo)
+
+        if (!ejercicio) {
+            return res.status(404).json({
+                success: false,
+                error: { code: 'NOT_FOUND', message: 'Ejercicio no encontrado' }
+            })
+        }
+
+        res.json({ success: true, ejercicio })
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            error: { code: 'SERVER_ERROR', message: error.message }
+        })
+    }
+})
+
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`)
 })

@@ -36,7 +36,7 @@
 }
 
 .ejercicio-page__salida {
-  background-color: #1a1e16;
+  background-color: #282c34;
   display: flex;
   flex-direction: column;
   height: 195px;
@@ -56,11 +56,11 @@
   gap: 4px;
 }
 .ejercicio-page__salida-label {
-  color: #a8c488;
+  color: #eeeeee;
   line-height: 1.75;
 }
 .ejercicio-page__salida-valor {
-  color: #a8c488;
+  color: #eeeeee;
   line-height: 1.75;
 }
 .ejercicio-page__salida-valor--error {
