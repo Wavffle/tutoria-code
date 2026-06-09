@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import AyudaPopup from './AyudaPopup'
-import { ejercicioData } from './ejercicioData'
 import './EjercicioFooter.css'
 
 const robotImg = {
@@ -9,7 +8,7 @@ const robotImg = {
   incorrecto: '/robotTutorIA/robotIncorrecto.png',
 }
 
-export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboard }) {
+export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboard, onPedirPista, pistaTexto, cargandoPista }) {
   const [mostrarAyuda, setMostrarAyuda] = useState(false)
   const [mostrarPista, setMostrarPista] = useState(false)
   const [cerrando, setCerrando] = useState(false)
@@ -37,6 +36,9 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
       cerrarPista()
     } else {
       setMostrarPista(true)
+      if (!pistaTexto) {
+        onPedirPista() // Llama al backend si aún no hay pista generada
+      }
     }
   }
 
@@ -51,20 +53,13 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
 
   return (
       <div className="ej-footer">
-
-        {/* Left */}
         <div className="ej-footer__left">
-          <img
-              src={robotImg[estado] || robotImg.pendiente}
-              alt="Tutor"
-              className={`ej-footer__robot ej-footer__robot--${estado}`}
-          />
+          <img src={robotImg[estado] || robotImg.pendiente} alt="Tutor" className={`ej-footer__robot ej-footer__robot--${estado}`} />
           <span className="ej-footer__label">Tutor IA</span>
           <span className="ej-footer__dot" style={{ backgroundColor: color }} />
           <span className="ej-footer__estado" style={{ color }}>{texto}</span>
         </div>
 
-        {/* Center */}
         <div className="ej-footer__center">
           <div className="ej-footer__pista-wrapper">
             {mostrarPista && (
@@ -75,13 +70,12 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
                       <span>Pista</span>
                     </div>
                   </div>
-                  <p className="ej-footer__pista-texto">{ejercicioData.pistaBton}</p>
+                  <p className="ej-footer__pista-texto">
+                    {cargandoPista ? 'TutorIA está analizando tu código...' : pistaTexto}
+                  </p>
                 </div>
             )}
-            <button
-                className={`ej-footer__btn ej-footer__btn--pista ${mostrarPista ? 'ej-footer__btn--pista-activo' : ''}`}
-                onClick={togglePista}
-            >
+            <button className={`ej-footer__btn ej-footer__btn--pista ${mostrarPista ? 'ej-footer__btn--pista-activo' : ''}`} onClick={togglePista}>
               Pedir pista
               <span className="ej-footer__pista-arrow">{mostrarPista ? '∨' : '∧'}</span>
             </button>
@@ -93,17 +87,13 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
                   Reintenta o genera un ejercicio de refuerzo primero
                 </div>
             )}
-            <button
-                className={`ej-footer__btn ej-footer__btn--nuevo ${nuevoDeshabilitado ? 'ej-footer__btn--nuevo-disabled' : ''}`}
-                onClick={handleNuevoClick}
-            >
+            <button className={`ej-footer__btn ej-footer__btn--nuevo ${nuevoDeshabilitado ? 'ej-footer__btn--nuevo-disabled' : ''}`} onClick={handleNuevoClick}>
               <img src="/iconos/repetirIcono.png" alt="Nuevo" className="ej-footer__btn-icon" />
               Nuevo ejercicio del mismo nivel
             </button>
           </div>
         </div>
 
-        {/* Right */}
         <div className="ej-footer__right">
           <button className="ej-footer__link" onClick={onIrDashboard}>
             ← Ir al dashboard
@@ -114,9 +104,7 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
           </button>
         </div>
 
-        {mostrarAyuda && (
-            <AyudaPopup onClose={() => setMostrarAyuda(false)} />
-        )}
+        {mostrarAyuda && <AyudaPopup onClose={() => setMostrarAyuda(false)} />}
       </div>
   )
 }

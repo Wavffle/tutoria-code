@@ -2,7 +2,6 @@ import CodeMirror from '@uiw/react-codemirror'
 import { python } from '@codemirror/lang-python'
 import { oneDark } from '@codemirror/theme-one-dark'
 import { useState } from 'react'
-import { ejercicioData } from './ejercicioData'
 import './EjercicioEditor.css'
 
 export default function EjercicioEditor({ onEjecutar, estado, cargando, onCodigoChange, archivo }) {
@@ -20,7 +19,7 @@ export default function EjercicioEditor({ onEjecutar, estado, cargando, onCodigo
             <div className="ej-editor__tabbar">
                 <div className="ej-editor__tab">
                     <span className="ej-editor__tab-dot" />
-                    {archivo || ejercicioData.archivo}
+                    {archivo}
                 </div>
                 <button
                     className={`ej-editor__ejecutar-btn ${enviado ? 'ej-editor__ejecutar-btn--enviado' : ''}`}

@@ -14,6 +14,11 @@ export default function ModuloCard({ modulo, onIAClick }) {
 
     const ejerciciosSoloEjercicios = modulo.ejercicios.filter(e => e.tipo === 'ejercicio')
 
+    // Función para adaptar el nivel visual al formato exacto de tu backend en Python
+    const formatearNivel = (nivel) => {
+        return nivel.toUpperCase().replace('BASICO', 'BÁSICO');
+    }
+
     function handleEjercicioClick(ejercicio) {
         if (!modulo.desbloqueado) {
             setMostrarAviso(true)
@@ -30,14 +35,36 @@ export default function ModuloCard({ modulo, onIAClick }) {
         const numeroEjercicio = ejerciciosSoloEjercicios.indexOf(ejercicio) + 1
         const totalEjercicios = ejerciciosSoloEjercicios.length
 
-        navigate('/ejercicio', { state: { ejercicio, modulo, numeroEjercicio, totalEjercicios } })
+        // AQUÍ ESTÁ LA MAGIA: Enviamos la categoría y el nivel exactos al backend
+        navigate('/ejercicio', {
+            state: {
+                modulo: modulo,
+                categoria: ejercicio.texto,
+                nivel: formatearNivel(modulo.nivelMinimo),
+                ejercicio: ejercicio,
+                numeroEjercicio: numeroEjercicio,
+                totalEjercicios: totalEjercicios
+            }
+        })
     }
 
     function handleRepetirClick(e, ejercicio) {
         e.stopPropagation()
         const numeroEjercicio = ejerciciosSoloEjercicios.indexOf(ejercicio) + 1
         const totalEjercicios = ejerciciosSoloEjercicios.length
-        navigate('/ejercicio', { state: { ejercicio, modulo, numeroEjercicio, totalEjercicios, esRepeticion: true } })
+
+        // También lo enviamos si el usuario repite un ejercicio ya completado
+        navigate('/ejercicio', {
+            state: {
+                modulo: modulo,
+                categoria: ejercicio.texto,
+                nivel: formatearNivel(modulo.nivelMinimo),
+                ejercicio: ejercicio,
+                numeroEjercicio: numeroEjercicio,
+                totalEjercicios: totalEjercicios,
+                esRepeticion: true
+            }
+        })
     }
 
     return (

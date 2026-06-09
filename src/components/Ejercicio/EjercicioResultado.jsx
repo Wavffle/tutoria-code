@@ -1,11 +1,10 @@
 import { useNavigate } from 'react-router-dom'
-import { ejercicioData } from './ejercicioData'
 import './EjercicioResultado.css'
 
-export default function EjercicioResultado({ estado, salida, onReintentar, onRefuerzo }) {
+export default function EjercicioResultado({ estado, salida, onReintentar, onRefuerzo, evaluacion }) {
     const navigate = useNavigate()
 
-    if (estado === 'pendiente') {
+    if (estado === 'pendiente' || !evaluacion) {
         return (
             <div className="ej-resultado ej-resultado--pendiente">
                 <div className="ej-resultado__pending-header">
@@ -39,21 +38,18 @@ export default function EjercicioResultado({ estado, salida, onReintentar, onRef
     }
 
     if (estado === 'correcto') {
-        const fb = ejercicioData.feedbackCorrecto
+        const fb = evaluacion.feedbackCorrecto
         return (
             <div className="ej-resultado ej-resultado--correcto">
                 <p className="ej-resultado__correcto-texto">
-                    <strong>¡Correcto!</strong> {fb.texto.replace('¡Correcto! ', '')}
+                    <strong>¡Correcto!</strong> {fb?.texto?.replace('¡Correcto! ', '')}
                 </p>
                 <div className="ej-resultado__tags">
-                    {fb.conceptosLogrados.map((c, i) => (
+                    {fb?.conceptosLogrados?.map((c, i) => (
                         <span key={i} className="ej-resultado__tag ej-resultado__tag--verde">✓ {c}</span>
                     ))}
                 </div>
-                <button
-                    className="ej-resultado__continuar-btn"
-                    onClick={() => navigate('/feedback')}
-                >
+                <button className="ej-resultado__continuar-btn" onClick={() => navigate('/feedback')}>
                     CONTINUAR
                 </button>
             </div>
@@ -61,26 +57,26 @@ export default function EjercicioResultado({ estado, salida, onReintentar, onRef
     }
 
     if (estado === 'incorrecto') {
-        const fb = ejercicioData.feedbackIncorrecto
+        const fb = evaluacion.feedbackIncorrecto
         return (
             <div className="ej-resultado ej-resultado--incorrecto">
                 <div className="ej-resultado__incorrecto-top">
                     <div className="ej-resultado__incorrecto-left">
                         <p className="ej-resultado__incorrecto-texto">
-                            <strong>Incorrecto.</strong> {fb.texto.replace('Incorrecto. ', '')}
+                            <strong>Incorrecto.</strong> {fb?.texto?.replace('Incorrecto. ', '')}
                         </p>
                         <div className="ej-resultado__error-box">
                             <div className="ej-resultado__error-header">
                                 <img src="/iconos/xIcono.png" alt="Error" className="ej-resultado__x-icon" />
-                                <strong>{fb.errorTitulo}</strong>
+                                <strong>{fb?.errorTitulo}</strong>
                             </div>
-                            <p className="ej-resultado__error-desc">{fb.errorDesc}</p>
+                            <p className="ej-resultado__error-desc">{fb?.errorDesc}</p>
                         </div>
                         <div className="ej-resultado__tags">
-                            {fb.conceptosLogrados.map((c, i) => (
+                            {fb?.conceptosLogrados?.map((c, i) => (
                                 <span key={i} className="ej-resultado__tag ej-resultado__tag--verde">✓ {c}</span>
                             ))}
-                            {fb.conceptosError.map((c, i) => (
+                            {fb?.conceptosError?.map((c, i) => (
                                 <span key={i} className="ej-resultado__tag ej-resultado__tag--rojo">✗ {c}</span>
                             ))}
                         </div>
@@ -88,7 +84,7 @@ export default function EjercicioResultado({ estado, salida, onReintentar, onRef
                     <div className="ej-resultado__incorrecto-right">
                         <div className="ej-resultado__decision-box">
                             <p className="ej-resultado__decision-title">Decisión de TutorIA</p>
-                            <p className="ej-resultado__decision-desc">{fb.decisionTutor}</p>
+                            <p className="ej-resultado__decision-desc">{fb?.decisionTutor}</p>
                         </div>
                     </div>
                 </div>

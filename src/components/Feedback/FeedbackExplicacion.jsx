@@ -1,8 +1,8 @@
-import { feedbackData } from './feedbackData'
 import './FeedbackExplicacion.css'
 
-export default function FeedbackExplicacion() {
-    const { explicacion } = feedbackData
+export default function FeedbackExplicacion({ data }) {
+    if (!data || !data.explicacion) return null;
+    const { explicacion } = data
 
     return (
         <div className="fb-explicacion">
@@ -14,16 +14,16 @@ export default function FeedbackExplicacion() {
             <p className="fb-explicacion__intro">{explicacion.intro}</p>
 
             <ul className="fb-explicacion__lista">
-                {explicacion.puntos.map((p, i) => (
+                {explicacion.puntos?.map((p, i) => (
                     <li key={i}>
                         <span className="fb-explicacion__check">✓</span>
                         <span>
-              {p.texto}
+                            {p.texto}
                             {p.bold && <strong>{p.bold}</strong>}
                             {p.texto2}
                             {p.bold2 && <strong>{p.bold2}</strong>}
                             {p.texto3}
-            </span>
+                        </span>
                     </li>
                 ))}
             </ul>

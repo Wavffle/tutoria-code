@@ -1,193 +1,171 @@
-import { useEffect, useRef, useState } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import TutorIANavbar from '../components/shared/TutorIANavbar.jsx'
 import EjercicioInfo from '../components/Ejercicio/EjercicioInfo'
 import EjercicioEditor from '../components/Ejercicio/EjercicioEditor'
 import EjercicioFooter from '../components/Ejercicio/EjercicioFooter'
 import EjercicioResultado from '../components/Ejercicio/EjercicioResultado'
-import { ejercicioData } from '../components/Ejercicio/ejercicioData'
 import './Ejercicio.css'
 
 export default function Ejercicio() {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const ejercicioSeleccionado = location.state?.ejercicio
-  const moduloSeleccionado = location.state?.modulo
-  const numeroEjercicio = location.state?.numeroEjercicio || ejercicioData.ejercicioNum
-  const totalEjercicios = location.state?.totalEjercicios || ejercicioData.ejercicioTotal
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const [estado, setEstado] = useState('pendiente')
-  const [salida, setSalida] = useState('')
-  const [errores, setErrores] = useState(ejercicioData.errores)
-  const [cargandoPython, setCargandoPython] = useState(true)
-  const [codigoEscrito, setCodigoEscrito] = useState(false)
-  const [mostrarConfirm, setMostrarConfirm] = useState(false)
-  const [destino, setDestino] = useState(null)
-  const pyodideRef = useRef(null)
+  const moduloActual = typeof location.state?.modulo === 'object'
+      ? location.state.modulo.titulo
+      : (location.state?.modulo || "Variables básicas");
+  const categoriaActual = location.state?.categoria || "Introducción a variables";
+  const nivelActual = location.state?.nivel || "BÁSICO";
 
-  useEffect(() => {
-    async function cargarPyodide() {
-      pyodideRef.current = await window.loadPyodide({
-        indexURL: 'https://cdn.jsdelivr.net/pyodide/v0.25.0/full/'
-      })
-      setCargandoPython(false)
-    }
-    cargarPyodide()
-  }, [])
+  const [ejercicioData, setEjercicioData] = useState(null);
+  const [evaluacion, setEvaluacion] = useState(null);
+  const [estadoEjercicio, setEstadoEjercicio] = useState('pendiente');
+  const [codigo, setCodigo] = useState('');
+  const [cargandoIA, setCargandoIA] = useState(true);
+  const [pistaTexto, setPistaTexto] = useState('');
+  const [cargandoPista, setCargandoPista] = useState(false);
+
+  // 2. Creamos la variable del candado
+  const peticionEnviada = useRef(false);
 
   useEffect(() => {
-    const handleBeforeUnload = (e) => {
-      if (codigoEscrito && estado === 'pendiente') {
-        e.preventDefault()
-        e.returnValue = ''
+    // 3. Si el candado está cerrado, abortamos inmediatamente
+    if (peticionEnviada.current) return;
+
+    const generarEjercicio = async () => {
+      // 4. Cerramos el candado justo antes de hacer el fetch
+      peticionEnviada.current = true;
+
+      try {
+        const res = await fetch('http://127.0.0.1:8000/api/generar_ejercicio', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            modulo: moduloActual,
+            categoria: categoriaActual,
+            nivel: nivelActual,
+            errores_previos: 0
+          })
+        });
+
+        if (!res.ok) throw new Error("Error conectando al backend");
+
+        const data = await res.json();
+        setEjercicioData(data);
+        setCargandoIA(false);
+      } catch (error) {
+        console.error("Error al generar el ejercicio:", error);
+        setCargandoIA(false);
+        // Si hubo un error catastrófico, abrimos el candado por si el usuario quiere reintentar
+        peticionEnviada.current = false;
       }
-    }
-    window.addEventListener('beforeunload', handleBeforeUnload)
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
-  }, [codigoEscrito, estado])
+    };
 
-  function handleNavegar(ruta) {
-    if (codigoEscrito && estado === 'pendiente') {
-      setDestino(ruta)
-      setMostrarConfirm(true)
-    } else {
-      navigate(ruta)
-    }
-  }
+    generarEjercicio();
+  }, [moduloActual, categoriaActual, nivelActual]); // Se vuelve a ejecutar si cambian estos valores
 
-  function confirmarSalida() {
-    setMostrarConfirm(false)
-    navigate(destino)
-  }
+  // 3. Ejecutar y Evaluar
+  const handleEjecutar = async (codigoEditor) => {
+    setCodigo(codigoEditor);
+    setEstadoEjercicio('pendiente');
 
-  async function handleEjecutar(code) {
-    if (!code.trim()) return
-    if (!pyodideRef.current) return
+    // --- AQUÍ VA TU LÓGICA REAL DE PYODIDE ---
+    let salidaReal = ""; // Reemplaza esto con la salida real de Pyodide
+    let huboErrorReal = false;    // Reemplaza esto con el estado de error real de Pyodide
+    // -----------------------------------------
+
     try {
-      pyodideRef.current.runPython(`
-import sys
-from io import StringIO
-sys.stdout = StringIO()
-      `)
-      pyodideRef.current.runPython(code)
-      const output = pyodideRef.current.runPython('sys.stdout.getvalue()').trim()
-      setSalida(output || '(Sin salida)')
-      const salidaLimpia = output.trim().toLowerCase()
-      const esperadaLimpia = ejercicioData.salidaEsperada.trim().toLowerCase()
-      const esCorrecto = salidaLimpia === esperadaLimpia
-      if (esCorrecto) {
-        setEstado('correcto')
-      } else {
-        setEstado('incorrecto')
-        setErrores(prev => prev + 1)
-      }
+      const res = await fetch('http://127.0.0.1:8000/api/evaluar_codigo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          modulo: moduloActual,             // <-- DINÁMICO
+          categoria: categoriaActual,       // <-- DINÁMICO
+          descripcion_ejercicio: ejercicioData.descripcion,
+          codigo_usuario: codigoEditor,
+          salida_consola: salidaReal,
+          es_error_sintaxis: huboErrorReal
+        })
+      });
+
+      const dataEval = await res.json();
+      setEvaluacion(dataEval);
+      setEstadoEjercicio(dataEval.estado);
+
     } catch (error) {
-      setSalida(`Error: ${error.message}`)
-      setEstado('incorrecto')
-      setErrores(prev => prev + 1)
-    } finally {
-      pyodideRef.current.runPython('sys.stdout = sys.__stdout__')
+      console.error("Error en la evaluación:", error);
     }
-  }
+  };
 
-  function handleReintentar() { setEstado('pendiente'); setSalida('') }
-  function handleRefuerzo()   { setEstado('pendiente'); setSalida(''); setErrores(0) }
-  function handleNuevoEjercicio() { setEstado('pendiente'); setSalida(''); setErrores(0) }
-
-  const tituloModulo    = moduloSeleccionado?.titulo || ejercicioData.modulo
-  const tituloEjercicio = ejercicioSeleccionado?.texto || ejercicioData.practica
-
-  const archivoEditor = moduloSeleccionado?.id === 1 ? 'variables_basicas.py'
-      : moduloSeleccionado?.id === 2 ? 'condicionales.py'
-          : moduloSeleccionado?.id === 3 ? 'bucles_repeticion.py'
-              : ejercicioData.archivo
+  // 4. Pedir Pista a la IA
+  const handlePedirPista = async () => {
+    setCargandoPista(true);
+    try {
+      const res = await fetch('http://127.0.0.1:8000/api/pedir_pista', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          descripcion_ejercicio: ejercicioData.descripcion,
+          nivel: nivelActual,               // <-- DINÁMICO
+          codigo_actual: codigo
+        })
+      });
+      const dataPista = await res.json();
+      setPistaTexto(dataPista.pistaBton);
+    } catch (error) {
+      console.error("Error al pedir pista:", error);
+      setPistaTexto("Hubo un error al consultar al TutorIA.");
+    } finally {
+      setCargandoPista(false);
+    }
+  };
 
   return (
-      <div className="ejercicio-page">
-        <TutorIANavbar
-            breadcrumb={[
-              { label: 'Dashboard', path: '/dashboard' },
-              { label: tituloModulo, path: '/dashboard' },
-              { label: tituloEjercicio }
-            ]}
-            onLogoClick={() => handleNavegar('/dashboard')}
-            onAvatarClick={() => handleNavegar('/perfil')}
-            onBreadcrumbClick={(path) => handleNavegar(path)}
-        />
+      <div className="layout-ejercicio" style={{ display: 'flex', flexDirection: 'column', height: '100vh' }}>
+        {/* Contenido Principal */}
+        <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
 
-        <div className="ejercicio-page__main">
-          <div className="ejercicio-page__left">
+          {/* Panel Izquierdo (Información) */}
+          <div style={{ flex: 1, overflowY: 'auto', borderRight: '1px solid #ccc' }}>
             <EjercicioInfo
-                estado={estado}
-                errores={errores}
-                ejercicioSeleccionado={ejercicioSeleccionado}
-                moduloSeleccionado={moduloSeleccionado}
-                numeroEjercicio={numeroEjercicio}
-                totalEjercicios={totalEjercicios}
+                data={ejercicioData ? { ...ejercicioData, nivel: ejercicioData.nivel || nivelActual } : null}
+                estado={estadoEjercicio}
+                errores={0}
+                moduloSeleccionado={location.state?.modulo}
+                ejercicioSeleccionado={location.state?.ejercicio}
+                numeroEjercicio={location.state?.numeroEjercicio || 1}
+                totalEjercicios={location.state?.totalEjercicios || 5}
             />
           </div>
-          <div className="ejercicio-page__right">
+
+          {/* Panel Derecho (Editor y Resultado) */}
+          <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
             <EjercicioEditor
+                estado={estadoEjercicio}
+                cargando={cargandoIA}
                 onEjecutar={handleEjecutar}
-                estado={estado}
-                cargando={cargandoPython}
-                onCodigoChange={(tieneContenido) => setCodigoEscrito(tieneContenido)}
-                archivo={archivoEditor}
+                archivo={ejercicioData?.archivo}
+                onCodigoChange={(val) => setCodigo(val)}
             />
-          </div>
-        </div>
 
-        <EjercicioFooter
-            estado={estado}
-            onNuevoEjercicio={handleNuevoEjercicio}
-            onIrDashboard={() => handleNavegar('/dashboard')}
-        />
-
-        <div className="ejercicio-page__bottom">
-          <div className="ejercicio-page__salida">
-            <div className="ejercicio-page__salida-body">
-              <div className="ejercicio-page__salida-content">
-                <p className="ejercicio-page__salida-label">Salida:</p>
-                <p className={`ejercicio-page__salida-valor ${estado === 'incorrecto' ? 'ejercicio-page__salida-valor--error' : ''}`}>
-                  {salida || '(Aquí se verá la ejecución)'}
-                </p>
-              </div>
-            </div>
-          </div>
-          <div className="ejercicio-page__feedback">
             <EjercicioResultado
-                estado={estado}
-                salida={salida}
-                onReintentar={handleReintentar}
-                onRefuerzo={handleRefuerzo}
+                estado={estadoEjercicio}
+                evaluacion={evaluacion}
+                onReintentar={() => setEstadoEjercicio('pendiente')}
+                onRefuerzo={() => window.location.reload()}
             />
           </div>
         </div>
 
-        {mostrarConfirm && (
-            <div className="ejercicio-confirm__overlay" onClick={() => setMostrarConfirm(false)}>
-              <div className="ejercicio-confirm__modal" onClick={e => e.stopPropagation()}>
-                <p className="ejercicio-confirm__titulo">¿Seguro que quieres salir?</p>
-                <p className="ejercicio-confirm__desc">
-                  Perderás el código que escribiste. Esta acción no se puede deshacer.
-                </p>
-                <div className="ejercicio-confirm__btns">
-                  <button
-                      className="ejercicio-confirm__btn ejercicio-confirm__btn--cancel"
-                      onClick={() => setMostrarConfirm(false)}
-                  >
-                    Seguir practicando
-                  </button>
-                  <button
-                      className="ejercicio-confirm__btn ejercicio-confirm__btn--confirm"
-                      onClick={confirmarSalida}
-                  >
-                    Sí, salir
-                  </button>
-                </div>
-              </div>
-            </div>
-        )}
+        {/* Footer */}
+        <EjercicioFooter
+            estado={estadoEjercicio}
+            pistaTexto={pistaTexto}
+            cargandoPista={cargandoPista}
+            onPedirPista={handlePedirPista}
+            onNuevoEjercicio={() => window.location.reload()}
+            onIrDashboard={() => navigate('/dashboard')}
+        />
       </div>
-  )
+  );
 }
