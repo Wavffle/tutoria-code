@@ -24,8 +24,5 @@ export const perfilData = {
   },
 
   historial: [
-    { id: 1, ejercicio: 'Introducción a variables', modulo: 'Variables básicas', resultado: 100, estado: 'Completado' },
-    { id: 2, ejercicio: 'Tipos de datos básicos', modulo: 'Variables básicas', resultado: 100, estado: 'Completado' },
-    { id: 3, ejercicio: 'Operaciones con variables', modulo: 'Variables básicas', resultado: 100, estado: 'Completado' }
   ],
 }

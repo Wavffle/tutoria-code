@@ -4,7 +4,7 @@
   grid-template-columns: 1fr auto auto;
   align-items: center;
   padding: 14px 32px;
-  background-color: rgb(238 238 238 / 0.93);
+  background-color: rgb(221 221 221);
   border-top: 1px solid rgba(0,0,0,0.08);
   gap: 16px;
 }
@@ -21,6 +21,10 @@
   object-fit: contain;
   position: absolute;
   z-index: 10;
+  transition: opacity 0.2s ease;
+}
+.ej-footer__robot--fading {
+  opacity: 0;
 }
 .ej-footer__robot--pendiente {
   width: 130px; height: 130px;
@@ -78,7 +82,7 @@
   border: none;
 }
 .ej-footer__btn--pista {
-  background-color: rgb(238 238 238 / 0.93);
+  background-color: rgb(221 221 221);
   color: #1c1c1c;
   border: 1.5px solid rgba(0,0,0,0.12);
 }
@@ -93,11 +97,11 @@
 }
 .ej-footer__btn--pista-activo:hover {
   background-color: #76885B;
-  color: #fff;
+  color: #dddddd;
 }
 .ej-footer__btn--nuevo {
-  background-color: #4a5c3a;
-  color: #fff;
+  background-color: #627254;
+  color: #dddddd;
   font-weight: 400;
 }
 .ej-footer__btn--nuevo:hover {

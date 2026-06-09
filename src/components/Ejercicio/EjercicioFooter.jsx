@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import AyudaPopup from './AyudaPopup'
 import { ejercicioData } from './ejercicioData'
 import './EjercicioFooter.css'
@@ -14,6 +14,21 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
   const [mostrarPista, setMostrarPista] = useState(false)
   const [cerrando, setCerrando] = useState(false)
   const [mostrarAviso, setMostrarAviso] = useState(false)
+  const [robotSrc, setRobotSrc] = useState(robotImg[estado] || robotImg.pendiente)
+  const [robotFading, setRobotFading] = useState(false)
+
+  useEffect(() => {
+    const nuevaSrc = robotImg[estado] || robotImg.pendiente
+    if (nuevaSrc === robotSrc) return
+
+    setRobotFading(true)
+    const timer = setTimeout(() => {
+      setRobotSrc(nuevaSrc)
+      setRobotFading(false)
+    }, 200)
+
+    return () => clearTimeout(timer)
+  }, [estado])
 
   const estadoConfig = {
     pendiente:  { color: '#f0ad4e', texto: 'Ejercicio sin completar' },
@@ -55,9 +70,9 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
         {/* Left */}
         <div className="ej-footer__left">
           <img
-              src={robotImg[estado] || robotImg.pendiente}
+              src={robotSrc}
               alt="Tutor"
-              className={`ej-footer__robot ej-footer__robot--${estado}`}
+              className={`ej-footer__robot ej-footer__robot--${estado} ${robotFading ? 'ej-footer__robot--fading' : ''}`}
           />
           <span className="ej-footer__label">Tutor IA</span>
           <span className="ej-footer__dot" style={{ backgroundColor: color }} />

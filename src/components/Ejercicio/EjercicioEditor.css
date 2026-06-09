@@ -27,9 +27,9 @@
   border-bottom: 2px solid #5a6e45;
 }
 .ej-editor__tab-dot {
-  width: 8px; height: 8px;
+  width: 6px; height: 6px;
   border-radius: 50%;
-  background-color: #f0ad4e;
+  background-color: #a8c488;
 }
 .ej-editor__ejecutar-btn {
   background-color: #4a5c3a;

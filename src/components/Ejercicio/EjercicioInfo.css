@@ -11,7 +11,7 @@
   font-family: 'Inter', sans-serif;
   font-size: 0.75rem;
   font-weight: 700;
-  color: #5a6e45;
+  color: #627254;
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -20,7 +20,6 @@
   font-size: 1.25rem;
   font-weight: 700;
   color: #1c1c1c;
-  letter-spacing: -0.02em;
   line-height: 1.2;
 }
 .ej-info__meta {
@@ -33,7 +32,7 @@
   color: #888;
 }
 .ej-info__nivel {
-  background-color: #4a5c3a;
+  background-color: #76885b;
   color: #fff;
   font-size: 0.72rem;
   font-weight: 500;
@@ -44,9 +43,9 @@
 
 /* IA Box */
 .ej-info__ia-box {
-  background-color: rgba(107,79,160,0.07);
+  background-color: rgb(234 226 242);
   border-radius: 12px;
-  padding: 12px 14px;
+  padding: 12px 20px;
   border: 1px solid rgba(107,79,160,0.15);
 }
 .ej-info__ia-box--error {
@@ -60,14 +59,14 @@
   margin-bottom: 6px;
 }
 .ej-info__ia-icon {
-  width: 16px;
-  height: 16px;
+  width: 24px;
+  height: 24px;
   object-fit: contain;
 }
 .ej-info__ia-title {
   font-size: 0.85rem;
-  font-weight: 700;
-  color: #6b4fa0;
+  font-weight: 600;
+  color: #6d46a2;
 }
 .ej-info__ia-title--error {
   color: #c0392b;
@@ -75,6 +74,7 @@
 .ej-info__ia-generado {
   font-size: 0.80rem;
   color: #555;
+  font-weight: 500;
   margin-bottom: 6px;
 }
 .ej-info__ia-lista {
@@ -90,21 +90,22 @@
   align-items: center;
   gap: 6px;
 }
-.ej-info__check { color: #4a5c3a; font-weight: 700; }
+.ej-info__check { color: #6d46a2; font-weight: 700; }
 .ej-info__x { color: #c0392b; font-weight: 700; }
 
 .ej-info__section-title {
   font-family: 'Inter', sans-serif;
-  font-size: 0.75rem;
-  font-weight: 700;
-  color: #888;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #627254;
   letter-spacing: 0.08em;
   margin-top: 2px;
 }
 .ej-info__desc {
-  font-size: 0.85rem;
+  font-size: 0.82rem;
   color: #444;
-  line-height: 1.55;
+  line-height: 1.5;
+  font-weight: 300;
 }
 
 .ej-info__salida {
@@ -117,13 +118,13 @@
   font-family: 'JetBrains Mono', monospace;
 }
 .ej-info__salida-num {
-  color: #4a5c3a;
+  color: #eeeeee;
   font-size: 0.82rem;
   opacity: 0.6;
   flex-shrink: 0;
 }
 .ej-info__salida-texto {
-  color: #a8c488;
+  color: #eeeeee;
   font-size: 0.85rem;
 }
 
@@ -146,7 +147,7 @@
   opacity: 0.8;
 }
 .ej-info__consejo-texto {
-  font-size: 0.78rem;
+  font-size: 0.74rem;
   color: #6b4fa0;
   line-height: 1.4;
 }
