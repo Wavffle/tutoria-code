@@ -2,9 +2,8 @@ import { useNavigate } from 'react-router-dom'
 import { ejercicioData } from './ejercicioData'
 import './EjercicioResultado.css'
 
-export default function EjercicioResultado({ estado, salida, onReintentar, onRefuerzo }) {
+export default function EjercicioResultado({ estado, salida, onReintentar, onRefuerzo, ejercicioSeleccionado, moduloSeleccionado, numeroEjercicio, totalEjercicios }) {
     const navigate = useNavigate()
-
     if (estado === 'pendiente') {
         return (
             <div className="ej-resultado ej-resultado--pendiente">
@@ -52,7 +51,14 @@ export default function EjercicioResultado({ estado, salida, onReintentar, onRef
                 </div>
                 <button
                     className="ej-resultado__continuar-btn"
-                    onClick={() => navigate('/feedback')}
+                    onClick={() => navigate('/feedback', {
+                        state: {
+                            ejercicio: ejercicioSeleccionado,
+                            modulo: moduloSeleccionado,
+                            numeroEjercicio,
+                            totalEjercicios
+                        }
+                    })}
                 >
                     CONTINUAR
                 </button>

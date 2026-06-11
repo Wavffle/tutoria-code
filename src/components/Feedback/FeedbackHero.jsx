@@ -1,16 +1,15 @@
+import { useEstudiante } from '../../context/EstudianteContext'
 import { feedbackData } from './feedbackData'
 import './FeedbackHero.css'
 
-function colorPorPuntaje(puntaje) {
-    if (puntaje >= 80) return '#a8d878'
-    if (puntaje >= 50) return '#f0d080'
-    return '#e07060'
-}
-
 export default function FeedbackHero() {
+    const { resultadoIntento } = useEstudiante()
+
+    const puntosGanados = resultadoIntento?.puntosGanados ?? feedbackData.puntosGanados
+
+    // Círculo siempre 100% si llegaste al feedback, el ejercicio fue correcto
     const radio = 42
     const circunferencia = 2 * Math.PI * radio
-    const progreso = circunferencia * feedbackData.puntaje / 100
 
     return (
         <div className="fb-hero">
@@ -26,21 +25,20 @@ export default function FeedbackHero() {
             </div>
 
             <div className="fb-hero__derecha">
-                {/* Círculo puntaje */}
                 <div className="fb-hero__puntaje">
                     <svg className="fb-hero__puntaje-svg" viewBox="0 0 100 100">
                         <circle cx="50" cy="50" r={radio} fill="#4F5C43" />
                         <circle
                             cx="50" cy="50" r={radio}
                             fill="none"
-                            stroke={colorPorPuntaje(feedbackData.puntaje)}
+                            stroke="#a8d878"
                             strokeWidth="5"
                             strokeLinecap="round"
-                            strokeDasharray={`${progreso} ${circunferencia}`}
+                            strokeDasharray={`${circunferencia} ${circunferencia}`}
                             transform="rotate(-90 50 50)"
                         />
                         <text x="50" y="47" textAnchor="middle" fill="white" fontSize="18" fontWeight="400" fontFamily="Inter">
-                            {feedbackData.puntaje}%
+                            100%
                         </text>
                         <text x="50" y="62" textAnchor="middle" fill="rgba(255,255,255,0.75)" fontSize="10" fontFamily="Inter">
                             Puntaje
@@ -48,12 +46,11 @@ export default function FeedbackHero() {
                     </svg>
                 </div>
 
-                {/* Tarjeta puntos ganados */}
                 <div className="fb-hero__puntos-card">
                     <img src="/iconos/tarjetaPuntos.png" alt="Puntos" className="fb-hero__puntos-bg" />
                     <div className="fb-hero__puntos-content">
                         <img src="/iconos/iconoEstrella.png" alt="Estrella" className="fb-hero__puntos-estrella" />
-                        <p className="fb-hero__puntos-valor">+{feedbackData.puntosGanados}</p>
+                        <p className="fb-hero__puntos-valor">+{puntosGanados}</p>
                         <p className="fb-hero__puntos-label">puntos</p>
                     </div>
                 </div>

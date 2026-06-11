@@ -9,26 +9,63 @@ import { ejercicioData } from '../components/Ejercicio/ejercicioData'
 import { useEstudiante } from '../context/EstudianteContext'
 import './Ejercicio.css'
 
+const MODULO_SLUG = {
+  1: 'variables_basicas',
+  2: 'condicionales',
+  3: 'bucles_repeticion'
+}
+
 export default function Ejercicio() {
   const location = useLocation()
   const navigate = useNavigate()
-  const { estudiante, sesion_id, registrarIntento } = useEstudiante()
+  const { estudiante, sesion_id, registrarIntento, iniciarEjercicio, ejercicioActual, moduloActual } = useEstudiante()
 
-  const ejercicioSeleccionado = location.state?.ejercicio
-  const moduloSeleccionado = location.state?.modulo
-  const esRepeticion = location.state?.esRepeticion || false
+  // location.state tiene prioridad, Context es el fallback cuando viene de feedback
+  const ejercicioSeleccionado = location.state?.ejercicio ?? ejercicioActual
+  const moduloSeleccionado = location.state?.modulo ?? moduloActual
   const numeroEjercicio = location.state?.numeroEjercicio || ejercicioData.ejercicioNum
   const totalEjercicios = location.state?.totalEjercicios || ejercicioData.ejercicioTotal
 
+  const [esRepeticion, setEsRepeticion] = useState(location.state?.esRepeticion || false)
+  const [esRefuerzo, setEsRefuerzo] = useState(false)
   const [estado, setEstado] = useState('pendiente')
   const [salida, setSalida] = useState('')
-  const [errores, setErrores] = useState(ejercicioData.errores)
+  const [errores, setErrores] = useState(0)
+  const [salidaEsperadaReal, setSalidaEsperadaReal] = useState(null)
   const [cargandoPython, setCargandoPython] = useState(true)
   const [codigoEscrito, setCodigoEscrito] = useState(false)
   const [mostrarConfirm, setMostrarConfirm] = useState(false)
   const [destino, setDestino] = useState(null)
   const [tiempoInicio] = useState(Date.now())
   const pyodideRef = useRef(null)
+
+  // Sincronizar ejercicio al Context si vino por location.state
+  useEffect(() => {
+    if (location.state?.ejercicio && location.state?.modulo) {
+      iniciarEjercicio(location.state.ejercicio, location.state.modulo)
+    }
+  }, [])
+
+  // Cargar salida esperada real desde BD
+  useEffect(() => {
+    if (!ejercicioSeleccionado || !moduloSeleccionado) return
+    const moduloSlug = MODULO_SLUG[moduloSeleccionado.id] ?? 'variables_basicas'
+
+    async function cargarEjercicio() {
+      try {
+        const res = await fetch(
+            `http://localhost:3001/api/ejercicios/buscar?titulo=${encodeURIComponent(ejercicioSeleccionado.texto)}&modulo=${moduloSlug}`
+        )
+        const data = await res.json()
+        if (data.success && data.ejercicio.salida_esperada) {
+          setSalidaEsperadaReal(data.ejercicio.salida_esperada)
+        }
+      } catch (e) {
+        console.error('Error al cargar ejercicio:', e)
+      }
+    }
+    cargarEjercicio()
+  }, [ejercicioSeleccionado, moduloSeleccionado])
 
   useEffect(() => {
     async function cargarPyodide() {
@@ -65,54 +102,67 @@ export default function Ejercicio() {
     navigate(destino)
   }
 
+  function handleContinuar() {
+    navigate('/feedback', {
+      state: { ejercicio: ejercicioSeleccionado, modulo: moduloSeleccionado, numeroEjercicio, totalEjercicios }
+    })
+  }
+
   async function handleEjecutar(code) {
-    if (!code.trim()) return
-    if (!pyodideRef.current) return
+    if (!code.trim() || !pyodideRef.current) return
 
     try {
       pyodideRef.current.runPython(`
 import sys
 from io import StringIO
 sys.stdout = StringIO()
-      `)
+            `)
       pyodideRef.current.runPython(code)
       const output = pyodideRef.current.runPython('sys.stdout.getvalue()').trim()
       setSalida(output || '(Sin salida)')
 
       const salidaLimpia = output.trim().toLowerCase()
-      const esperadaLimpia = ejercicioData.salidaEsperada.trim().toLowerCase()
+      const esperadaLimpia = (salidaEsperadaReal ?? ejercicioData.salidaEsperada).trim().toLowerCase()
       const esCorrecto = salidaLimpia === esperadaLimpia
 
       if (esCorrecto) {
         setEstado('correcto')
 
-        // Registrar intento en el backend
         const tiempoSegundos = Math.floor((Date.now() - tiempoInicio) / 1000)
         const nivelEjercicio = moduloSeleccionado?.id || 1
-        const tipoIntento = esRepeticion ? 'repeticion' : errores > 0 ? 'refuerzo' : 'primera_vez'
+        const tipoIntento = esRepeticion ? 'repeticion' : esRefuerzo ? 'refuerzo' : 'primera_vez'
+        const moduloSlug = MODULO_SLUG[moduloSeleccionado?.id] ?? 'variables_basicas'
 
-        // Buscar el ejercicio_id correcto por título y módulo
-        let ejercicioId = 1
+        let ejercicioId = null
         if (ejercicioSeleccionado && moduloSeleccionado) {
           try {
-            const res = await fetch(
-                `http://localhost:3001/api/ejercicios/buscar?titulo=${encodeURIComponent(ejercicioSeleccionado.texto)}&modulo=${encodeURIComponent(moduloSeleccionado.id === 1 ? 'variables_basicas' : moduloSeleccionado.id === 2 ? 'condicionales' : 'bucles_repeticion')}`
-            )
+            const res = await fetch('http://localhost:3001/api/ejercicios/upsert', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                titulo: ejercicioSeleccionado.texto,
+                modulo: moduloSlug,
+                titulo_modulo: moduloSeleccionado.titulo,
+                nivel: moduloSeleccionado.id
+              })
+            })
             const data = await res.json()
             if (data.success) ejercicioId = data.ejercicio.id
           } catch (e) {
-            console.error('Error buscando ejercicio:', e)
+            console.error('Error en upsert ejercicio:', e)
           }
         }
 
-        await registrarIntento({
-          ejercicio_id: ejercicioId,
-          codigo_enviado: code,
-          es_correcto: true,
-          tipo_intento: tipoIntento,
-          nivel_ejercicio: nivelEjercicio,
-          tiempo_segundos: tiempoSegundos
-        })
+        if (ejercicioId) {
+          await registrarIntento({
+            ejercicio_id: ejercicioId,
+            codigo_enviado: code,
+            es_correcto: true,
+            tipo_intento: tipoIntento,
+            nivel_ejercicio: nivelEjercicio,
+            tiempo_segundos: tiempoSegundos
+          })
+        }
 
       } else {
         setEstado('incorrecto')
@@ -129,16 +179,27 @@ sys.stdout = StringIO()
   }
 
   function handleReintentar() { setEstado('pendiente'); setSalida('') }
-  function handleRefuerzo() { setEstado('pendiente'); setSalida(''); setErrores(0) }
-  function handleNuevoEjercicio() { setEstado('pendiente'); setSalida(''); setErrores(0) }
+
+  function handleRefuerzo() {
+    setEstado('pendiente')
+    setSalida('')
+    setErrores(0)
+    setEsRefuerzo(true)
+    setEsRepeticion(false)
+  }
+
+  function handleNuevoEjercicio() {
+    setEstado('pendiente')
+    setSalida('')
+    setErrores(0)
+    setEsRefuerzo(false)
+  }
 
   const tituloModulo = moduloSeleccionado?.titulo || ejercicioData.modulo
   const tituloEjercicio = ejercicioSeleccionado?.texto || ejercicioData.practica
-
-  const archivoEditor = moduloSeleccionado?.id === 1 ? 'variables_basicas.py'
-      : moduloSeleccionado?.id === 2 ? 'condicionales.py'
-          : moduloSeleccionado?.id === 3 ? 'bucles_repeticion.py'
-              : ejercicioData.archivo
+  const archivoEditor = MODULO_SLUG[moduloSeleccionado?.id]
+      ? `${MODULO_SLUG[moduloSeleccionado.id]}.py`
+      : ejercicioData.archivo
 
   return (
       <div className="ejercicio-page">
@@ -152,7 +213,6 @@ sys.stdout = StringIO()
             onAvatarClick={() => handleNavegar('/perfil')}
             onBreadcrumbClick={(path) => handleNavegar(path)}
         />
-
         <div className="ejercicio-page__main">
           <div className="ejercicio-page__left">
             <EjercicioInfo
@@ -174,13 +234,11 @@ sys.stdout = StringIO()
             />
           </div>
         </div>
-
         <EjercicioFooter
             estado={estado}
             onNuevoEjercicio={handleNuevoEjercicio}
             onIrDashboard={() => handleNavegar('/dashboard')}
         />
-
         <div className="ejercicio-page__bottom">
           <div className="ejercicio-page__salida">
             <div className="ejercicio-page__salida-body">
@@ -198,10 +256,13 @@ sys.stdout = StringIO()
                 salida={salida}
                 onReintentar={handleReintentar}
                 onRefuerzo={handleRefuerzo}
+                ejercicioSeleccionado={ejercicioSeleccionado}
+                moduloSeleccionado={moduloSeleccionado}
+                numeroEjercicio={numeroEjercicio}
+                totalEjercicios={totalEjercicios}
             />
           </div>
         </div>
-
         {mostrarConfirm && (
             <div className="ejercicio-confirm__overlay" onClick={() => setMostrarConfirm(false)}>
               <div className="ejercicio-confirm__modal" onClick={e => e.stopPropagation()}>
@@ -210,16 +271,10 @@ sys.stdout = StringIO()
                   Perderás el código que escribiste. Esta acción no se puede deshacer.
                 </p>
                 <div className="ejercicio-confirm__btns">
-                  <button
-                      className="ejercicio-confirm__btn ejercicio-confirm__btn--cancel"
-                      onClick={() => setMostrarConfirm(false)}
-                  >
+                  <button className="ejercicio-confirm__btn ejercicio-confirm__btn--cancel" onClick={() => setMostrarConfirm(false)}>
                     Seguir practicando
                   </button>
-                  <button
-                      className="ejercicio-confirm__btn ejercicio-confirm__btn--confirm"
-                      onClick={confirmarSalida}
-                  >
+                  <button className="ejercicio-confirm__btn ejercicio-confirm__btn--confirm" onClick={confirmarSalida}>
                     Sí, salir
                   </button>
                 </div>

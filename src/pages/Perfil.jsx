@@ -1,3 +1,6 @@
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
+import { useEstudiante } from '../context/EstudianteContext'
 import TutorIANavbar from '../components/shared/TutorIANavbar.jsx'
 import MoodleBanner from '../components/Perfil/MoodleBanner'
 import PerfilInfo from '../components/Perfil/PerfilInfo'
@@ -7,6 +10,15 @@ import PerfilAcciones from '../components/Perfil/PerfilAcciones'
 import './Perfil.css'
 
 export default function Perfil() {
+    const { estudiante, recargarProgreso } = useEstudiante()
+    const location = useLocation()
+
+    useEffect(() => {
+        if (estudiante) {
+            recargarProgreso(estudiante.moodle_id, estudiante.id)
+        }
+    }, [location])
+
     return (
         <div className="perfil-page">
             <TutorIANavbar breadcrumb={[
