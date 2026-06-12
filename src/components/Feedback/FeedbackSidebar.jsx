@@ -1,17 +1,20 @@
 import { useEstudiante } from '../../context/EstudianteContext'
 import { useState, useEffect } from 'react'
-import { feedbackData } from './feedbackData'
 import './FeedbackSidebar.css'
 
-export default function FeedbackSidebar() {
+export default function FeedbackSidebar({ feedbackIA }) {
     const { estudiante, resultadoIntento } = useEstudiante()
     const [historial, setHistorial] = useState([])
     const [ejerciciosModulo, setEjerciciosModulo] = useState(0)
 
-    const puntosActuales = resultadoIntento?.puntosActuales ?? feedbackData.puntosActuales
-    const puntosParaSiguienteNivel = resultadoIntento?.puntosParaSiguienteNivel ?? feedbackData.puntosParaSiguienteNivel
-    const nivelActual = resultadoIntento?.nivelActual ?? feedbackData.nivelActual
-    const siguienteNivel = resultadoIntento?.siguienteNivel ?? feedbackData.siguienteNivel
+    const puntosActuales = resultadoIntento?.puntosActuales ?? 0
+    const puntosParaSiguienteNivel = resultadoIntento?.puntosParaSiguienteNivel ?? 500
+    const nivelActual = resultadoIntento?.nivelActual ?? 'Basico'
+    const siguienteNivel = resultadoIntento?.siguienteNivel ?? 'INTERMEDIO'
+
+    // Decisión y conceptos vienen del LLM
+    const decision = feedbackIA?.decision ?? null
+    const conceptos = feedbackIA?.conceptos ?? []
 
     useEffect(() => {
         if (!estudiante) return
@@ -23,7 +26,6 @@ export default function FeedbackSidebar() {
                 if (data.success) {
                     setHistorial(data.intentos.slice(0, 8))
 
-                    // Calcular ejercicios completados en el módulo actual
                     if (resultadoIntento?.ejercicio_id) {
                         const res2 = await fetch(`http://localhost:3001/api/ejercicios/${resultadoIntento.ejercicio_id}`)
                         const data2 = await res2.json()
@@ -49,23 +51,16 @@ export default function FeedbackSidebar() {
     return (
         <aside className="fb-sidebar">
 
-            {/* Progreso módulo */}
             <div className="fb-sidebar__card">
                 <h3 className="fb-sidebar__card-title">Progreso en el modulo</h3>
                 <div className="fb-sidebar__dots">
                     {Array.from({ length: 5 }, (_, i) => (
-                        <span
-                            key={i}
-                            className={`fb-sidebar__dot ${i < ejerciciosModulo ? 'fb-sidebar__dot--done' : ''}`}
-                        />
+                        <span key={i} className={`fb-sidebar__dot ${i < ejerciciosModulo ? 'fb-sidebar__dot--done' : ''}`} />
                     ))}
                 </div>
-                <p className="fb-sidebar__sub">
-                    {ejerciciosModulo}/5 Ejercicios del modulo completados
-                </p>
+                <p className="fb-sidebar__sub">{ejerciciosModulo}/5 Ejercicios del modulo completados</p>
             </div>
 
-            {/* Progreso nivel */}
             <div className="fb-sidebar__card">
                 <h3 className="fb-sidebar__card-title">Progreso hasta el proximo nivel</h3>
                 <div className="fb-sidebar__barra">
@@ -74,45 +69,44 @@ export default function FeedbackSidebar() {
                         style={{ width: `${Math.min((puntosActuales / puntosParaSiguienteNivel) * 100, 100)}%` }}
                     />
                 </div>
-                <p className="fb-sidebar__sub">
-                    {puntosActuales}/{puntosParaSiguienteNivel} Puntos totales
-                </p>
-                <p className="fb-sidebar__nivel">
-                    Nivel actual: <strong>{nivelActual}</strong>
-                </p>
-                <p className="fb-sidebar__nivel">
-                    Siguiente nivel: <strong className="fb-sidebar__nivel--next">{siguienteNivel}</strong>
-                </p>
+                <p className="fb-sidebar__sub">{puntosActuales}/{puntosParaSiguienteNivel} Puntos totales</p>
+                <p className="fb-sidebar__nivel">Nivel actual: <strong>{nivelActual}</strong></p>
+                <p className="fb-sidebar__nivel">Siguiente nivel: <strong className="fb-sidebar__nivel--next">{siguienteNivel}</strong></p>
             </div>
 
-            {/* Decisión tutor */}
             <div className="fb-sidebar__card">
                 <h3 className="fb-sidebar__card-title">Decisión del tutor</h3>
-                <div className="fb-sidebar__decision-lista">
-                    <p><strong>Resultado:</strong> {feedbackData.decision.resultado}</p>
-                    <p><strong>Intentos:</strong> {feedbackData.decision.intentos}</p>
-                    <p><strong>Nivel actual:</strong> {nivelActual}</p>
-                    <p><strong>Decisión:</strong> {feedbackData.decision.accion}</p>
-                </div>
-                <div className="fb-sidebar__decision-box">
-                    <img src="/iconos/iAIcono.png" alt="IA" className="fb-sidebar__ia-icon" />
-                    <p>{feedbackData.decision.mensaje}</p>
-                </div>
+                {!decision ? (
+                    <p style={{ color: '#888', fontSize: '0.85rem' }}>Analizando desempeño...</p>
+                ) : (
+                    <>
+                        <div className="fb-sidebar__decision-lista">
+                            <p><strong>Resultado:</strong> {decision.resultado}</p>
+                            <p><strong>Intentos:</strong> {decision.intentos}</p>
+                            <p><strong>Nivel actual:</strong> {decision.nivelActual}</p>
+                            <p><strong>Decisión:</strong> {decision.accion}</p>
+                        </div>
+                        <div className="fb-sidebar__decision-box">
+                            <img src="/iconos/iAIcono.png" alt="IA" className="fb-sidebar__ia-icon" />
+                            <p>{decision.mensaje}</p>
+                        </div>
+                    </>
+                )}
             </div>
 
-            {/* Conceptos */}
             <div className="fb-sidebar__card">
                 <h3 className="fb-sidebar__card-title">Conceptos clave reforzados</h3>
-                <ul className="fb-sidebar__conceptos">
-                    {feedbackData.conceptos.map((c, i) => (
-                        <li key={i}>
-                            <span className="fb-sidebar__check">✓</span> {c}
-                        </li>
-                    ))}
-                </ul>
+                {conceptos.length === 0 ? (
+                    <p style={{ color: '#888', fontSize: '0.85rem' }}>Cargando conceptos...</p>
+                ) : (
+                    <ul className="fb-sidebar__conceptos">
+                        {conceptos.map((c, i) => (
+                            <li key={i}><span className="fb-sidebar__check">✓</span> {c}</li>
+                        ))}
+                    </ul>
+                )}
             </div>
 
-            {/* Historial */}
             <div className="fb-sidebar__card">
                 <h3 className="fb-sidebar__card-title">Historial reciente</h3>
                 {historial.length === 0 ? (

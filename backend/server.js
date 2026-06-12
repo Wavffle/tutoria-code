@@ -419,6 +419,54 @@ app.post('/api/ejercicios/upsert', (req, res) => {
     }
 })
 
+// ── Crear usuario demo ──
+app.post('/api/auth/demo', (req, res) => {
+    try {
+        const timestamp = Date.now()
+        const moodle_id = `demo_${timestamp}`
+
+        db.prepare(`
+            INSERT INTO estudiantes (moodle_id, nombre, apellido, correo)
+            VALUES (?, ?, ?, ?)
+        `).run(moodle_id, 'Invitado', '', `demo_${timestamp}@tutoria.cl`)
+
+        const estudiante = db.prepare(
+            'SELECT * FROM estudiantes WHERE moodle_id = ?'
+        ).get(moodle_id)
+
+        db.prepare(`INSERT INTO sesiones (estudiante_id) VALUES (?)`).run(estudiante.id)
+
+        const sesion = db.prepare(`
+            SELECT * FROM sesiones WHERE estudiante_id = ? ORDER BY id DESC LIMIT 1
+        `).get(estudiante.id)
+
+        res.json({ success: true, estudiante, sesion_id: sesion.id })
+    } catch (error) {
+        res.status(500).json({ success: false, error: { code: 'SERVER_ERROR', message: error.message } })
+    }
+})
+
+// ── Eliminar usuario demo ──
+app.delete('/api/auth/demo/:estudiante_id', (req, res) => {
+    const { estudiante_id } = req.params
+    try {
+        const estudiante = db.prepare('SELECT * FROM estudiantes WHERE id = ?').get(estudiante_id)
+
+        if (!estudiante || !estudiante.moodle_id.startsWith('demo_')) {
+            return res.status(400).json({ success: false, error: { code: 'NOT_DEMO', message: 'No es un usuario demo' } })
+        }
+
+        db.prepare('DELETE FROM intentos WHERE estudiante_id = ?').run(estudiante_id)
+        db.prepare('DELETE FROM progreso_modulo WHERE estudiante_id = ?').run(estudiante_id)
+        db.prepare('DELETE FROM sesiones WHERE estudiante_id = ?').run(estudiante_id)
+        db.prepare('DELETE FROM estudiantes WHERE id = ?').run(estudiante_id)
+
+        res.json({ success: true })
+    } catch (error) {
+        res.status(500).json({ success: false, error: { code: 'SERVER_ERROR', message: error.message } })
+    }
+})
+
 app.listen(PORT, () => {
     console.log(`Servidor corriendo en http://localhost:${PORT}`)
 })

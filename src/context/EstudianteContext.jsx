@@ -21,8 +21,9 @@ export function EstudianteProvider({ children }) {
     const [resultadoIntento, setResultadoIntento] = useState(null)
     const [ejercicioActual, setEjercicioActual] = useState(null)
     const [moduloActual, setModuloActual] = useState(null)
+    const [esDemo, setEsDemo] = useState(false)
 
-    useEffect(() => { iniciarSesion() }, [])
+    useEffect(() => { setCargando(false) }, [])
 
     async function recargarProgreso(moodle_id, estudiante_id) {
         try {
@@ -45,29 +46,65 @@ export function EstudianteProvider({ children }) {
         }
     }
 
-    async function iniciarSesion() {
+    async function iniciarSesionMoodle(moodle_id, nombre, apellido, correo) {
+        setCargando(true)
         try {
             const res = await fetch('http://localhost:3001/api/auth/login', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    moodle_id: 'alumno_002',
-                    nombre: 'Usuario',
-                    apellido: 'Demo',
-                    correo: 'alumno@tutoria.cl'
-                })
+                body: JSON.stringify({ moodle_id, nombre, apellido, correo })
             })
             const data = await res.json()
             if (data.success) {
                 setEstudiante({ ...data.estudiante, nivelTexto: numeroANivel(data.estudiante.nivel_actual) })
                 setSesionId(data.sesion_id)
-                await recargarProgreso('alumno_002', data.estudiante.id)
+                await recargarProgreso(moodle_id, data.estudiante.id)
             }
         } catch (error) {
-            console.error('Error al iniciar sesión:', error)
+            console.error('Error al iniciar sesión Moodle:', error)
         } finally {
             setCargando(false)
         }
+    }
+
+    async function iniciarSesionDemo() {
+        setCargando(true)
+        try {
+            const res = await fetch('http://localhost:3001/api/auth/demo', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            const data = await res.json()
+            if (data.success) {
+                setEstudiante({ ...data.estudiante, nivelTexto: numeroANivel(data.estudiante.nivel_actual) })
+                setSesionId(data.sesion_id)
+                setEsDemo(true)
+            }
+        } catch (error) {
+            console.error('Error al iniciar sesión demo:', error)
+        } finally {
+            setCargando(false)
+        }
+    }
+
+    async function cerrarSesion() {
+        if (esDemo && estudiante?.id) {
+            try {
+                await fetch(`http://localhost:3001/api/auth/demo/${estudiante.id}`, {
+                    method: 'DELETE'
+                })
+            } catch (error) {
+                console.error('Error al eliminar usuario demo:', error)
+            }
+        }
+        setEstudiante(null)
+        setSesionId(null)
+        setEsDemo(false)
+        setProgreso([])
+        setCompletados([])
+        setResultadoIntento(null)
+        setEjercicioActual(null)
+        setModuloActual(null)
     }
 
     async function registrarIntento({ ejercicio_id, codigo_enviado, es_correcto, tipo_intento, nivel_ejercicio, tiempo_segundos }) {
@@ -146,6 +183,10 @@ export function EstudianteProvider({ children }) {
             ejercicioActual,
             moduloActual,
             resultadoIntento,
+            esDemo,
+            iniciarSesionDemo,
+            iniciarSesionMoodle,
+            cerrarSesion,
             NIVELES
         }}>
             {children}

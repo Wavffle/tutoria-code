@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import AyudaPopup from './AyudaPopup'
-import { ejercicioData } from './ejercicioData'
 import './EjercicioFooter.css'
 
 const robotImg = {
@@ -9,7 +8,7 @@ const robotImg = {
   incorrecto: '/robotTutorIA/robotIncorrecto.png',
 }
 
-export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboard }) {
+export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboard, onPedirPista, pistaTexto, cargandoPista }) {
   const [mostrarAyuda, setMostrarAyuda] = useState(false)
   const [mostrarPista, setMostrarPista] = useState(false)
   const [cerrando, setCerrando] = useState(false)
@@ -20,13 +19,11 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
   useEffect(() => {
     const nuevaSrc = robotImg[estado] || robotImg.pendiente
     if (nuevaSrc === robotSrc) return
-
     setRobotFading(true)
     const timer = setTimeout(() => {
       setRobotSrc(nuevaSrc)
       setRobotFading(false)
     }, 200)
-
     return () => clearTimeout(timer)
   }, [estado])
 
@@ -36,15 +33,11 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
     incorrecto: { color: '#c0392b', texto: 'Ejercicio incorrecto' },
   }
   const { color, texto } = estadoConfig[estado] || estadoConfig.pendiente
-
   const nuevoDeshabilitado = estado === 'incorrecto'
 
   function cerrarPista() {
     setCerrando(true)
-    setTimeout(() => {
-      setMostrarPista(false)
-      setCerrando(false)
-    }, 200)
+    setTimeout(() => { setMostrarPista(false); setCerrando(false) }, 200)
   }
 
   function togglePista() {
@@ -52,6 +45,7 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
       cerrarPista()
     } else {
       setMostrarPista(true)
+      if (!pistaTexto) onPedirPista()
     }
   }
 
@@ -66,8 +60,6 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
 
   return (
       <div className="ej-footer">
-
-        {/* Left */}
         <div className="ej-footer__left">
           <img
               src={robotSrc}
@@ -79,7 +71,6 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
           <span className="ej-footer__estado" style={{ color }}>{texto}</span>
         </div>
 
-        {/* Center */}
         <div className="ej-footer__center">
           <div className="ej-footer__pista-wrapper">
             {mostrarPista && (
@@ -90,7 +81,9 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
                       <span>Pista</span>
                     </div>
                   </div>
-                  <p className="ej-footer__pista-texto">{ejercicioData.pistaBton}</p>
+                  <p className="ej-footer__pista-texto">
+                    {cargandoPista ? 'TutorIA está analizando tu código...' : pistaTexto}
+                  </p>
                 </div>
             )}
             <button
@@ -118,20 +111,15 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
           </div>
         </div>
 
-        {/* Right */}
         <div className="ej-footer__right">
-          <button className="ej-footer__link" onClick={onIrDashboard}>
-            ← Ir al dashboard
-          </button>
+          <button className="ej-footer__link" onClick={onIrDashboard}>← Ir al dashboard</button>
           <button className="ej-footer__ayuda" onClick={() => setMostrarAyuda(true)}>
             <img src="/iconos/interrogacionIcono.png" alt="Ayuda" className="ej-footer__ayuda-icon" />
             ¿Necesitas ayuda?
           </button>
         </div>
 
-        {mostrarAyuda && (
-            <AyudaPopup onClose={() => setMostrarAyuda(false)} />
-        )}
+        {mostrarAyuda && <AyudaPopup onClose={() => setMostrarAyuda(false)} />}
       </div>
   )
 }

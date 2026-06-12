@@ -1,8 +1,7 @@
-import { feedbackData } from './feedbackData'
 import './FeedbackExplicacion.css'
 
-export default function FeedbackExplicacion() {
-    const { explicacion } = feedbackData
+export default function FeedbackExplicacion({ feedbackIA, cargando }) {
+    const explicacion = feedbackIA?.explicacion
 
     return (
         <div className="fb-explicacion">
@@ -11,24 +10,28 @@ export default function FeedbackExplicacion() {
                 <h2 className="fb-explicacion__title">Explicación de la IA</h2>
             </div>
 
-            <p className="fb-explicacion__intro">{explicacion.intro}</p>
-
-            <ul className="fb-explicacion__lista">
-                {explicacion.puntos.map((p, i) => (
-                    <li key={i}>
-                        <span className="fb-explicacion__check">✓</span>
-                        <span>
-              {p.texto}
-                            {p.bold && <strong>{p.bold}</strong>}
-                            {p.texto2}
-                            {p.bold2 && <strong>{p.bold2}</strong>}
-                            {p.texto3}
-            </span>
-                    </li>
-                ))}
-            </ul>
-
-            <p className="fb-explicacion__recuerda">{explicacion.recuerda}</p>
+            {cargando || !explicacion ? (
+                <p style={{ color: '#888' }}>TutorIA está generando la explicación...</p>
+            ) : (
+                <>
+                    <p className="fb-explicacion__intro">{explicacion.intro}</p>
+                    <ul className="fb-explicacion__lista">
+                        {explicacion.puntos?.map((p, i) => (
+                            <li key={i}>
+                                <span className="fb-explicacion__check">✓</span>
+                                <span>
+                                    {p.texto}
+                                    {p.bold && <strong>{p.bold}</strong>}
+                                    {p.texto2}
+                                    {p.bold2 && <strong>{p.bold2}</strong>}
+                                    {p.texto3}
+                                </span>
+                            </li>
+                        ))}
+                    </ul>
+                    <p className="fb-explicacion__recuerda">{explicacion.recuerda}</p>
+                </>
+            )}
         </div>
     )
 }

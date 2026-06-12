@@ -1,5 +1,6 @@
 import './Hero.css'
 import { useNavigate } from 'react-router-dom'
+import { useEstudiante } from '../../context/EstudianteContext'
 
 const codeSnippetsLeft = [
   '#include <cmath>',
@@ -27,11 +28,15 @@ const randomBetween = (min, max) => Math.random() * (max - min) + min
 
 export default function Hero() {
   const navigate = useNavigate()
+  const { iniciarSesionDemo } = useEstudiante()
+
+  async function handleDemo() {
+    await iniciarSesionDemo()
+    navigate('/dashboard')
+  }
 
   return (
       <section className="hero">
-
-        {/* Decorativo izquierda */}
         <div className="hero__code hero__code--left" aria-hidden="true">
           {codeSnippetsLeft.map((line, i) => (
               <span
@@ -43,12 +48,11 @@ export default function Hero() {
                     fontSize: `${randomBetween(0.72, 1.0)}rem`,
                   }}
               >
-            {line}
-          </span>
+                {line}
+              </span>
           ))}
         </div>
 
-        {/* Main content */}
         <div className="hero__content">
           <h1 className="hero__title">
             Aprende a programar
@@ -68,14 +72,13 @@ export default function Hero() {
             </button>
             <button
                 className="btn btn--outline"
-                onClick={() => navigate('/dashboard')}
+                onClick={handleDemo}
             >
               Conocer TutorIA
             </button>
           </div>
         </div>
 
-        {/* Decorativo derecha */}
         <div className="hero__code hero__code--right" aria-hidden="true">
           {codeSnippetsRight.map((line, i) => (
               <span
@@ -87,8 +90,8 @@ export default function Hero() {
                     fontSize: `${randomBetween(0.72, 1.0)}rem`,
                   }}
               >
-            {line}
-          </span>
+                {line}
+              </span>
           ))}
         </div>
       </section>

@@ -1,12 +1,15 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useEstudiante } from '../../context/EstudianteContext'
 import './PerfilAcciones.css'
 
 export default function PerfilAcciones() {
   const navigate = useNavigate()
+  const { cerrarSesion } = useEstudiante()
   const [mostrarConfirm, setMostrarConfirm] = useState(false)
 
-  function handleCerrarSesion() {
+  async function handleCerrarSesion() {
+    await cerrarSesion()
     navigate('/')
   }
 
@@ -37,7 +40,6 @@ export default function PerfilAcciones() {
           </p>
         </div>
 
-        {/* Modal de confirmación */}
         {mostrarConfirm && (
             <div className="perfil-acciones__overlay" onClick={() => setMostrarConfirm(false)}>
               <div className="perfil-acciones__modal" onClick={e => e.stopPropagation()}>

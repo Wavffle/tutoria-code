@@ -5,7 +5,6 @@ import EjercicioInfo from '../components/Ejercicio/EjercicioInfo'
 import EjercicioEditor from '../components/Ejercicio/EjercicioEditor'
 import EjercicioFooter from '../components/Ejercicio/EjercicioFooter'
 import EjercicioResultado from '../components/Ejercicio/EjercicioResultado'
-import { ejercicioData } from '../components/Ejercicio/ejercicioData'
 import { useEstudiante } from '../context/EstudianteContext'
 import './Ejercicio.css'
 
@@ -15,23 +14,37 @@ const MODULO_SLUG = {
   3: 'bucles_repeticion'
 }
 
+const FASTAPI_URL = 'http://127.0.0.1:8000'
+
 export default function Ejercicio() {
   const location = useLocation()
   const navigate = useNavigate()
   const { estudiante, sesion_id, registrarIntento, iniciarEjercicio, ejercicioActual, moduloActual } = useEstudiante()
 
-  // location.state tiene prioridad, Context es el fallback cuando viene de feedback
   const ejercicioSeleccionado = location.state?.ejercicio ?? ejercicioActual
   const moduloSeleccionado = location.state?.modulo ?? moduloActual
-  const numeroEjercicio = location.state?.numeroEjercicio || ejercicioData.ejercicioNum
-  const totalEjercicios = location.state?.totalEjercicios || ejercicioData.ejercicioTotal
+  const numeroEjercicio = location.state?.numeroEjercicio || 1
+  const totalEjercicios = location.state?.totalEjercicios || 5
 
+  // Estado del LLM
+  const [ejercicioIA, setEjercicioIA] = useState(null)
+  const [evaluacion, setEvaluacion] = useState(null)
+  const [cargandoIA, setCargandoIA] = useState(true)
+  const [cargandoEvaluacion, setCargandoEvaluacion] = useState(false)
+  const [pistaTexto, setPistaTexto] = useState('')
+  const [cargandoPista, setCargandoPista] = useState(false)
+  const [generarTrigger, setGenerarTrigger] = useState(0)
+  const peticionEnviada = useRef(false)
+
+  // Estado del ejercicio
   const [esRepeticion, setEsRepeticion] = useState(location.state?.esRepeticion || false)
   const [esRefuerzo, setEsRefuerzo] = useState(false)
   const [estado, setEstado] = useState('pendiente')
   const [salida, setSalida] = useState('')
   const [errores, setErrores] = useState(0)
-  const [salidaEsperadaReal, setSalidaEsperadaReal] = useState(null)
+  const [erroresAcumulados, setErroresAcumulados] = useState(0)
+  const [codigoActual, setCodigoActual] = useState('')
+  const [codigoFinal, setCodigoFinal] = useState('')
   const [cargandoPython, setCargandoPython] = useState(true)
   const [codigoEscrito, setCodigoEscrito] = useState(false)
   const [mostrarConfirm, setMostrarConfirm] = useState(false)
@@ -39,33 +52,44 @@ export default function Ejercicio() {
   const [tiempoInicio] = useState(Date.now())
   const pyodideRef = useRef(null)
 
-  // Sincronizar ejercicio al Context si vino por location.state
   useEffect(() => {
     if (location.state?.ejercicio && location.state?.modulo) {
       iniciarEjercicio(location.state.ejercicio, location.state.modulo)
     }
   }, [])
 
-  // Cargar salida esperada real desde BD
   useEffect(() => {
-    if (!ejercicioSeleccionado || !moduloSeleccionado) return
-    const moduloSlug = MODULO_SLUG[moduloSeleccionado.id] ?? 'variables_basicas'
+    if (peticionEnviada.current) return
+    if (!moduloSeleccionado || !ejercicioSeleccionado) return
 
-    async function cargarEjercicio() {
+    peticionEnviada.current = true
+
+    async function generarEjercicio() {
+      setCargandoIA(true)
       try {
-        const res = await fetch(
-            `http://localhost:3001/api/ejercicios/buscar?titulo=${encodeURIComponent(ejercicioSeleccionado.texto)}&modulo=${moduloSlug}`
-        )
+        const res = await fetch(`${FASTAPI_URL}/api/generar_ejercicio`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            modulo: moduloSeleccionado.titulo,
+            categoria: ejercicioSeleccionado.texto,
+            nivel: moduloSeleccionado.nivelMinimo?.toUpperCase() || 'BASICO',
+            errores_previos: erroresAcumulados
+          })
+        })
+        if (!res.ok) throw new Error('Error conectando al LLM')
         const data = await res.json()
-        if (data.success && data.ejercicio.salida_esperada) {
-          setSalidaEsperadaReal(data.ejercicio.salida_esperada)
-        }
-      } catch (e) {
-        console.error('Error al cargar ejercicio:', e)
+        setEjercicioIA(data)
+      } catch (error) {
+        console.error('Error al generar ejercicio:', error)
+        peticionEnviada.current = false
+      } finally {
+        setCargandoIA(false)
       }
     }
-    cargarEjercicio()
-  }, [ejercicioSeleccionado, moduloSeleccionado])
+
+    generarEjercicio()
+  }, [ejercicioSeleccionado, moduloSeleccionado, generarTrigger])
 
   useEffect(() => {
     async function cargarPyodide() {
@@ -104,29 +128,87 @@ export default function Ejercicio() {
 
   function handleContinuar() {
     navigate('/feedback', {
-      state: { ejercicio: ejercicioSeleccionado, modulo: moduloSeleccionado, numeroEjercicio, totalEjercicios }
+      state: {
+        ejercicio: ejercicioSeleccionado,
+        modulo: moduloSeleccionado,
+        numeroEjercicio,
+        totalEjercicios,
+        codigoEstudiante: codigoFinal,
+        descripcionEjercicio: ejercicioIA?.descripcion || ''
+      }
     })
   }
 
-  async function handleEjecutar(code) {
-    if (!code.trim() || !pyodideRef.current) return
+  async function handlePedirPista() {
+    if (!ejercicioIA) return
+    setCargandoPista(true)
+    try {
+      const res = await fetch(`${FASTAPI_URL}/api/pedir_pista`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          descripcion_ejercicio: ejercicioIA.descripcion,
+          nivel: moduloSeleccionado?.nivelMinimo?.toUpperCase() || 'BASICO',
+          codigo_actual: codigoActual
+        })
+      })
+      const data = await res.json()
+      setPistaTexto(data.pistaBton)
+    } catch (error) {
+      console.error('Error al pedir pista:', error)
+      setPistaTexto('Hubo un error al consultar al TutorIA.')
+    } finally {
+      setCargandoPista(false)
+    }
+  }
 
+  async function handleEjecutar(code) {
+    if (!code.trim() || !pyodideRef.current || !ejercicioIA) return
+    setCodigoActual(code)
+
+    let output = ''
+    let huboError = false
     try {
       pyodideRef.current.runPython(`
 import sys
 from io import StringIO
 sys.stdout = StringIO()
-            `)
+sys.stderr = StringIO()
+      `)
       pyodideRef.current.runPython(code)
-      const output = pyodideRef.current.runPython('sys.stdout.getvalue()').trim()
-      setSalida(output || '(Sin salida)')
+      output = pyodideRef.current.runPython('sys.stdout.getvalue()').trim()
+    } catch (error) {
+      output = `Error: ${error.message}`
+      huboError = true
+    } finally {
+      try {
+        pyodideRef.current.runPython('sys.stdout = sys.__stdout__')
+        pyodideRef.current.runPython('sys.stderr = sys.__stderr__')
+      } catch (_) {}
+    }
 
-      const salidaLimpia = output.trim().toLowerCase()
-      const esperadaLimpia = (salidaEsperadaReal ?? ejercicioData.salidaEsperada).trim().toLowerCase()
-      const esCorrecto = salidaLimpia === esperadaLimpia
+    setSalida(output || '(Sin salida)')
+    setCargandoEvaluacion(true)
 
-      if (esCorrecto) {
-        setEstado('correcto')
+    try {
+      const res = await fetch(`${FASTAPI_URL}/api/evaluar_codigo`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          modulo: moduloSeleccionado.titulo,
+          categoria: ejercicioSeleccionado.texto,
+          descripcion_ejercicio: ejercicioIA.descripcion,
+          codigo_usuario: code,
+          salida_consola: output,
+          es_error_sintaxis: huboError
+        })
+      })
+      const dataEval = await res.json()
+      setEvaluacion(dataEval)
+      setEstado(dataEval.estado)
+
+      if (dataEval.estado === 'correcto') {
+        setCodigoFinal(code)
 
         const tiempoSegundos = Math.floor((Date.now() - tiempoInicio) / 1000)
         const nivelEjercicio = moduloSeleccionado?.id || 1
@@ -134,23 +216,21 @@ sys.stdout = StringIO()
         const moduloSlug = MODULO_SLUG[moduloSeleccionado?.id] ?? 'variables_basicas'
 
         let ejercicioId = null
-        if (ejercicioSeleccionado && moduloSeleccionado) {
-          try {
-            const res = await fetch('http://localhost:3001/api/ejercicios/upsert', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                titulo: ejercicioSeleccionado.texto,
-                modulo: moduloSlug,
-                titulo_modulo: moduloSeleccionado.titulo,
-                nivel: moduloSeleccionado.id
-              })
+        try {
+          const resUpsert = await fetch('http://localhost:3001/api/ejercicios/upsert', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              titulo: ejercicioSeleccionado.texto,
+              modulo: moduloSlug,
+              titulo_modulo: moduloSeleccionado.titulo,
+              nivel: moduloSeleccionado.id
             })
-            const data = await res.json()
-            if (data.success) ejercicioId = data.ejercicio.id
-          } catch (e) {
-            console.error('Error en upsert ejercicio:', e)
-          }
+          })
+          const dataUpsert = await resUpsert.json()
+          if (dataUpsert.success) ejercicioId = dataUpsert.ejercicio.id
+        } catch (e) {
+          console.error('Error en upsert ejercicio:', e)
         }
 
         if (ejercicioId) {
@@ -163,43 +243,59 @@ sys.stdout = StringIO()
             tiempo_segundos: tiempoSegundos
           })
         }
-
       } else {
-        setEstado('incorrecto')
         setErrores(prev => prev + 1)
+        setErroresAcumulados(prev => prev + 1)
       }
 
     } catch (error) {
-      setSalida(`Error: ${error.message}`)
+      console.error('Error en evaluación:', error)
       setEstado('incorrecto')
       setErrores(prev => prev + 1)
+      setErroresAcumulados(prev => prev + 1)
     } finally {
-      pyodideRef.current.runPython('sys.stdout = sys.__stdout__')
+      setCargandoEvaluacion(false)
     }
   }
 
-  function handleReintentar() { setEstado('pendiente'); setSalida('') }
+  function handleReintentar() {
+    setEstado('pendiente')
+    setSalida('')
+    setEvaluacion(null)
+  }
 
   function handleRefuerzo() {
     setEstado('pendiente')
     setSalida('')
     setErrores(0)
+    setEvaluacion(null)
     setEsRefuerzo(true)
     setEsRepeticion(false)
+    peticionEnviada.current = false
+    setEjercicioIA(null)
+    setCargandoIA(true)
+    setGenerarTrigger(prev => prev + 1)
+    // erroresAcumulados NO se resetea, se mantiene para el LLM
   }
 
   function handleNuevoEjercicio() {
     setEstado('pendiente')
     setSalida('')
     setErrores(0)
+    setEvaluacion(null)
     setEsRefuerzo(false)
+    peticionEnviada.current = false
+    setEjercicioIA(null)
+    setCargandoIA(true)
+    setGenerarTrigger(prev => prev + 1)
+    // erroresAcumulados NO se resetea, se mantiene para el LLM
   }
 
-  const tituloModulo = moduloSeleccionado?.titulo || ejercicioData.modulo
-  const tituloEjercicio = ejercicioSeleccionado?.texto || ejercicioData.practica
+  const tituloModulo = moduloSeleccionado?.titulo || 'Módulo'
+  const tituloEjercicio = ejercicioSeleccionado?.texto || 'Ejercicio'
   const archivoEditor = MODULO_SLUG[moduloSeleccionado?.id]
       ? `${MODULO_SLUG[moduloSeleccionado.id]}.py`
-      : ejercicioData.archivo
+      : 'ejercicio.py'
 
   return (
       <div className="ejercicio-page">
@@ -222,13 +318,14 @@ sys.stdout = StringIO()
                 moduloSeleccionado={moduloSeleccionado}
                 numeroEjercicio={numeroEjercicio}
                 totalEjercicios={totalEjercicios}
+                data={ejercicioIA}
             />
           </div>
           <div className="ejercicio-page__right">
             <EjercicioEditor
                 onEjecutar={handleEjecutar}
                 estado={estado}
-                cargando={cargandoPython}
+                cargando={cargandoPython || cargandoIA}
                 onCodigoChange={(tieneContenido) => setCodigoEscrito(tieneContenido)}
                 archivo={archivoEditor}
             />
@@ -238,6 +335,9 @@ sys.stdout = StringIO()
             estado={estado}
             onNuevoEjercicio={handleNuevoEjercicio}
             onIrDashboard={() => handleNavegar('/dashboard')}
+            onPedirPista={handlePedirPista}
+            pistaTexto={pistaTexto}
+            cargandoPista={cargandoPista}
         />
         <div className="ejercicio-page__bottom">
           <div className="ejercicio-page__salida">
@@ -254,12 +354,15 @@ sys.stdout = StringIO()
             <EjercicioResultado
                 estado={estado}
                 salida={salida}
+                evaluacion={evaluacion}
+                cargandoEvaluacion={cargandoEvaluacion}
                 onReintentar={handleReintentar}
                 onRefuerzo={handleRefuerzo}
                 ejercicioSeleccionado={ejercicioSeleccionado}
                 moduloSeleccionado={moduloSeleccionado}
                 numeroEjercicio={numeroEjercicio}
                 totalEjercicios={totalEjercicios}
+                onContinuar={handleContinuar}
             />
           </div>
         </div>

@@ -22,7 +22,7 @@ export default function TutorIANavbar({ breadcrumb, onLogoClick, onAvatarClick, 
     }
 
     const iniciales = estudiante
-        ? `${estudiante.nombre[0]}${estudiante.apellido[0]}`
+        ? `${estudiante.nombre?.[0] ?? ''}${estudiante.apellido?.[0] ?? ''}`.trim() || '?'
         : '??'
 
     const nivelTexto = estudiante ? estudiante.nivelTexto : '...'
