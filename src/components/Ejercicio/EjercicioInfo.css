@@ -109,23 +109,31 @@
 }
 
 .ej-info__salida {
-  background-color: #1a1e16;
+  background-color: #282c34;
   border-radius: 8px;
   padding: 10px 16px;
   display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-family: 'JetBrains Mono', monospace;
+}
+.ej-info__salida-linea {
+  display: flex;
   align-items: center;
   gap: 16px;
-  font-family: 'JetBrains Mono', monospace;
 }
 .ej-info__salida-num {
   color: #eeeeee;
   font-size: 0.82rem;
-  opacity: 0.6;
+  opacity: 0.4;
   flex-shrink: 0;
+  min-width: 16px;
+  text-align: right;
 }
 .ej-info__salida-texto {
   color: #eeeeee;
   font-size: 0.85rem;
+  white-space: pre;
 }
 
 /* Consejo */

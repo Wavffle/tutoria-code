@@ -4,23 +4,26 @@ import Dashboard from './pages/Dashboard'
 import Perfil from './pages/Perfil'
 import Ejercicio from './pages/Ejercicio'
 import Feedback from './pages/Feedback'
-import Error from './pages/Error'
+import MoodleLogin from './pages/MoodleLogin'
 import { EstudianteProvider } from './context/EstudianteContext'
+import ErrorBoundary from './components/shared/ErrorBoundary'
 
 function App() {
     return (
-        <EstudianteProvider>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
-                    <Route path="/perfil" element={<Perfil />} />
-                    <Route path="/ejercicio" element={<Ejercicio />} />
-                    <Route path="/feedback" element={<Feedback />} />
-                    <Route path="/error" element={<Error />} />
-                </Routes>
-            </BrowserRouter>
-        </EstudianteProvider>
+        <ErrorBoundary>
+            <EstudianteProvider>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/dashboard" element={<Dashboard />} />
+                        <Route path="/perfil" element={<Perfil />} />
+                        <Route path="/ejercicio" element={<Ejercicio />} />
+                        <Route path="/feedback" element={<Feedback />} />
+                        <Route path="/moodle" element={<MoodleLogin />} />
+                    </Routes>
+                </BrowserRouter>
+            </EstudianteProvider>
+        </ErrorBoundary>
     )
 }
 

@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import TutorIANavbar from '../components/shared/TutorIANavbar.jsx'
 import FeedbackHero from '../components/Feedback/FeedbackHero'
 import FeedbackResumen from '../components/Feedback/FeedbackResumen'
@@ -26,8 +26,13 @@ export default function Feedback() {
     const [feedbackIA, setFeedbackIA] = useState(null)
     const [cargandoIA, setCargandoIA] = useState(true)
 
+    const peticionEnviada = useRef(false)
+
     useEffect(() => {
+        if (peticionEnviada.current) return
         if (!ejercicio || !estudiante) return
+
+        peticionEnviada.current = true
 
         async function generarFeedback() {
             setCargandoIA(true)
@@ -52,7 +57,7 @@ export default function Feedback() {
         }
 
         generarFeedback()
-    }, [ejercicio, estudiante])
+    }, [])
 
     return (
         <div className="feedback-page">

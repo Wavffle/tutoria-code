@@ -13,17 +13,41 @@ const PUNTOS_PARA_NIVEL = { 1: 500, 2: 750, 3: 1000 }
 const NOMBRE_SIGUIENTE = { 1: 'INTERMEDIO', 2: 'AVANZADO', 3: '—' }
 
 export function EstudianteProvider({ children }) {
-    const [estudiante, setEstudiante] = useState(null)
-    const [sesion_id, setSesionId] = useState(null)
+    const [estudiante, setEstudiante] = useState(() => {
+        const guardado = sessionStorage.getItem('estudiante')
+        return guardado ? JSON.parse(guardado) : null
+    })
+    const [sesion_id, setSesionId] = useState(() => {
+        return sessionStorage.getItem('sesion_id') || null
+    })
     const [cargando, setCargando] = useState(true)
     const [progreso, setProgreso] = useState([])
     const [completados, setCompletados] = useState([])
-    const [resultadoIntento, setResultadoIntento] = useState(null)
+    const [resultadoIntento, setResultadoIntento] = useState(() => {
+        const guardado = sessionStorage.getItem('resultadoIntento')
+        return guardado ? JSON.parse(guardado) : null
+    })
     const [ejercicioActual, setEjercicioActual] = useState(null)
     const [moduloActual, setModuloActual] = useState(null)
-    const [esDemo, setEsDemo] = useState(false)
+    const [esDemo, setEsDemo] = useState(() => {
+        return sessionStorage.getItem('esDemo') === 'true'
+    })
 
-    useEffect(() => { setCargando(false) }, [])
+    useEffect(() => {
+        const estudianteGuardado = sessionStorage.getItem('estudiante')
+        if (estudianteGuardado && JSON.parse(estudianteGuardado)?.id) {
+            const est = JSON.parse(estudianteGuardado)
+            recargarProgreso(est.moodle_id, est.id).finally(() => setCargando(false))
+        } else {
+            setCargando(false)
+        }
+    }, [])
+
+    function guardarSesion(estudianteData, sesionId, demo) {
+        sessionStorage.setItem('estudiante', JSON.stringify(estudianteData))
+        sessionStorage.setItem('sesion_id', sesionId?.toString() || '')
+        sessionStorage.setItem('esDemo', demo ? 'true' : 'false')
+    }
 
     async function recargarProgreso(moodle_id, estudiante_id) {
         try {
@@ -39,7 +63,11 @@ export function EstudianteProvider({ children }) {
             if (dataProgreso.success) setProgreso(dataProgreso.progreso)
             if (dataCompletados.success) setCompletados(dataCompletados.modulos)
             if (dataTiempo.success) {
-                setEstudiante(prev => ({ ...prev, tiempo_total_segundos: dataTiempo.total_segundos }))
+                setEstudiante(prev => {
+                    const actualizado = { ...prev, tiempo_total_segundos: dataTiempo.total_segundos }
+                    sessionStorage.setItem('estudiante', JSON.stringify(actualizado))
+                    return actualizado
+                })
             }
         } catch (error) {
             console.error('Error al recargar progreso:', error)
@@ -56,8 +84,10 @@ export function EstudianteProvider({ children }) {
             })
             const data = await res.json()
             if (data.success) {
-                setEstudiante({ ...data.estudiante, nivelTexto: numeroANivel(data.estudiante.nivel_actual) })
+                const est = { ...data.estudiante, nivelTexto: numeroANivel(data.estudiante.nivel_actual) }
+                setEstudiante(est)
                 setSesionId(data.sesion_id)
+                guardarSesion(est, data.sesion_id, false)
                 await recargarProgreso(moodle_id, data.estudiante.id)
             }
         } catch (error) {
@@ -76,9 +106,11 @@ export function EstudianteProvider({ children }) {
             })
             const data = await res.json()
             if (data.success) {
-                setEstudiante({ ...data.estudiante, nivelTexto: numeroANivel(data.estudiante.nivel_actual) })
+                const est = { ...data.estudiante, nivelTexto: numeroANivel(data.estudiante.nivel_actual) }
+                setEstudiante(est)
                 setSesionId(data.sesion_id)
                 setEsDemo(true)
+                guardarSesion(est, data.sesion_id, true)
             }
         } catch (error) {
             console.error('Error al iniciar sesión demo:', error)
@@ -97,6 +129,7 @@ export function EstudianteProvider({ children }) {
                 console.error('Error al eliminar usuario demo:', error)
             }
         }
+        sessionStorage.clear()
         setEstudiante(null)
         setSesionId(null)
         setEsDemo(false)
@@ -135,16 +168,19 @@ export function EstudianteProvider({ children }) {
                 const nivelTextoNormalizado = data.resultado.nivelNuevo.charAt(0).toUpperCase() +
                     data.resultado.nivelNuevo.slice(1).toLowerCase()
 
-                setEstudiante(prev => ({
-                    ...prev,
+                const estActualizado = {
+                    ...estudiante,
                     progreso_nivel: data.resultado.puntosActuales,
                     nivel_actual: nuevoNivelActual,
                     nivelTexto: nivelTextoNormalizado,
-                    ejercicios_completados: prev.ejercicios_completados + 1,
-                    ejercicios_correctos: prev.ejercicios_correctos + 1
-                }))
+                    ejercicios_completados: estudiante.ejercicios_completados + 1,
+                    ejercicios_correctos: estudiante.ejercicios_correctos + 1
+                }
 
-                setResultadoIntento({
+                setEstudiante(estActualizado)
+                sessionStorage.setItem('estudiante', JSON.stringify(estActualizado))
+
+                const resultado = {
                     puntosGanados: data.puntosGanados,
                     puntosActuales: data.resultado.puntosActuales,
                     puntosParaSiguienteNivel: PUNTOS_PARA_NIVEL[nuevoNivelActual] ?? 1000,
@@ -152,7 +188,9 @@ export function EstudianteProvider({ children }) {
                     siguienteNivel: NOMBRE_SIGUIENTE[nuevoNivelActual] ?? '—',
                     subioNivel: data.resultado.subioNivel,
                     ejercicio_id
-                })
+                }
+                setResultadoIntento(resultado)
+                sessionStorage.setItem('resultadoIntento', JSON.stringify(resultado))
 
                 await recargarProgreso(estudiante.moodle_id, estudiante.id)
             }
@@ -168,6 +206,7 @@ export function EstudianteProvider({ children }) {
         setEjercicioActual(ejercicio)
         setModuloActual(modulo)
         setResultadoIntento(null)
+        sessionStorage.removeItem('resultadoIntento')
     }
 
     return (

@@ -66,7 +66,7 @@ export default function Hero() {
           <div className="hero__actions">
             <button
                 className="btn btn--primary"
-                onClick={() => navigate('/error')}
+                onClick={() => navigate('/moodle')}
             >
               Ingresar desde Moodle
             </button>

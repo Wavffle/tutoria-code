@@ -187,7 +187,6 @@ sys.stderr = StringIO()
       } catch (_) {}
     }
 
-    setSalida(output || '(Sin salida)')
     setCargandoEvaluacion(true)
 
     try {
@@ -204,6 +203,7 @@ sys.stderr = StringIO()
         })
       })
       const dataEval = await res.json()
+      setSalida(output || '(Sin salida)')
       setEvaluacion(dataEval)
       setEstado(dataEval.estado)
 
@@ -293,9 +293,10 @@ sys.stderr = StringIO()
 
   const tituloModulo = moduloSeleccionado?.titulo || 'Módulo'
   const tituloEjercicio = ejercicioSeleccionado?.texto || 'Ejercicio'
-  const archivoEditor = MODULO_SLUG[moduloSeleccionado?.id]
-      ? `${MODULO_SLUG[moduloSeleccionado.id]}.py`
-      : 'ejercicio.py'
+  const archivoEditor = ejercicioIA?.archivo
+      || (MODULO_SLUG[moduloSeleccionado?.id]
+          ? `${MODULO_SLUG[moduloSeleccionado.id]}.py`
+          : 'ejercicio.py')
 
   return (
       <div className="ejercicio-page">
@@ -326,6 +327,7 @@ sys.stderr = StringIO()
                 onEjecutar={handleEjecutar}
                 estado={estado}
                 cargando={cargandoPython || cargandoIA}
+                cargandoEvaluacion={cargandoEvaluacion}
                 onCodigoChange={(tieneContenido) => setCodigoEscrito(tieneContenido)}
                 archivo={archivoEditor}
             />
@@ -338,6 +340,7 @@ sys.stderr = StringIO()
             onPedirPista={handlePedirPista}
             pistaTexto={pistaTexto}
             cargandoPista={cargandoPista}
+            cargandoEvaluacion={cargandoEvaluacion}
         />
         <div className="ejercicio-page__bottom">
           <div className="ejercicio-page__salida">
@@ -345,7 +348,7 @@ sys.stderr = StringIO()
               <div className="ejercicio-page__salida-content">
                 <p className="ejercicio-page__salida-label">Salida:</p>
                 <p className={`ejercicio-page__salida-valor ${estado === 'incorrecto' ? 'ejercicio-page__salida-valor--error' : ''}`}>
-                  {salida || '(Aquí se verá la ejecución)'}
+                  {cargandoEvaluacion ? 'Analizando tu código...' : (salida || '(Aquí se verá la ejecución)')}
                 </p>
               </div>
             </div>

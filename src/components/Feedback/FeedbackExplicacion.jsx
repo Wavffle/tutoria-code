@@ -21,15 +21,17 @@ export default function FeedbackExplicacion({ feedbackIA, cargando }) {
                                 <span className="fb-explicacion__check">✓</span>
                                 <span>
                                     {p.texto}
-                                    {p.bold && <strong>{p.bold}</strong>}
+                                    {p.bold && p.texto2 && <strong>{p.bold}</strong>}
                                     {p.texto2}
-                                    {p.bold2 && <strong>{p.bold2}</strong>}
+                                    {p.bold2 && p.texto3 && <strong>{p.bold2}</strong>}
                                     {p.texto3}
                                 </span>
                             </li>
                         ))}
                     </ul>
-                    <p className="fb-explicacion__recuerda">{explicacion.recuerda}</p>
+                    {explicacion.recuerda && explicacion.recuerda.trim() !== '' && (
+                        <p className="fb-explicacion__recuerda">{explicacion.recuerda}</p>
+                    )}
                 </>
             )}
         </div>

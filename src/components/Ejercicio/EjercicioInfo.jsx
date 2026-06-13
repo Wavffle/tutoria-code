@@ -17,7 +17,7 @@ export default function EjercicioInfo({ estado, errores, ejercicioSeleccionado, 
                 <span className="ej-info__num">
                     Ejercicio {numeroEjercicio}/{totalEjercicios}
                 </span>
-                <span className="ej-info__nivel">Nivel: {ejercicioData.nivel}</span>
+                <span className="ej-info__nivel">Nivel: {moduloSeleccionado?.nivelMinimo?.toUpperCase() || ejercicioData.nivel}</span>
             </div>
 
             <div className={`ej-info__ia-box ${esIncorrecto ? 'ej-info__ia-box--error' : ''}`}>
@@ -43,7 +43,7 @@ export default function EjercicioInfo({ estado, errores, ejercicioSeleccionado, 
                     <li><span className="ej-info__check">✓</span> <strong>Modulo:</strong> {moduloSeleccionado?.titulo || ejercicioData.modulo}</li>
                     <li><span className="ej-info__check">✓</span> <strong>Lenguaje:</strong> {ejercicioData.lenguaje}</li>
                     <li><span className="ej-info__check">✓</span> <strong>Práctica:</strong> {ejercicioSeleccionado?.texto || ejercicioData.practica}</li>
-                    <li><span className="ej-info__check">✓</span> <strong>Nivel:</strong> {ejercicioData.nivel}</li>
+                    <li><span className="ej-info__check">✓</span> <strong>Nivel:</strong> {moduloSeleccionado?.nivelMinimo?.toUpperCase() || ejercicioData.nivel}</li>
                     <li>
                         <span className={esIncorrecto ? 'ej-info__x' : 'ej-info__check'}>
                             {esIncorrecto ? '✗' : '✓'}
@@ -55,21 +55,29 @@ export default function EjercicioInfo({ estado, errores, ejercicioSeleccionado, 
 
             <h2 className="ej-info__section-title">DESCRIPCIÓN</h2>
             <p className="ej-info__desc">
-                {cargando ? 'TutorIA está generando tu ejercicio...' : data.descripcion}
+                {cargando ? 'TutorIA está generando tu ejercicio...' : (data?.descripcion || 'Lee el ejemplo de salida esperada para entender qué debe hacer tu programa.')}
             </p>
 
             <h2 className="ej-info__section-title">EJEMPLO DE SALIDA ESPERADA</h2>
             <div className="ej-info__salida">
-                <span className="ej-info__salida-num">1</span>
-                <span className="ej-info__salida-texto">
-                    {cargando ? '...' : data.salidaEsperada || data.salida_esperada || data.salida || '(Sin salida esperada)'}
-                </span>
+                {cargando ? (
+                    <span className="ej-info__salida-texto">...</span>
+                ) : (
+                    (data?.salidaEsperada || data?.salida_esperada || data?.salida || '(Sin salida esperada)')
+                        .split('\n')
+                        .map((linea, i) => (
+                            <div key={i} className="ej-info__salida-linea">
+                                <span className="ej-info__salida-num">{i + 1}</span>
+                                <span className="ej-info__salida-texto">{linea}</span>
+                            </div>
+                        ))
+                )}
             </div>
 
             <div className="ej-info__consejo-box">
                 <img src="/iconos/cerebroIcon.png" alt="Consejo" className="ej-info__consejo-icon" />
                 <p className="ej-info__consejo-texto">
-                    <strong>Recuerda:</strong> {cargando ? 'Cargando consejo...' : data.consejo}
+                    <strong>Recuerda:</strong> {cargando ? 'Cargando consejo...' : (data?.consejo?.replace(/^recuerda que\s*/i, '').replace(/^recuerda\s*/i, '') || 'Revisa bien la descripción antes de escribir tu código.')}
                 </p>
             </div>
         </div>

@@ -1,14 +1,6 @@
-import { useNavigate } from 'react-router-dom'
 import './EjercicioResultado.css'
 
-export default function EjercicioResultado({ estado, evaluacion, cargandoEvaluacion, onReintentar, onRefuerzo, ejercicioSeleccionado, moduloSeleccionado, numeroEjercicio, totalEjercicios }) {
-    const navigate = useNavigate()
-
-    function handleContinuar() {
-        navigate('/feedback', {
-            state: { ejercicio: ejercicioSeleccionado, modulo: moduloSeleccionado, numeroEjercicio, totalEjercicios }
-        })
-    }
+export default function EjercicioResultado({ estado, evaluacion, cargandoEvaluacion, onReintentar, onRefuerzo, ejercicioSeleccionado, moduloSeleccionado, numeroEjercicio, totalEjercicios, onContinuar }) {
 
     if (cargandoEvaluacion) {
         return (
@@ -69,7 +61,7 @@ export default function EjercicioResultado({ estado, evaluacion, cargandoEvaluac
                         <span key={i} className="ej-resultado__tag ej-resultado__tag--verde">✓ {c}</span>
                     ))}
                 </div>
-                <button className="ej-resultado__continuar-btn" onClick={handleContinuar}>
+                <button className="ej-resultado__continuar-btn" onClick={onContinuar}>
                     CONTINUAR
                 </button>
             </div>

@@ -10,8 +10,9 @@
   display: grid;
   grid-template-columns: 700px 1fr;
   flex: 1;
-  min-height: 500px;
+  height: calc(100vh - 60px - 195px - 56px);
   padding-right: 32px;
+  overflow: hidden;
 }
 
 .ejercicio-page__left {
@@ -21,10 +22,16 @@
   max-height: 75vh;
   display: flex;
   flex-direction: column;
+  scrollbar-width: thin;
+  scrollbar-color: #76885b transparent;
 }
 
 .ejercicio-page__right {
   background-color: #1a1e16;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .ejercicio-page__bottom {

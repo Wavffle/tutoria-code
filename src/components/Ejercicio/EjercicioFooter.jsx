@@ -8,7 +8,7 @@ const robotImg = {
   incorrecto: '/robotTutorIA/robotIncorrecto.png',
 }
 
-export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboard, onPedirPista, pistaTexto, cargandoPista }) {
+export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboard, onPedirPista, pistaTexto, cargandoPista, cargandoEvaluacion }) {
   const [mostrarAyuda, setMostrarAyuda] = useState(false)
   const [mostrarPista, setMostrarPista] = useState(false)
   const [cerrando, setCerrando] = useState(false)
@@ -33,7 +33,7 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
     incorrecto: { color: '#c0392b', texto: 'Ejercicio incorrecto' },
   }
   const { color, texto } = estadoConfig[estado] || estadoConfig.pendiente
-  const nuevoDeshabilitado = estado === 'incorrecto'
+  const nuevoDeshabilitado = estado === 'incorrecto' || estado === 'correcto' || cargandoEvaluacion
 
   function cerrarPista() {
     setCerrando(true)
@@ -45,7 +45,7 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
       cerrarPista()
     } else {
       setMostrarPista(true)
-      if (!pistaTexto) onPedirPista()
+      if (!pistaTexto || pistaTexto.trim() === '') onPedirPista()
     }
   }
 
@@ -82,7 +82,12 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
                     </div>
                   </div>
                   <p className="ej-footer__pista-texto">
-                    {cargandoPista ? 'TutorIA está analizando tu código...' : pistaTexto}
+                    {cargandoPista
+                        ? 'TutorIA está analizando el ejercicio...'
+                        : pistaTexto?.trim()
+                            ? pistaTexto
+                            : 'No se pudo generar la pista. Intenta de nuevo.'
+                    }
                   </p>
                 </div>
             )}
@@ -98,7 +103,7 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
           <div className="ej-footer__nuevo-wrapper">
             {mostrarAviso && (
                 <div className="ej-footer__nuevo-tooltip">
-                  Reintenta o genera un ejercicio de refuerzo primero
+                  {estado === 'correcto' ? 'Continúa al feedback para ver tu resultado' : 'Reintenta o genera un ejercicio de refuerzo primero'}
                 </div>
             )}
             <button
