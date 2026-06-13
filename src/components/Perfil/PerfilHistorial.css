@@ -79,3 +79,10 @@
   padding: 40px 0;
   font-style: italic;
 }
+
+.historial__scroll {
+  max-height: 269px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #76885b transparent;
+}

@@ -32,44 +32,46 @@ export default function PerfilHistorial() {
     return (
         <div className="historial">
             <h2 className="historial__title">Historial</h2>
-            <table className="historial__table">
-                <thead>
-                <tr>
-                    <th>Ejercicio</th>
-                    <th>Puntos</th>
-                    <th>Estado</th>
-                </tr>
-                </thead>
-                <tbody>
-                {historial.length === 0 ? (
+            <div className="historial__scroll">
+                <table className="historial__table">
+                    <thead>
                     <tr>
-                        <td colSpan={3} className="historial__vacio">
-                            Aún no has completado ningún ejercicio.
-                        </td>
+                        <th>Ejercicio</th>
+                        <th>Puntos</th>
+                        <th>Estado</th>
                     </tr>
-                ) : (
-                    historial.map((item) => (
-                        <tr key={item.id}>
-                            <td>
-                                <p className="historial__ejercicio">{item.titulo}</p>
-                                <p className="historial__modulo">{item.titulo_modulo}</p>
+                    </thead>
+                    <tbody>
+                    {historial.length === 0 ? (
+                        <tr>
+                            <td colSpan={3} className="historial__vacio">
+                                Aún no has completado ningún ejercicio.
                             </td>
-                            <td className="historial__resultado">
-                                {item.puntaje > 0 ? `+${item.puntaje} pts` : '0 pts'}
-                            </td>
-                            <td>
+                        </tr>
+                    ) : (
+                        historial.map((item) => (
+                            <tr key={item.id}>
+                                <td>
+                                    <p className="historial__ejercicio">{item.titulo}</p>
+                                    <p className="historial__modulo">{item.titulo_modulo}</p>
+                                </td>
+                                <td className="historial__resultado">
+                                    {item.puntaje > 0 ? `+${item.puntaje} pts` : '0 pts'}
+                                </td>
+                                <td>
                                 <span className="historial__estado">
                                     <span className={item.es_correcto ? 'historial__check' : 'historial__x'}>
                                         {item.es_correcto ? '✓' : '✗'}
                                     </span>
                                     {item.es_correcto ? 'Completado' : 'Incorrecto'}
                                 </span>
-                            </td>
-                        </tr>
-                    ))
-                )}
-                </tbody>
-            </table>
+                                </td>
+                            </tr>
+                        ))
+                    )}
+                    </tbody>
+                </table>
+            </div>
         </div>
     )
 }
