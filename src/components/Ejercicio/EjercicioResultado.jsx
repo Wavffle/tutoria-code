@@ -1,6 +1,6 @@
 import './EjercicioResultado.css'
 
-export default function EjercicioResultado({ estado, evaluacion, cargandoEvaluacion, onReintentar, onRefuerzo, ejercicioSeleccionado, moduloSeleccionado, numeroEjercicio, totalEjercicios, onContinuar }) {
+export default function EjercicioResultado({ estado, evaluacion, cargandoEvaluacion, onReintentar, onRefuerzo, ejercicioSeleccionado, moduloSeleccionado, numeroEjercicio, totalEjercicios, onContinuar, erroresAcumulados }) {
 
     if (cargandoEvaluacion) {
         return (
@@ -70,6 +70,8 @@ export default function EjercicioResultado({ estado, evaluacion, cargandoEvaluac
 
     if (estado === 'incorrecto') {
         const fb = evaluacion.feedbackIncorrecto
+
+        const recomendacion = fb?.mensajeAliento || 'Revisa tu código e inténtalo de nuevo.'
         return (
             <div className="ej-resultado ej-resultado--incorrecto">
                 <div className="ej-resultado__incorrecto-top">
@@ -95,8 +97,8 @@ export default function EjercicioResultado({ estado, evaluacion, cargandoEvaluac
                     </div>
                     <div className="ej-resultado__incorrecto-right">
                         <div className="ej-resultado__decision-box">
-                            <p className="ej-resultado__decision-title">Decisión de TutorIA</p>
-                            <p className="ej-resultado__decision-desc">{fb?.decisionTutor}</p>
+                            <p className="ej-resultado__decision-title">Recomendación de TutorIA</p>
+                            <p className="ej-resultado__decision-desc">{recomendacion}</p>
                         </div>
                     </div>
                 </div>

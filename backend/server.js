@@ -270,6 +270,7 @@ app.get('/api/estudiantes/:estudiante_id/historial', (req, res) => {
                 i.es_correcto,
                 i.puntaje,
                 i.created_at,
+                i.decision_tutor,
                 e.titulo,
                 e.modulo,
                 e.titulo_modulo,

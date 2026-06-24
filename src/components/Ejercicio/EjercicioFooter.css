@@ -68,6 +68,18 @@
   position: relative;
 }
 
+.ej-footer__pista-codigo {
+  background: #1e1e1e;
+  color: #a8d878;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  margin-top: 6px;
+  white-space: pre-wrap;
+  border-left: 3px solid #a8d878;
+}
+
 .ej-footer__btn {
   display: flex;
   align-items: center;

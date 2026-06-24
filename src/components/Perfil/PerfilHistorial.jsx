@@ -7,23 +7,31 @@ export default function PerfilHistorial() {
     const [historial, setHistorial] = useState([])
     const [cargando, setCargando] = useState(true)
 
+    const nivelConfig = {
+        1: { label: 'Básico', color: '#627254' },
+        2: { label: 'Intermedio', color: '#2980b9' },
+        3: { label: 'Avanzado', color: '#c8883a' }
+    }
+
+    const tipoConfig = {
+        'primera_vez': { label: 'Primera vez', color: '#4a5c3a' },
+        'refuerzo':    { label: 'Refuerzo', color: '#c0392b' },
+        'repeticion':  { label: 'Repetición', color: '#6d46a2' }
+    }
+
     useEffect(() => {
         if (!estudiante) return
-
         async function cargarHistorial() {
             try {
                 const res = await fetch(`http://localhost:3001/api/estudiantes/${estudiante.id}/historial`)
                 const data = await res.json()
-                if (data.success) {
-                    setHistorial(data.intentos)
-                }
+                if (data.success) setHistorial(data.intentos)
             } catch (error) {
                 console.error('Error al cargar historial:', error)
             } finally {
                 setCargando(false)
             }
         }
-
         cargarHistorial()
     }, [estudiante])
 
@@ -50,21 +58,31 @@ export default function PerfilHistorial() {
                         </tr>
                     ) : (
                         historial.map((item) => (
-                            <tr key={item.id}>
+                            <tr key={item.id} title={`Nivel: ${nivelConfig[item.nivel]?.label || ''}`}>
                                 <td>
                                     <p className="historial__ejercicio">{item.titulo}</p>
-                                    <p className="historial__modulo">{item.titulo_modulo}</p>
+                                    <div className="historial__badges">
+                                        <span className="historial__modulo">{item.titulo_modulo}</span>
+                                        {item.decision_tutor && (
+                                            <span
+                                                className="historial__badge"
+                                                style={{ color: tipoConfig[item.decision_tutor]?.color }}
+                                            >
+                                                · {tipoConfig[item.decision_tutor]?.label}
+                                            </span>
+                                        )}
+                                    </div>
                                 </td>
                                 <td className="historial__resultado">
                                     {item.puntaje > 0 ? `+${item.puntaje} pts` : '0 pts'}
                                 </td>
                                 <td>
-                                <span className="historial__estado">
-                                    <span className={item.es_correcto ? 'historial__check' : 'historial__x'}>
-                                        {item.es_correcto ? '✓' : '✗'}
+                                    <span className="historial__estado">
+                                        <span className={item.es_correcto ? 'historial__check' : 'historial__x'}>
+                                            {item.es_correcto ? '✓' : '✗'}
+                                        </span>
+                                        {item.es_correcto ? 'Completado' : 'Incorrecto'}
                                     </span>
-                                    {item.es_correcto ? 'Completado' : 'Incorrecto'}
-                                </span>
                                 </td>
                             </tr>
                         ))

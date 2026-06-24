@@ -14,7 +14,7 @@
 /* ── Code Editor ── */
 .demo__editor {
   flex: 1;
-  background-color: #1a1e16;
+  background-color: #282c34;
   border-radius: var(--radius-md);
   overflow: hidden;
   box-shadow: 0 8px 40px rgba(0,0,0,0.25);
@@ -28,7 +28,7 @@
   align-items: center;
   gap: 8px;
   padding: 12px 16px;
-  background-color: #141710;
+  background-color: #282c34;
 }
 
 .demo__dot {
@@ -71,10 +71,10 @@
   border: none;
   outline: none;
   resize: none;
-  color: #a8c488;
+  color: #eeeeee;
   font-family: var(--font-mono);
   font-size: 0.9rem;
-  line-height: 1.75;
+  line-height: 1.7;
   caret-color: #7a9460;
   min-height: 80px;
 }
@@ -87,7 +87,7 @@
   padding: 12px 16px;
   display: flex;
   justify-content: flex-end;
-  background-color: #141710;
+  background-color: #282c34;
 }
 
 .demo__submit-btn {

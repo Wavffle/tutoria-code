@@ -65,7 +65,7 @@ export default function MoodleLogin() {
         <div className="moodle-page">
             <div className="moodle-page__card">
                 <img
-                    src="public/logos/logoTutorIA.png"
+                    src="public/logos/LogoTutorIA.png"
                     alt="TutorIA"
                     className="moodle-page__logo"
                 />

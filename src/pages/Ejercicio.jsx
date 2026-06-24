@@ -51,6 +51,7 @@ export default function Ejercicio() {
   const [destino, setDestino] = useState(null)
   const [tiempoInicio] = useState(Date.now())
   const pyodideRef = useRef(null)
+  const [ejerciciosPrevios, setEjerciciosPrevios] = useState([])
 
   useEffect(() => {
     if (location.state?.ejercicio && location.state?.modulo) {
@@ -74,12 +75,18 @@ export default function Ejercicio() {
             modulo: moduloSeleccionado.titulo,
             categoria: ejercicioSeleccionado.texto,
             nivel: moduloSeleccionado.nivelMinimo?.toUpperCase() || 'BASICO',
-            errores_previos: erroresAcumulados
+            errores_previos: erroresAcumulados,
+            ejercicios_previos: ejerciciosPrevios
           })
         })
         if (!res.ok) throw new Error('Error conectando al LLM')
         const data = await res.json()
         setEjercicioIA(data)
+        setEjerciciosPrevios(prev => [...prev, {
+          patron_id: data.patron_id || '',
+          titulo: data.titulo,
+          variables: data.codigoSolucion?.match(/\w+ = .+/g)?.slice(0, 3).join(', ') || ''
+        }])
       } catch (error) {
         console.error('Error al generar ejercicio:', error)
         peticionEnviada.current = false
@@ -149,14 +156,16 @@ export default function Ejercicio() {
         body: JSON.stringify({
           descripcion_ejercicio: ejercicioIA.descripcion,
           nivel: moduloSeleccionado?.nivelMinimo?.toUpperCase() || 'BASICO',
-          codigo_actual: codigoActual
+          codigo_actual: codigoActual,
+          salida_esperada: ejercicioIA.salidaEsperada || '',
+          ejercicios_previos: ejerciciosPrevios
         })
       })
       const data = await res.json()
-      setPistaTexto(data.pistaBton)
+      setPistaTexto(data)
     } catch (error) {
       console.error('Error al pedir pista:', error)
-      setPistaTexto('Hubo un error al consultar al TutorIA.')
+      setPistaTexto({ texto: 'Hubo un error al consultar al TutorIA.', codigo: null })
     } finally {
       setCargandoPista(false)
     }
@@ -178,7 +187,14 @@ sys.stderr = StringIO()
       pyodideRef.current.runPython(code)
       output = pyodideRef.current.runPython('sys.stdout.getvalue()').trim()
     } catch (error) {
-      output = `Error: ${error.message}`
+      const mensaje = error.message
+      const lineas = mensaje.split('\n').filter(l => l.trim() !== '')
+      const ultimaLinea = lineas[lineas.length - 1] || mensaje
+
+      const execMatch = mensaje.match(/File "<exec>", line (\d+)/)
+      const numLinea = execMatch ? ` (línea ${execMatch[1]})` : ''
+
+      output = `Error${numLinea}: ${ultimaLinea}`
       huboError = true
     } finally {
       try {
@@ -199,7 +215,9 @@ sys.stderr = StringIO()
           descripcion_ejercicio: ejercicioIA.descripcion,
           codigo_usuario: code,
           salida_consola: output,
-          es_error_sintaxis: huboError
+          es_error_sintaxis: huboError,
+          errores_previos: erroresAcumulados,
+          salida_esperada: ejercicioIA.salidaEsperada || ''
         })
       })
       const dataEval = await res.json()
@@ -275,7 +293,7 @@ sys.stderr = StringIO()
     setEjercicioIA(null)
     setCargandoIA(true)
     setGenerarTrigger(prev => prev + 1)
-    // erroresAcumulados NO se resetea, se mantiene para el LLM
+    setPistaTexto('')
   }
 
   function handleNuevoEjercicio() {
@@ -288,7 +306,7 @@ sys.stderr = StringIO()
     setEjercicioIA(null)
     setCargandoIA(true)
     setGenerarTrigger(prev => prev + 1)
-    // erroresAcumulados NO se resetea, se mantiene para el LLM
+    setPistaTexto('')
   }
 
   const tituloModulo = moduloSeleccionado?.titulo || 'Módulo'
@@ -341,6 +359,7 @@ sys.stderr = StringIO()
             pistaTexto={pistaTexto}
             cargandoPista={cargandoPista}
             cargandoEvaluacion={cargandoEvaluacion}
+            cargandoIA={cargandoIA}
         />
         <div className="ejercicio-page__bottom">
           <div className="ejercicio-page__salida">
@@ -366,6 +385,7 @@ sys.stderr = StringIO()
                 numeroEjercicio={numeroEjercicio}
                 totalEjercicios={totalEjercicios}
                 onContinuar={handleContinuar}
+                erroresAcumulados={erroresAcumulados}
             />
           </div>
         </div>

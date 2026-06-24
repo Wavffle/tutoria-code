@@ -8,7 +8,7 @@ const robotImg = {
   incorrecto: '/robotTutorIA/robotIncorrecto.png',
 }
 
-export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboard, onPedirPista, pistaTexto, cargandoPista, cargandoEvaluacion }) {
+export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboard, onPedirPista, pistaTexto, cargandoPista, cargandoEvaluacion, cargandoIA }) {
   const [mostrarAyuda, setMostrarAyuda] = useState(false)
   const [mostrarPista, setMostrarPista] = useState(false)
   const [cerrando, setCerrando] = useState(false)
@@ -27,13 +27,20 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
     return () => clearTimeout(timer)
   }, [estado])
 
+  useEffect(() => {
+    if (!pistaTexto) {
+      setMostrarPista(false)
+    }
+  }, [pistaTexto])
+
   const estadoConfig = {
     pendiente:  { color: '#b07801', texto: 'Ejercicio sin completar' },
     correcto:   { color: '#4a5c3a', texto: 'Ejercicio correcto' },
     incorrecto: { color: '#c0392b', texto: 'Ejercicio incorrecto' },
   }
   const { color, texto } = estadoConfig[estado] || estadoConfig.pendiente
-  const nuevoDeshabilitado = estado === 'incorrecto' || estado === 'correcto' || cargandoEvaluacion
+  const nuevoDeshabilitado = estado === 'incorrecto' || estado === 'correcto' || cargandoEvaluacion || cargandoIA
+  const pistaDeshabilitada = cargandoIA || cargandoPista
 
   function cerrarPista() {
     setCerrando(true)
@@ -45,14 +52,16 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
       cerrarPista()
     } else {
       setMostrarPista(true)
-      if (!pistaTexto || pistaTexto.trim() === '') onPedirPista()
+      if (!pistaTexto?.texto) onPedirPista()
     }
   }
 
   function handleNuevoClick() {
     if (nuevoDeshabilitado) {
-      setMostrarAviso(true)
-      setTimeout(() => setMostrarAviso(false), 2500)
+      if (!cargandoIA && !cargandoEvaluacion) {
+        setMostrarAviso(true)
+        setTimeout(() => setMostrarAviso(false), 2500)
+      }
     } else {
       onNuevoEjercicio()
     }
@@ -81,19 +90,23 @@ export default function EjercicioFooter({ estado, onNuevoEjercicio, onIrDashboar
                       <span>Pista</span>
                     </div>
                   </div>
-                  <p className="ej-footer__pista-texto">
-                    {cargandoPista
-                        ? 'TutorIA está analizando el ejercicio...'
-                        : pistaTexto?.trim()
-                            ? pistaTexto
-                            : 'No se pudo generar la pista. Intenta de nuevo.'
-                    }
-                  </p>
+                  {cargandoPista ? (
+                      <p className="ej-footer__pista-texto">TutorIA está analizando el ejercicio...</p>
+                  ) : pistaTexto?.texto ? (
+                      <>
+                        <p className="ej-footer__pista-texto">{pistaTexto.texto}</p>
+                        {pistaTexto.codigo && (
+                            <pre className="ej-footer__pista-codigo">{pistaTexto.codigo}</pre>
+                        )}
+                      </>
+                  ) : (
+                      <p className="ej-footer__pista-texto">No se pudo generar la pista. Intenta de nuevo.</p>
+                  )}
                 </div>
             )}
             <button
-                className={`ej-footer__btn ej-footer__btn--pista ${mostrarPista ? 'ej-footer__btn--pista-activo' : ''}`}
-                onClick={togglePista}
+                className={`ej-footer__btn ej-footer__btn--pista ${mostrarPista ? 'ej-footer__btn--pista-activo' : ''} ${pistaDeshabilitada ? 'ej-footer__btn--nuevo-disabled' : ''}`}
+                onClick={!pistaDeshabilitada ? togglePista : undefined}
             >
               Pedir pista
               <span className="ej-footer__pista-arrow">{mostrarPista ? '∨' : '∧'}</span>

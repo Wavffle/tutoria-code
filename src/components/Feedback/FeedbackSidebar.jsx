@@ -16,6 +16,18 @@ export default function FeedbackSidebar({ feedbackIA }) {
     const decision = feedbackIA?.decision ?? null
     const conceptos = feedbackIA?.conceptos ?? []
 
+    const nivelConfig = {
+        1: { label: 'Básico' },
+        2: { label: 'Intermedio' },
+        3: { label: 'Avanzado' }
+    }
+
+    const tipoConfig = {
+        'primera_vez': { label: 'Primera vez', color: '#4a5c3a' },
+        'refuerzo':    { label: 'Refuerzo', color: '#c0392b' },
+        'repeticion':  { label: 'Repetición', color: '#6d46a2' }
+    }
+
     useEffect(() => {
         if (!estudiante) return
 
@@ -114,13 +126,28 @@ export default function FeedbackSidebar({ feedbackIA }) {
                 ) : (
                     <ul className="fb-sidebar__historial">
                         {historial.map((h, i) => (
-                            <li key={i} className="fb-sidebar__historial-item">
-                                <span className={`fb-sidebar__historial-check ${h.es_correcto ? 'fb-sidebar__historial-check--done' : ''}`}>
-                                    {h.es_correcto ? '✓' : '○'}
-                                </span>
+                            <li
+                                key={i}
+                                className="fb-sidebar__historial-item"
+                                title={`Nivel: ${nivelConfig[h.nivel]?.label || ''}`}
+                            >
+            <span className={`fb-sidebar__historial-check ${h.es_correcto ? 'fb-sidebar__historial-check--done' : ''}`}>
+                {h.es_correcto ? '✓' : '○'}
+            </span>
                                 <div className="fb-sidebar__historial-info">
                                     <p className="fb-sidebar__historial-nombre">{h.titulo}</p>
-                                    <p className="fb-sidebar__historial-tiempo">{h.titulo_modulo}</p>
+                                    <div style={{ display: 'flex', alignItems: 'baseline', gap: '4px' }}>
+                                        <p className="fb-sidebar__historial-tiempo">{h.titulo_modulo}</p>
+                                        {h.decision_tutor && (
+                                            <span style={{
+                                                fontSize: '0.56rem',
+                                                fontWeight: '500',
+                                                color: tipoConfig[h.decision_tutor]?.color
+                                            }}>
+                                                · {tipoConfig[h.decision_tutor]?.label}
+                                            </span>
+                                        )}
+                                    </div>
                                 </div>
                                 <span className={`fb-sidebar__historial-pct ${h.es_correcto ? 'fb-sidebar__historial-pct--done' : ''}`}>
                                     {h.puntaje > 0 ? `+${h.puntaje}` : '0'} pts

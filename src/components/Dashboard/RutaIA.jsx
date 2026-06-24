@@ -4,7 +4,7 @@ export default function RutaIA() {
     return (
         <div className="ruta-ia">
             <div className="ruta-ia__left">
-                <img src="/robotTutorIA/robotSaludando.png" alt="Robot TutorIA" className="ruta-ia__robot" />
+                <img src="/robotTutorIA/CodiDashboard.png" alt="Robot TutorIA" className="ruta-ia__robot" />
                 <div className="ruta-ia__text">
                     <h2 className="ruta-ia__titulo">
                         Ruta adaptativa basada en IA
