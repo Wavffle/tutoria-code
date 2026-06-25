@@ -25,7 +25,9 @@ export default function MoodleLogin() {
     const dominiosValidos = ['@mail.pucv.cl', '@pucv.cl', '@alumnos.pucv.cl']
 
     function validarCorreo(correo) {
-        return dominiosValidos.some(d => correo.endsWith(d))
+        // Formato exacto: nombre.apellido.inicial@mail.pucv.cl
+        const regex = /^[a-záéíóúñA-ZÁÉÍÓÚÑ]+\.[a-záéíóúñA-ZÁÉÍÓÚÑ]+\.[a-záéíóúñA-ZÁÉÍÓÚÑ]@mail\.pucv\.cl$/
+        return regex.test(correo.trim().toLowerCase())
     }
 
     async function handleSubmit() {
@@ -35,7 +37,7 @@ export default function MoodleLogin() {
             return
         }
         if (!validarCorreo(correo.trim().toLowerCase())) {
-            setError('El correo debe ser institucional (@mail.pucv.cl, @pucv.cl o @alumnos.pucv.cl).')
+            setError('Correo inválido. Ingresa el correo institucional en su formato: nombre.apellido.a@mail.pucv.cl')
             return
         }
 
