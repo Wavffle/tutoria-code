@@ -32,11 +32,22 @@ export function EstudianteProvider({ children }) {
     const [esDemo, setEsDemo] = useState(() => {
         return sessionStorage.getItem('esDemo') === 'true'
     })
+    const [recomendacion, setRecomendacion] = useState(null)
 
     useEffect(() => {
         const estudianteGuardado = sessionStorage.getItem('estudiante')
         if (estudianteGuardado && JSON.parse(estudianteGuardado)?.id) {
             const est = JSON.parse(estudianteGuardado)
+
+            // Cargar recomendación guardada para este estudiante específico
+            if (!sessionStorage.getItem('esDemo') === 'true') {
+                const clave = `tutoria_recomendacion_${est.moodle_id}`
+                const recomendacionGuardada = localStorage.getItem(clave)
+                if (recomendacionGuardada) {
+                    setRecomendacion(JSON.parse(recomendacionGuardada))
+                }
+            }
+
             recargarProgreso(est.moodle_id, est.id).finally(() => setCargando(false))
         } else {
             setCargando(false)
@@ -63,14 +74,45 @@ export function EstudianteProvider({ children }) {
             if (dataProgreso.success) setProgreso(dataProgreso.progreso)
             if (dataCompletados.success) setCompletados(dataCompletados.modulos)
             if (dataTiempo.success) {
-                setEstudiante(prev => {
-                    const actualizado = { ...prev, tiempo_total_segundos: dataTiempo.total_segundos }
-                    sessionStorage.setItem('estudiante', JSON.stringify(actualizado))
-                    return actualizado
-                })
+                setEstudiante(prev => ({
+                    ...prev,
+                    tiempo_total_segundos: dataTiempo.total_segundos
+                }))
             }
         } catch (error) {
             console.error('Error al recargar progreso:', error)
+        }
+    }
+
+    async function generarRecomendacion(estudianteData, progresoData) {
+        try {
+            const NIVELES_MAP = { 1: 'Basico', 2: 'Intermedio', 3: 'Avanzado' }
+            const PUNTOS_NIVEL = { 1: 500, 2: 750, 3: 1000 }
+            const nivelNum = estudianteData.nivel_actual || 1
+
+            const res = await fetch('http://127.0.0.1:8000/api/generar_recomendacion', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    nivel_actual: NIVELES_MAP[nivelNum] || 'Basico',
+                    ejercicios_correctos: estudianteData.ejercicios_correctos || 0,
+                    ejercicios_completados: estudianteData.ejercicios_completados || 0,
+                    progreso_nivel: estudianteData.progreso_nivel || 0,
+                    puntos_para_siguiente_nivel: PUNTOS_NIVEL[nivelNum] || 500,
+                    modulos_progreso: progresoData || []
+                })
+            })
+            const data = await res.json()
+            if (data.texto) {
+                setRecomendacion(data)
+                // Solo guardar en localStorage si no es demo
+                if (!estudianteData.moodle_id?.startsWith('demo_')) {
+                    const clave = `tutoria_recomendacion_${estudianteData.moodle_id}`
+                    localStorage.setItem(clave, JSON.stringify(data))
+                }
+            }
+        } catch (error) {
+            console.error('Error al generar recomendación:', error)
         }
     }
 
@@ -89,6 +131,19 @@ export function EstudianteProvider({ children }) {
                 setSesionId(data.sesion_id)
                 guardarSesion(est, data.sesion_id, false)
                 await recargarProgreso(moodle_id, data.estudiante.id)
+
+                // Cargar recomendación guardada o generar una nueva
+                const clave = `tutoria_recomendacion_${moodle_id}`
+                const recomendacionGuardada = localStorage.getItem(clave)
+                if (recomendacionGuardada) {
+                    setRecomendacion(JSON.parse(recomendacionGuardada))
+                } else {
+                    const resProgreso = await fetch(`http://localhost:3001/api/estudiantes/${moodle_id}/progreso`)
+                    const dataProgreso = await resProgreso.json()
+                    if (dataProgreso.success) {
+                        generarRecomendacion(data.estudiante, dataProgreso.progreso)
+                    }
+                }
             }
         } catch (error) {
             console.error('Error al iniciar sesión Moodle:', error)
@@ -111,6 +166,8 @@ export function EstudianteProvider({ children }) {
                 setSesionId(data.sesion_id)
                 setEsDemo(true)
                 guardarSesion(est, data.sesion_id, true)
+                await recargarProgreso(est.moodle_id, est.id)
+                // Demo no carga ni genera recomendación — empieza sin historial
             }
         } catch (error) {
             console.error('Error al iniciar sesión demo:', error)
@@ -138,6 +195,7 @@ export function EstudianteProvider({ children }) {
         setResultadoIntento(null)
         setEjercicioActual(null)
         setModuloActual(null)
+        setRecomendacion(null)
     }
 
     async function registrarIntento({ ejercicio_id, codigo_enviado, es_correcto, tipo_intento, nivel_ejercicio, tiempo_segundos }) {
@@ -193,6 +251,9 @@ export function EstudianteProvider({ children }) {
                 sessionStorage.setItem('resultadoIntento', JSON.stringify(resultado))
 
                 await recargarProgreso(estudiante.moodle_id, estudiante.id)
+
+                // Regenerar recomendación con datos actualizados
+                generarRecomendacion(estActualizado, progreso)
             }
 
             return data
@@ -226,6 +287,7 @@ export function EstudianteProvider({ children }) {
             iniciarSesionDemo,
             iniciarSesionMoodle,
             cerrarSesion,
+            recomendacion,
             NIVELES
         }}>
             {children}

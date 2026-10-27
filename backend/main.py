@@ -568,7 +568,13 @@ class ReqFeedback(BaseModel):
     intentos_utilizados: int
     nivel_actual: str
 
-
+class ReqRecomendacion(BaseModel):
+    nivel_actual: str
+    ejercicios_correctos: int
+    ejercicios_completados: int
+    progreso_nivel: int
+    puntos_para_siguiente_nivel: int
+    modulos_progreso: list[dict] = []
 
 # ==========================================
 # VALIDACIÓN Y RESPALDOS
@@ -1228,6 +1234,56 @@ Devuelve ÚNICAMENTE este JSON:
 
     try:
         response = ollama.chat(model='tutoria_modelv2', messages=[{'role': 'user', 'content': prompt}], format='json')
+        return json.loads(response['message']['content'])
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/api/generar_recomendacion")
+async def generar_recomendacion(req: ReqRecomendacion):
+    resumen_modulos = '\n'.join([
+        f"- {m.get('titulo_modulo', '')}: {m.get('ejercicios_completados', 0)}/5 ejercicios completados"
+        for m in req.modulos_progreso
+    ]) if req.modulos_progreso else '- Sin progreso registrado aún'
+
+    prompt = f"""Eres TutorIA, tutor de programación Python para estudiantes universitarios.
+
+DATOS DEL ESTUDIANTE:
+- Nivel actual: {req.nivel_actual}
+- Puntos acumulados: {req.progreso_nivel}/{req.puntos_para_siguiente_nivel}
+- Ejercicios completados: {req.ejercicios_completados}
+- Ejercicios correctos: {req.ejercicios_correctos}
+- Progreso por módulo:
+{resumen_modulos}
+
+TAREA: Genera una recomendación personalizada y breve para este estudiante.
+
+REGLAS:
+1. El texto debe tener máximo 2 oraciones.
+2. Debe ser específico al progreso real del estudiante.
+3. Si tiene pocos ejercicios, recomienda practicar más.
+4. Si tiene errores frecuentes, recomienda reforzar un módulo específico.
+5. Si va bien, motívalo a seguir con el siguiente módulo.
+6. modulo_recomendado debe ser exactamente uno de: "variables_basicas", "condicionales" o "bucles_repeticion".
+7. ejercicio_recomendado debe ser exactamente uno de los títulos del módulo recomendado.
+
+TÍTULOS DISPONIBLES:
+- variables_basicas: "Introducción a variables", "Tipos de datos básicos", "Operaciones con variables", "Entrada y salida con variables", "Cálculos integrados con variables"
+- condicionales: "Estructura if simple", "Estructura if/else", "Condicionales con operadores lógicos", "Condicionales anidados con elif", "Validación de datos ingresados"
+- bucles_repeticion: "Bucle while con condición simple", "Bucle for con range()", "Contadores y acumuladores", "Bucles con condicionales", "Repetición con entrada de usuario"
+
+Devuelve ÚNICAMENTE este JSON:
+{{
+    "texto": "Recomendación breve de máximo 2 oraciones.",
+    "modulo_recomendado": "slug_del_modulo",
+    "ejercicio_recomendado": "Título exacto del ejercicio"
+}}"""
+
+    try:
+        response = ollama.chat(
+            model='tutoria_modelv2',
+            messages=[{'role': 'user', 'content': prompt}],
+            format='json'
+        )
         return json.loads(response['message']['content'])
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

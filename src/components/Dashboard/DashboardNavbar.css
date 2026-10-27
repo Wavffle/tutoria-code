@@ -140,7 +140,7 @@
   color: #fff;
 }
 .db-navbar__sugerencia-title {
-  font-size: 0.82rem;
+  font-size: 0.76rem;
   font-weight: 600;
   color: #fff;
   margin-bottom: 10px;
@@ -148,7 +148,7 @@
 .db-navbar__sugerencia-body {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
+  gap: 4px;
 }
 .db-navbar__sugerencia-icon {
   width: 36px;
@@ -158,7 +158,7 @@
   filter: brightness(0) invert(1);
 }
 .db-navbar__sugerencia-text {
-  font-size: 0.82rem;
+  font-size: 0.72rem;
   color: #fff;
   line-height: 1.45;
   font-style: italic;

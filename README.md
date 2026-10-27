@@ -1,7 +1,19 @@
-# TutorIA Code
 
-Proyecto desarrollado con React + Vite, Node.js y un modelo LLM local mediante Ollama.
+<p align="center">
+  <img src="public/logos/LogoTutorIA.png" alt="Logo de TutorIA Code" width="200"/>
+</p>
 
+<h3 align="center">Aprende a programar con la ayuda de la inteligencia artificial</h3>
+
+<p align="center">
+  Un entorno interactivo de aprendizaje diseñado para practicar Python, explorar conceptos de programación y recibir asistencia mediante un modelo de lenguaje local.
+</p>
+
+TutorIA Code combina una interfaz web interactiva con herramientas de ejecución de código y una capa de inteligencia artificial local para ofrecer una experiencia de aprendizaje de programación.
+
+**Tecnologías principales:** React · Vite · Node.js · Python · FastAPI · Ollama
+
+---
 ## Requisitos
 
 Antes de ejecutar el proyecto, instalar:
@@ -108,3 +120,8 @@ npm run dev
 | Backend Node.js | http://localhost:3001 |
 | Backend Python (FastAPI) | http://localhost:8000 |
 | Ollama (LLM) | http://localhost:11434 |
+
+
+<p align="right">
+  <img src="public/robotTutorIA/TutorIA trabajando.png" alt="Codi trabajando en su escritorio con un notebook" width="400"/>
+</p>

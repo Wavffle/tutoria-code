@@ -22,8 +22,6 @@ export default function MoodleLogin() {
     const [error, setError] = useState('')
     const [cargando, setCargando] = useState(false)
 
-    const dominiosValidos = ['@mail.pucv.cl', '@pucv.cl', '@alumnos.pucv.cl']
-
     function validarCorreo(correo) {
         // Formato exacto: nombre.apellido.inicial@mail.pucv.cl
         const regex = /^[a-záéíóúñA-ZÁÉÍÓÚÑ]+\.[a-záéíóúñA-ZÁÉÍÓÚÑ]+\.[a-záéíóúñA-ZÁÉÍÓÚÑ]@mail\.pucv\.cl$/

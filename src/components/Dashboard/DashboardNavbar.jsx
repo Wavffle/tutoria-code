@@ -7,7 +7,7 @@ const PUNTOS_PARA_NIVEL = { 1: 500, 2: 750, 3: 1000 }
 
 export default function DashboardNavbar() {
     const navigate = useNavigate()
-    const { estudiante } = useEstudiante()
+    const { estudiante, recomendacion } = useEstudiante()
     const [tooltipPos, setTooltipPos] = useState({ x: 0, y: 0 })
     const [tooltipVisible, setTooltipVisible] = useState(false)
     const [easterEgg, setEasterEgg] = useState(false)
@@ -98,7 +98,12 @@ export default function DashboardNavbar() {
                 <p className="db-navbar__sugerencia-title">Sugerencia del tutor</p>
                 <div className="db-navbar__sugerencia-body">
                     <img src="/iconos/programacionIcono.png" alt="Código" className="db-navbar__sugerencia-icon" />
-                    <p className="db-navbar__sugerencia-text">"Es recomendado practicar condicionales"</p>
+                    <p className="db-navbar__sugerencia-text">
+                        {recomendacion?.texto
+                            ? `"${recomendacion.texto}"`
+                            : '"¡Comienza a practicar para recibir recomendaciones personalizadas!"'
+                        }
+                    </p>
                 </div>
             </div>
         </header>
